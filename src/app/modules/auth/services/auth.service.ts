@@ -6,6 +6,9 @@ import { GenericService } from '../../generic/services/generic.service';
 import { ILoginUnitMember } from '../interfaces/ilogin-unit-member';
 import { ILoginUnitResponse } from '../interfaces/ilogin-unit-response';
 
+import { Storage } from '@ionic/storage-angular';
+import { IMemberCreate } from '../interfaces/imember-create';
+
 @Injectable({
 	providedIn: 'root',
 })
@@ -17,10 +20,12 @@ export class AuthService extends GenericService {
 
 	constructor(
 		protected override $http: HttpClient,
-		protected $router: Router
+		protected $router: Router,
+		private _storage: Storage
 	) {
 		super($http);
 		this.endPoint += `/auth`;
+		this._storage.create();
 	}
 
 	getParams(key: string, value: any): HttpParams {
@@ -50,17 +55,32 @@ export class AuthService extends GenericService {
 			);
 	}
 
-	// private saveToStorage(model: ILoginUnitResponse): void {
-	// 	this.STORAGE?.set('denominacion', model.denominacion);
-	// 	this.STORAGE?.set('ficha', model.ficha);
-	// 	this.STORAGE?.set('placa', model.placa);
-	// 	this.STORAGE?.set('miembro', model.miembroInfo);
-	// 	this.STORAGE?.set('token', model.token);
-	// }
+	registerMember(model: IMemberCreate): void {
+		this.$http
+			.post<boolean>(`${this.endPoint}/member/create`, model)
+			.subscribe((response: boolean) => {
+				if (response) {
+					this.$router.navigate(['auth/signin']);
+				}
+			});
+	}
+
+	private saveToStorage(model: ILoginUnitResponse): void {
+		this._storage?.set('denominacion', model.denominacion);
+		this._storage?.set('ficha', model.ficha);
+		this._storage?.set('placa', model.placa);
+		this._storage?.set('miembro', model.miembroInfo);
+		this._storage?.set('token', model.token);
+	}
 
 	loginUnitMember(model: ILoginUnitMember): void {
 		this.$http
 			.post<ILoginUnitResponse>(`${this.endPoint}/assign`, model)
-			.subscribe((response: ILoginUnitResponse) => {});
+			.subscribe((response: ILoginUnitResponse) => {
+				if (response.estatus) {
+					this.saveToStorage(response);
+					this.$router.navigate(['dashboard']);
+				}
+			});
 	}
 }

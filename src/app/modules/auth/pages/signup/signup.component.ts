@@ -45,6 +45,6 @@ export class SignupComponent implements OnInit {
 	}
 
 	registerMember(): void {
-		// TODO:Implement
+		this._auth.registerMember(this.registerForm.value);
 	}
 }

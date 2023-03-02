@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ILoginUnitMember } from '../../interfaces/ilogin-unit-member';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -22,6 +23,10 @@ export class SigninComponent implements OnInit {
 	}
 
 	loginUnitMember(): void {
-		// TODO:implement
+		const model: ILoginUnitMember = {
+			cedula: this.cedulaInput,
+			ficha: this.fichaInput,
+		};
+		this._auth.loginUnitMember(model);
 	}
 }
