@@ -1,0 +1,61 @@
+<ion-header>
+	<ion-toolbar color="primary">
+		<ion-title>Inicio</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<div id="content">
+		<ion-img id="logo" src="../../assets/logo_comipol.png"></ion-img>
+		<ion-card class="formulary">
+			<ion-card-header class="card-header">
+				<ion-card-title>Asistencia Vial</ion-card-title>
+				<ion-card-subtitle
+					>Formulario de autenticación
+				</ion-card-subtitle>
+				<small class="header-text"
+					>Esta versión de la aplicación es solo para uso exclusivo de
+					los miembros uniformados que prestan servicio en las
+					vías.</small
+				>
+			</ion-card-header>
+			<ion-card-content>
+				<ion-item counter="true">
+					<ion-label>Cedula</ion-label>
+					<ion-input
+						type="text"
+						placeholder="Cedula agente"
+						[clearInput]="true"
+						[required]="true"
+						[minlength]="11"
+						[maxlength]="11"
+						[(ngModel)]="cedulaInput"
+						(keyup.enter)="validateMember()"
+					></ion-input>
+				</ion-item>
+
+				<ion-item counter="true" *ngIf="_auth.isMemberValid$ | async">
+					<ion-label>Ficha</ion-label>
+					<ion-input
+						type="text"
+						placeholder="Ficha unidad"
+						[clearInput]="true"
+						maxlength="6"
+						(keyup.enter)="validateUnit()"
+						[(ngModel)]="fichaInput"
+					></ion-input>
+				</ion-item>
+			</ion-card-content>
+			<ion-button
+				(click)="loginUnitMember()"
+				color="primary"
+				expand="block"
+				class="btn"
+				[disabled]="!(_auth.isUnitValid$ | async)"
+			>
+				<ion-icon name="log-in-outline"></ion-icon>
+				Ingresar
+			</ion-button>
+		</ion-card>
+	</div>
+</ion-content>

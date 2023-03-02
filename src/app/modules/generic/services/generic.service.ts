@@ -7,7 +7,7 @@ import { environment as Prod } from 'src/environments/environment.prod';
 	providedIn: 'root',
 })
 export abstract class GenericService {
-	protected readonly endPoint: string = '';
+	protected endPoint: string = '';
 	constructor(protected $http: HttpClient) {
 		this.endPoint += `${isDevMode() ? Dev.api_url : Prod.api_url}`;
 	}

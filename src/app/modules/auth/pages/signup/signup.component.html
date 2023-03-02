@@ -1,0 +1,107 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-back-button></ion-back-button>
+		</ion-buttons>
+		<ion-title>Formulario</ion-title>
+	</ion-toolbar>
+</ion-header>
+<ion-content class="content">
+	<ion-grid class="icon-grid">
+		<ion-row>
+			<ion-col size="4"></ion-col>
+			<ion-col size="4" class="icon-col">
+				<ion-icon name="person-circle-outline"></ion-icon>
+			</ion-col>
+			<ion-col size="4"></ion-col>
+		</ion-row>
+	</ion-grid>
+	<ion-card>
+		<ion-card-header>
+			<ion-card-title style="text-align: center"
+				>Formulario Miembros</ion-card-title
+			>
+			<ion-card-subtitle style="text-align: center"
+				>Se requiere cierta informacion del miembro para ser validado
+				por la institución</ion-card-subtitle
+			>
+		</ion-card-header>
+		<ion-card-content>
+			<form [formGroup]="registerForm" (ngSubmit)="registerMember()">
+				<ion-item counter="true">
+					<ion-label>Cédula</ion-label>s
+					<ion-input
+						placeholder="Identificación"
+						formControlName="cedula"
+						maxlength="11"
+					></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label>Nombre</ion-label>
+					<ion-input
+						placeholder="Nombre"
+						formControlName="nombre"
+					></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label>Apellido</ion-label>
+					<ion-input
+						placeholder="Apellido"
+						formControlName="lastname"
+					></ion-input>
+				</ion-item>
+				<ion-radio-group formControlName="sexo">
+					<ion-grid>
+						<ion-row>
+							<ion-col>
+								<ion-item>
+									<ion-label>Hombre</ion-label>
+									<ion-radio
+										slot="end"
+										[value]="1"
+									></ion-radio>
+								</ion-item>
+							</ion-col>
+							<ion-col>
+								<ion-item>
+									<ion-label>Mujer</ion-label>
+									<ion-radio
+										slot="end"
+										[value]="2"
+									></ion-radio>
+								</ion-item>
+							</ion-col>
+						</ion-row>
+					</ion-grid>
+				</ion-radio-group>
+				<ion-item>
+					<ion-label>Seleccione su rango</ion-label>
+					<ion-select formControlName="rangoId">
+						<ion-select-option
+							[value]="item.id"
+							*ngFor="let item of rangos"
+							>{{ item.nombre }}</ion-select-option
+						>
+					</ion-select>
+				</ion-item>
+				<ion-item>
+					<ion-label>Seleccione su institución</ion-label>
+					<ion-select formControlName="institucion">
+						<ion-select-option
+							[value]="item.id"
+							*ngFor="let item of instituciones"
+							>{{ item.nombre }}</ion-select-option
+						>
+					</ion-select>
+				</ion-item>
+				<ion-button
+					type="submit"
+					expand="block"
+					color="success"
+					[disabled]="!registerForm.valid"
+					>Registrar</ion-button
+				>
+			</form>
+		</ion-card-content>
+	</ion-card>
+</ion-content>
