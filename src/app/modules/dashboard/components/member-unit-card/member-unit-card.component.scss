@@ -8,10 +8,16 @@
 		height: auto;
 		ion-icon {
 			font-size: 5rem;
+			border: 1px solid gainsboro;
+			border-radius: 0.1em;
 		}
 	}
 	.unit-info {
 		width: 70%;
 		height: auto;
 	}
+}
+
+.text {
+	margin-top: 1em;
 }

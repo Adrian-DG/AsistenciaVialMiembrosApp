@@ -8,6 +8,7 @@ import { ILoginUnitResponse } from '../interfaces/ilogin-unit-response';
 
 import { Storage } from '@ionic/storage-angular';
 import { IMemberCreate } from '../interfaces/imember-create';
+import { IMemberUnitInfo } from '../../dashboard/interfaces/imember-unit-info';
 
 @Injectable({
 	providedIn: 'root',
@@ -65,11 +66,21 @@ export class AuthService extends GenericService {
 			});
 	}
 
+	getStorageData(): Promise<any[]> {
+		const denominacion = this._storage.get('denominacion');
+		const ficha = this._storage.get('ficha');
+		const miembro = this._storage.get('miembro');
+		const placa = this._storage.get('placa');
+		const tramo = this._storage.get('tramo');
+		return Promise.all([denominacion, ficha, miembro, placa, tramo]);
+	}
+
 	private saveToStorage(model: ILoginUnitResponse): void {
 		this._storage?.set('denominacion', model.denominacion);
 		this._storage?.set('ficha', model.ficha);
 		this._storage?.set('placa', model.placa);
 		this._storage?.set('miembro', model.miembroInfo);
+		this._storage?.set('tramo', model.tramo);
 		this._storage?.set('token', model.token);
 	}
 
