@@ -1,0 +1,17 @@
+.card-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	.unit-icon {
+		width: 30%;
+		height: auto;
+		ion-icon {
+			font-size: 5rem;
+		}
+	}
+	.unit-info {
+		width: 70%;
+		height: auto;
+	}
+}
