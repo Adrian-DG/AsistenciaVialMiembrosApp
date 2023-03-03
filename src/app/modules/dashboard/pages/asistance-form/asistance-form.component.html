@@ -1,0 +1,144 @@
+<ion-header>
+	<ion-toolbar color="primary">
+		<ion-buttons slot="start">
+			<ion-back-button icon="caret-back"></ion-back-button>
+		</ion-buttons>
+		<ion-title>Formulario Asistencia</ion-title>
+	</ion-toolbar>
+</ion-header>
+<ion-content>
+	<ion-card>
+		<ion-card-header>
+			<ion-card-title>Formulario Asistencia</ion-card-title>
+			<ion-card-subtitle
+				>El siguiente formulario es para reportar las incidencias en el
+				campo.</ion-card-subtitle
+			>
+		</ion-card-header>
+		<ion-card-content>
+			<form [formGroup]="asistanceForm" (ngSubmit)="createAsistance()">
+				<ion-item counter="true">
+					<ion-label position="floating">Identificación</ion-label>
+					<ion-input
+						[maxlength]="11"
+						formControlName="identificacion"
+					></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label>Nombre Completo</ion-label>
+					<ion-input formControlName="nombreCompleto"></ion-input>
+				</ion-item>
+				<ion-item [counter]="true">
+					<ion-label>Telefono</ion-label>
+					<ion-input
+						formControlName="telefono"
+						type="number"
+						maxlength="10"
+					></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-select
+						(click)="_cache.getResource('VehiculoTipo')"
+						formControlName="vehiculoTipoId"
+						placeholder="Tipo de Vehiculo"
+					>
+						<ion-select-option
+							[value]="item.id"
+							*ngFor="let item of _cache.vehiculoTipos$ | async"
+							>{{ item.nombre }}</ion-select-option
+						>
+					</ion-select>
+				</ion-item>
+				<ion-item (click)="_cache.getResource('VehiculoColores')">
+					<ion-select
+						formControlName="vehiculoColorId"
+						placeholder="Seleccionar Color"
+					>
+						<ion-select-option
+							[value]="item.id"
+							*ngFor="let item of _cache.vehiculoColor$ | async"
+							>{{ item.nombre }}</ion-select-option
+						>
+					</ion-select>
+				</ion-item>
+				<ion-item (click)="_cache.getResource('VehiculoMarca')">
+					<ion-select
+						formControlName="vehiculoMarcaId"
+						placeholder="Seleccionar Marca"
+						#marcaId
+					>
+						<ion-select-option
+							[value]="item.id"
+							*ngFor="let item of _cache.vehiculoMarca$ | async"
+							>{{ item.nombre }}</ion-select-option
+						>
+					</ion-select>
+				</ion-item>
+				<ion-item
+					(click)="
+						_cache.getResourceById('VehiculoModelo', marcaId.value)
+					"
+				>
+					<ion-select
+						formControlName="vehiculoModeloId"
+						placeholder="Seleccionar Modelo"
+					>
+						<ion-select-option
+							[value]="item.id"
+							*ngFor="let item of _cache.vehiculoModelo$ | async"
+							>{{ item.nombre }}</ion-select-option
+						>
+					</ion-select>
+				</ion-item>
+				<ion-item (click)="_cache.getResource('provincias')">
+					<ion-select
+						formControlName="provinciaId"
+						placeholder="Seleccionar Provincia"
+						#provinciaId
+					>
+						<ion-select-option
+							[value]="item.id"
+							*ngFor="let item of _cache.provincias$ | async"
+							>{{ item.nombre }}</ion-select-option
+						>
+					</ion-select>
+				</ion-item>
+				<ion-item
+					(click)="
+						_cache.getResourceById('municipios', provinciaId.value)
+					"
+				>
+					<ion-select
+						formControlName="municipioId"
+						placeholder="Seleccionar Municipio"
+					>
+						<ion-select-option
+							[value]="item.id"
+							*ngFor="let item of _cache.municipios$ | async"
+							>{{ item.nombre }}</ion-select-option
+						>
+					</ion-select>
+				</ion-item>
+				<ion-item (click)="_cache.getResource('TipoAsistencia')">
+					<ion-select
+						formControlName="tipoAsistenciaId"
+						placeholder="Seleccionar Tipo Asistencia"
+					>
+						<ion-select-option
+							[value]="item.id"
+							*ngFor="let item of _cache.tipoAsistencia$ | async"
+							>{{ item.nombre }}</ion-select-option
+						>
+					</ion-select>
+				</ion-item>
+				<ion-button
+					expand="block"
+					type="submit"
+					color="primary"
+					[disabled]="!asistanceForm.valid"
+					>Reportar Asistencia</ion-button
+				>
+			</form>
+		</ion-card-content>
+	</ion-card>
+</ion-content>

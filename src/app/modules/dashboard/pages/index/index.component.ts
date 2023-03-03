@@ -16,10 +16,11 @@ export class IndexComponent implements OnInit {
 			console.log(response);
 			this.infoUser = {
 				denominacion: response[0],
-				ficha: response[1],
-				miembro: response[2],
-				placa: response[3],
-				tramo: response[4],
+				unidadMiembroId: response[1],
+				ficha: response[2],
+				miembro: response[3],
+				placa: response[4],
+				tramo: response[5],
 			};
 		});
 	}

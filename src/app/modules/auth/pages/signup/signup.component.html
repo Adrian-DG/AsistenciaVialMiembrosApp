@@ -1,7 +1,7 @@
 <ion-header>
 	<ion-toolbar>
 		<ion-buttons slot="start">
-			<ion-back-button></ion-back-button>
+			<ion-back-button icon="caret-back"></ion-back-button>
 		</ion-buttons>
 		<ion-title>Formulario</ion-title>
 	</ion-toolbar>
@@ -79,7 +79,7 @@
 					<ion-select formControlName="rangoId">
 						<ion-select-option
 							[value]="item.id"
-							*ngFor="let item of rangos"
+							*ngFor="let item of _cache.rangos$ | async"
 							>{{ item.nombre }}</ion-select-option
 						>
 					</ion-select>

@@ -5,4 +5,14 @@
 </ion-header>
 <ion-content>
 	<app-member-unit-card [memberInfo]="infoUser"></app-member-unit-card>
+	<div class="list">
+		<ion-list>
+			<ion-item>list item</ion-item>
+		</ion-list>
+	</div>
+	<ion-fab slot="fixed" vertical="bottom" horizontal="end">
+		<ion-fab-button [routerLink]="['create']">
+			<ion-icon name="add"></ion-icon>
+		</ion-fab-button>
+	</ion-fab>
 </ion-content>

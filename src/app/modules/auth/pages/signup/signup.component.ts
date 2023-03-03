@@ -23,7 +23,7 @@ export class SignupComponent implements OnInit {
 	constructor(
 		private _auth: AuthService,
 		private $fb: FormBuilder,
-		private _cache: CacheService
+		public _cache: CacheService
 	) {}
 
 	registerForm: FormGroup = this.$fb.group({
@@ -39,9 +39,7 @@ export class SignupComponent implements OnInit {
 	});
 
 	ngOnInit() {
-		this._cache
-			.getRangos()
-			.subscribe((data: IGenericEnum[]) => (this.rangos = data));
+		this._cache.getResource('rangos');
 	}
 
 	registerMember(): void {

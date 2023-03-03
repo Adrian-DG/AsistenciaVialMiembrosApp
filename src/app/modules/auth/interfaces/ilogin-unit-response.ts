@@ -1,5 +1,6 @@
 export interface ILoginUnitResponse {
 	denominacion: string;
+	unidadMiembroId: number;
 	ficha: string;
 	placa: string;
 	tramo: string;
