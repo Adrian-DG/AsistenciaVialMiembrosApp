@@ -11,6 +11,7 @@ export interface IAsistanceCreate {
 	longitud: string;
 	municipioId: number;
 	provinciaId: number;
-	unidadMiembro: number;
+	unidadMiembroId: number;
 	tipoAsistenciaId: number;
+	reportadoPor: number;
 }

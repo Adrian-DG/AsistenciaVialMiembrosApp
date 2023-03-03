@@ -17,6 +17,18 @@
 		</ion-card-header>
 		<ion-card-content>
 			<form [formGroup]="asistanceForm" (ngSubmit)="createAsistance()">
+				<ion-radio-group formControlName="reportadoPor">
+					<ion-row>
+						<ion-col class="radio-col">
+							<ion-radio [value]="2"></ion-radio>
+							<ion-label>Reconocimiento</ion-label>
+						</ion-col>
+						<ion-col class="radio-col">
+							<ion-radio [value]="3"></ion-radio>
+							<ion-label>Servicio 911</ion-label>
+						</ion-col>
+					</ion-row>
+				</ion-radio-group>
 				<ion-item counter="true">
 					<ion-label position="floating">Identificación</ion-label>
 					<ion-input
