@@ -19,6 +19,9 @@ export class AuthService extends GenericService {
 	private isUnitValidSource = new BehaviorSubject<boolean>(false);
 	public isUnitValid$ = this.isUnitValidSource.asObservable();
 
+	private isAuthenticatedSource = new BehaviorSubject<boolean>(false);
+	public isAuthenticated$ = this.isAuthenticatedSource.asObservable();
+
 	constructor(
 		protected override $http: HttpClient,
 		protected $router: Router,
@@ -27,6 +30,22 @@ export class AuthService extends GenericService {
 		super($http);
 		this.endPoint += `/auth`;
 		this._storage.create();
+	}
+
+	checkIfAuthenticated(): void {
+		this._storage
+			.length()
+			.then((value: number) =>
+				this.isAuthenticatedSource.next(value > 0)
+			);
+	}
+
+	getToken(): string | null {
+		let token: string | null = null;
+		this._storage
+			.get('token')
+			.then((value: string | null) => (token = value));
+		return token;
 	}
 
 	getParams(key: string, value: any): HttpParams {
