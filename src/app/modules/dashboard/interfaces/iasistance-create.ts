@@ -1,6 +1,6 @@
 export interface IAsistanceCreate {
 	identificacion: string;
-	nombreCompleto: string;
+	nombreCiudadano: string;
 	edad: number;
 	telefono: string;
 	vehiculoTipoId: number;

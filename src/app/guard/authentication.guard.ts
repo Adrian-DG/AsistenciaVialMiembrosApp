@@ -14,18 +14,15 @@ import { AuthService } from '../modules/auth/services/auth.service';
 })
 export class AuthenticationGuard implements CanActivate {
 	constructor(private _auth: AuthService, private $router: Router) {}
-	canActivate(
+
+	async canActivate(
 		route: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot
-	): boolean {
-		let isAuthenticated = false;
-		this._auth.checkIfAuthenticated();
-		this._auth.isAuthenticated$.subscribe((res: boolean) => {
-			if (res) {
-				isAuthenticated = res;
-				this.$router.navigate(['dashboard']);
-			}
-		});
-		return isAuthenticated;
+	): Promise<boolean> {
+		if (!((await this._auth.checkIfAuthenticated()) > 0)) {
+			this.$router.navigateByUrl('auth/signin');
+			return false;
+		}
+		return true;
 	}
 }

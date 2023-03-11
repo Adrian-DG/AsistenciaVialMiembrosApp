@@ -19,9 +19,6 @@ export class AuthService extends GenericService {
 	private isUnitValidSource = new BehaviorSubject<boolean>(false);
 	public isUnitValid$ = this.isUnitValidSource.asObservable();
 
-	private isAuthenticatedSource = new BehaviorSubject<boolean>(false);
-	public isAuthenticated$ = this.isAuthenticatedSource.asObservable();
-
 	constructor(
 		protected override $http: HttpClient,
 		protected $router: Router,
@@ -32,20 +29,12 @@ export class AuthService extends GenericService {
 		this._storage.create();
 	}
 
-	checkIfAuthenticated(): void {
-		this._storage
-			.length()
-			.then((value: number) =>
-				this.isAuthenticatedSource.next(value > 0)
-			);
+	checkIfAuthenticated() {
+		return this._storage.length();
 	}
 
-	getToken(): string | null {
-		let token: string | null = null;
-		this._storage
-			.get('token')
-			.then((value: string | null) => (token = value));
-		return token;
+	getToken(): Promise<any> {
+		return this._storage.get('token');
 	}
 
 	getParams(key: string, value: any): HttpParams {
@@ -117,6 +106,7 @@ export class AuthService extends GenericService {
 			.post<ILoginUnitResponse>(`${this.endPoint}/assign`, model)
 			.subscribe((response: ILoginUnitResponse) => {
 				if (response.estatus) {
+					console.log('The response was: ', response.estatus);
 					this.saveToStorage(response);
 					this.$router.navigate(['dashboard']);
 				}

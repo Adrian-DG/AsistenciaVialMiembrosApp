@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { CacheService } from 'src/app/modules/cache/services/cache.service';
+import { IAsistanceCreate } from '../../interfaces/iasistance-create';
 import { IMemberUnitInfo } from '../../interfaces/imember-unit-info';
 import { AsistanceService } from '../../services/asistance/asistance.service';
 
@@ -22,7 +23,7 @@ export class AsistanceFormComponent implements OnInit {
 
 	asistanceForm: FormGroup = this.$fb.group({
 		identificacion: ['', [Validators.required, Validators.minLength(11)]],
-		nombreCompleto: [''],
+		nombreCiudadano: [''],
 		edad: [0],
 		telefono: [''],
 		vehiculoTipoId: [],
@@ -33,18 +34,24 @@ export class AsistanceFormComponent implements OnInit {
 		longitud: [''],
 		municipioId: [],
 		provinciaId: [],
-		unidadMiembroId: [this.unidadMiembroId],
+		unidadMiembroId: [0],
 		tipoAsistenciaId: [],
 		reportadoPor: [],
 	});
 
 	ngOnInit() {
-		this._auth
-			.getStorageData()
-			.then((response: any[]) => (this.unidadMiembroId = response[1]));
+		this.getUnitMemberId();
 	}
 
-	createAsistance(): void {
-		this._asistencia.createAsistance(this.asistanceForm.value);
+	async getUnitMemberId(): Promise<number> {
+		const info = await this._auth.getStorageData();
+		return info[1];
+	}
+
+	async createAsistance(): Promise<any> {
+		let asistance: IAsistanceCreate = this.asistanceForm.value;
+		asistance.unidadMiembroId = await this.getUnitMemberId();
+		console.log(asistance);
+		this._asistencia.createAsistance(asistance);
 	}
 }

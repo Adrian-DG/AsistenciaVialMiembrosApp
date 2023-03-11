@@ -5,7 +5,7 @@ import { IndexComponent } from './pages/index/index.component';
 
 const routes: Routes = [
 	{ path: 'create', component: AsistanceFormComponent },
-	{ path: '', component: IndexComponent },
+	{ path: '', component: IndexComponent, pathMatch: 'full' },
 ];
 
 @NgModule({

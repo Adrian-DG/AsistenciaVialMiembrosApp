@@ -25,7 +25,11 @@
 						</ion-col>
 						<ion-col class="radio-col">
 							<ion-radio [value]="3"></ion-radio>
-							<ion-label>Servicio 911</ion-label>
+							<ion-label>R-5</ion-label>
+						</ion-col>
+						<ion-col class="radio-col">
+							<ion-radio [value]="1"></ion-radio>
+							<ion-label>911</ion-label>
 						</ion-col>
 					</ion-row>
 				</ion-radio-group>
@@ -37,14 +41,13 @@
 					></ion-input>
 				</ion-item>
 				<ion-item>
-					<ion-label>Nombre Completo</ion-label>
-					<ion-input formControlName="nombreCompleto"></ion-input>
+					<ion-label>Nombre</ion-label>
+					<ion-input formControlName="nombreCiudadano"></ion-input>
 				</ion-item>
 				<ion-item [counter]="true">
 					<ion-label>Telefono</ion-label>
 					<ion-input
 						formControlName="telefono"
-						type="number"
 						maxlength="10"
 					></ion-input>
 				</ion-item>
