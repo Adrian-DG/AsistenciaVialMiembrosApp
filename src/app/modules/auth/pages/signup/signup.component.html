@@ -31,6 +31,7 @@
 				<ion-item counter="true">
 					<ion-label>Cédula</ion-label>s
 					<ion-input
+						#cedulaInput
 						placeholder="Identificación"
 						formControlName="cedula"
 						maxlength="11"
@@ -75,7 +76,7 @@
 					</ion-grid>
 				</ion-radio-group>
 				<ion-item>
-					<ion-label>Seleccione su rango</ion-label>
+					<ion-label>Rango</ion-label>
 					<ion-select formControlName="rangoId">
 						<ion-select-option
 							[value]="item.id"
@@ -85,7 +86,7 @@
 					</ion-select>
 				</ion-item>
 				<ion-item>
-					<ion-label>Seleccione su institución</ion-label>
+					<ion-label>Institución</ion-label>
 					<ion-select formControlName="institucion">
 						<ion-select-option
 							[value]="item.id"

@@ -13,5 +13,6 @@ export interface IAsistanceCreate {
 	provinciaId: number;
 	unidadMiembroId: number;
 	tipoAsistenciaId: number;
+	comentarios: string;
 	reportadoPor: number;
 }

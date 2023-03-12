@@ -27,10 +27,7 @@ export class SignupComponent implements OnInit {
 	) {}
 
 	registerForm: FormGroup = this.$fb.group({
-		cedula: [
-			'',
-			[Validators.required, Validators.max(11), Validators.minLength(11)],
-		],
+		cedula: ['', [Validators.required, Validators.maxLength(11)]],
 		nombre: ['', [Validators.required]],
 		lastname: ['', [Validators.required]],
 		sexo: [, [Validators.required]],

@@ -24,7 +24,7 @@ export class AsistanceFormComponent implements OnInit {
 	asistanceForm: FormGroup = this.$fb.group({
 		identificacion: ['', [Validators.required, Validators.minLength(11)]],
 		nombreCiudadano: [''],
-		edad: [0],
+		edad: [0, [Validators.min(18)]],
 		telefono: [''],
 		vehiculoTipoId: [],
 		vehiculoColorId: [],
@@ -35,7 +35,8 @@ export class AsistanceFormComponent implements OnInit {
 		municipioId: [],
 		provinciaId: [],
 		unidadMiembroId: [0],
-		tipoAsistenciaId: [],
+		tipoAsistenciaId: [0],
+		comentarios: [''],
 		reportadoPor: [],
 	});
 
