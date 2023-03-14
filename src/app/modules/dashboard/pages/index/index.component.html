@@ -6,9 +6,62 @@
 <ion-content>
 	<app-member-unit-card [memberInfo]="infoUser"></app-member-unit-card>
 	<div class="list">
-		<ion-list>
-			<ion-item>list item</ion-item>
+		<!-- asistencias -->
+		<ion-list
+			*ngIf="_asistencias.asistencias$ as asistencias; else emptyList"
+		>
+			<ion-item *ngFor="let item of asistencias | async">
+				<ion-card style="width: 100%">
+					<ion-card-header>
+						<ion-row>
+							<ion-col size="10">
+								<ion-card-title>{{
+									item.tipoAsistencia
+								}}</ion-card-title>
+								<ion-card-subtitle
+									>{{ item.identificacion }} |
+									{{
+										item.nombreCiudadano
+									}}</ion-card-subtitle
+								>
+							</ion-col>
+							<ion-col size="2">
+								<ion-icon
+									style="
+										color: rgb(24, 187, 24);
+										font-size: 2.5rem;
+									"
+									*ngIf="item.completada"
+									name="checkmark-done-circle"
+								></ion-icon>
+								<ion-icon
+									style="
+										color: rgb(202, 68, 68);
+										font-size: 2.5rem;
+									"
+									*ngIf="!item.completada"
+									name="alert-circle"
+								></ion-icon>
+							</ion-col>
+						</ion-row>
+					</ion-card-header>
+					<ion-card-content>
+						<ion-text
+							>Ubicacion: {{ item.municipio }},
+							{{ item.provincia }}</ion-text
+						>
+					</ion-card-content>
+				</ion-card>
+			</ion-item>
 		</ion-list>
+		<!-- empty list -->
+		<ng-template #emptyList>
+			<ion-card>
+				<ion-card-content>
+					<h4>No hay asignaciones pendientes</h4>
+				</ion-card-content>
+			</ion-card>
+		</ng-template>
 	</div>
 	<ion-fab slot="fixed" vertical="bottom" horizontal="end">
 		<ion-fab-button [routerLink]="['create']">

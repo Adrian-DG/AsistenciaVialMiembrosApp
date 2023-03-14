@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { IMemberUnitInfo } from '../../interfaces/imember-unit-info';
+import { AsistanceService } from '../../services/asistance/asistance.service';
 
 @Component({
 	selector: 'app-index',
 	templateUrl: './index.component.html',
 	styleUrls: ['./index.component.scss'],
 })
-export class IndexComponent implements OnInit {
+export class IndexComponent implements OnInit, AfterViewInit {
 	infoUser: IMemberUnitInfo | null = null;
-	constructor(private _auth: AuthService) {}
+	constructor(
+		private _auth: AuthService,
+		public _asistencias: AsistanceService
+	) {}
 
 	ngOnInit() {
 		this._auth.getStorageData().then((response) => {
@@ -23,5 +27,13 @@ export class IndexComponent implements OnInit {
 				tramo: response[5],
 			};
 		});
+	}
+
+	ngAfterViewInit(): void {
+		this._asistencias.getAsistenciasUnidad('1234');
+		// const ficha = this.infoUser?.ficha;
+		// if (ficha) {
+		// 	this._asistencias.getAsistenciasUnidad('1234');
+		// }
 	}
 }
