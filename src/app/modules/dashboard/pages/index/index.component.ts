@@ -30,10 +30,12 @@ export class IndexComponent implements OnInit, AfterViewInit {
 	}
 
 	ngAfterViewInit(): void {
-		this._asistencias.getAsistenciasUnidad('1234');
-		// const ficha = this.infoUser?.ficha;
-		// if (ficha) {
-		// 	this._asistencias.getAsistenciasUnidad('1234');
-		// }
+		// TODO: asegurarse que la ficha pase
+		// this._asistencias.getAsistenciasUnidad('1234');
+		const ficha = this.infoUser?.ficha;
+		if (ficha) {
+			console.log('La ficha asignada es: ', ficha);
+			this._asistencias.getAsistenciasUnidad(ficha);
+		}
 	}
 }
