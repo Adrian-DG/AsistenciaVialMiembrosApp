@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { GenericService } from '../../../generic/services/generic.service';
 import { IAsistanceCreate } from '../../interfaces/iasistance-create';
 import { IAsistenciaViewModel } from '../../interfaces/iasistencia-view-model';
+import { IContadorAsistenciaViewModel } from '../../interfaces/icontador-asistencia-view-model';
 
 @Injectable({
 	providedIn: 'root',
@@ -12,6 +13,13 @@ import { IAsistenciaViewModel } from '../../interfaces/iasistencia-view-model';
 export class AsistanceService extends GenericService {
 	private asistenciasSource = new BehaviorSubject<IAsistenciaViewModel[]>([]);
 	public asistencias$ = this.asistenciasSource.asObservable();
+
+	private contadorAsistenciasSource =
+		new BehaviorSubject<IContadorAsistenciaViewModel>({
+			totalAccidentes: 0,
+			totalAsistencias: 0,
+		});
+	public contadorAsistencias$ = this.contadorAsistenciasSource.asObservable();
 
 	constructor(protected override $http: HttpClient, private $router: Router) {
 		super($http);
@@ -38,5 +46,16 @@ export class AsistanceService extends GenericService {
 				console.log(data);
 				this.asistenciasSource.next(data);
 			});
+	}
+
+	getTotalAsistenciasUnidad(unidadMiembroId: number): void {
+		const params = new HttpParams().set('unidadMiembroId', unidadMiembroId);
+		this.$http
+			.get<IContadorAsistenciaViewModel>(`${this.endPoint}/contador`, {
+				params: params,
+			})
+			.subscribe((data: IContadorAsistenciaViewModel) =>
+				this.contadorAsistenciasSource.next(data)
+			);
 	}
 }

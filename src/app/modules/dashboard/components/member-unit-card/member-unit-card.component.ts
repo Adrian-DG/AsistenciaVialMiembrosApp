@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { IContadorAsistenciaViewModel } from '../../interfaces/icontador-asistencia-view-model';
 import { IMemberUnitInfo } from '../../interfaces/imember-unit-info';
 
 @Component({
@@ -8,6 +9,7 @@ import { IMemberUnitInfo } from '../../interfaces/imember-unit-info';
 })
 export class MemberUnitCardComponent implements OnInit {
 	@Input() memberInfo!: IMemberUnitInfo | null;
+	@Input() counter!: IContadorAsistenciaViewModel | null;
 	constructor() {}
 
 	ngOnInit() {}

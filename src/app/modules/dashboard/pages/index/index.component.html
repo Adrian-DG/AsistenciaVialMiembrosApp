@@ -4,12 +4,21 @@
 	</ion-toolbar>
 </ion-header>
 <ion-content>
-	<app-member-unit-card [memberInfo]="infoUser"></app-member-unit-card>
+	<ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+		<ion-refresher-content></ion-refresher-content>
+	</ion-refresher>
+	<app-member-unit-card
+		[memberInfo]="infoUser"
+		[counter]="_asistencias.contadorAsistencias$ | async"
+	></app-member-unit-card>
 	<div class="list">
 		<!-- asistencias -->
 		<ion-list
 			*ngIf="_asistencias.asistencias$ as asistencias; else emptyList"
 		>
+			<ion-list-header>
+				<ion-label>Asistencias de hoy</ion-label>
+			</ion-list-header>
 			<ion-item *ngFor="let item of asistencias | async">
 				<ion-card style="width: 100%">
 					<ion-card-header>
@@ -49,6 +58,12 @@
 						<ion-text
 							>Ubicacion: {{ item.municipio }},
 							{{ item.provincia }}</ion-text
+						>
+						<ion-button
+							*ngIf="!item.completada"
+							style="width: 100%"
+							color="primary"
+							>Iniciar Asistencia</ion-button
 						>
 					</ion-card-content>
 				</ion-card>
