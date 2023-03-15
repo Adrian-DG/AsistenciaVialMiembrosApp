@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">AsistenciaVialMiembros</string>
+    <string name="title_activity_main">AsistenciaVialMiembros</string>
+    <string name="package_name">com.AsistenciaVialMiembros.app</string>
+    <string name="custom_url_scheme">com.AsistenciaVialMiembros.app</string>
+</resources>
