@@ -31,12 +31,20 @@ export class IndexComponent implements OnInit, AfterViewInit {
 
 	ngAfterViewInit(): void {
 		// TODO: asegurarse que la ficha pase
-		this._asistencias.getAsistenciasUnidad('1234');
+		if (this.infoUser?.ficha) {
+			this._asistencias.getAsistenciasUnidad(
+				this.infoUser?.ficha.toString()
+			);
+		}
 	}
 
 	handleRefresh(event: any) {
 		setTimeout(() => {
-			this._asistencias.getAsistenciasUnidad('1234');
+			if (this.infoUser?.ficha) {
+				this._asistencias.getAsistenciasUnidad(
+					this.infoUser?.ficha.toString()
+				);
+			}
 			event.target.complete();
 		}, 2000);
 	}

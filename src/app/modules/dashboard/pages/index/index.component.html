@@ -20,53 +20,7 @@
 				<ion-label>Asistencias de hoy</ion-label>
 			</ion-list-header>
 			<ion-item *ngFor="let item of asistencias | async">
-				<ion-card style="width: 100%">
-					<ion-card-header>
-						<ion-row>
-							<ion-col size="10">
-								<ion-card-title>{{
-									item.tipoAsistencia
-								}}</ion-card-title>
-								<ion-card-subtitle
-									>{{ item.identificacion }} |
-									{{
-										item.nombreCiudadano
-									}}</ion-card-subtitle
-								>
-							</ion-col>
-							<ion-col size="2">
-								<ion-icon
-									style="
-										color: rgb(24, 187, 24);
-										font-size: 2.5rem;
-									"
-									*ngIf="item.completada"
-									name="checkmark-done-circle"
-								></ion-icon>
-								<ion-icon
-									style="
-										color: rgb(202, 68, 68);
-										font-size: 2.5rem;
-									"
-									*ngIf="!item.completada"
-									name="alert-circle"
-								></ion-icon>
-							</ion-col>
-						</ion-row>
-					</ion-card-header>
-					<ion-card-content>
-						<ion-text
-							>Ubicacion: {{ item.municipio }},
-							{{ item.provincia }}</ion-text
-						>
-						<ion-button
-							*ngIf="!item.completada"
-							style="width: 100%"
-							color="primary"
-							>Iniciar Asistencia</ion-button
-						>
-					</ion-card-content>
-				</ion-card>
+				<app-asistencia-card [item]="item"></app-asistencia-card>
 			</ion-item>
 		</ion-list>
 		<!-- empty list -->

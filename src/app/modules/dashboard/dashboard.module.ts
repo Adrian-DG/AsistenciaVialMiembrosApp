@@ -10,6 +10,7 @@ import { IndexComponent } from './pages/index/index.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { AsistanceFormComponent } from './pages/asistance-form/asistance-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AsistenciaCardComponent } from './components/asistencia-card/asistencia-card.component';
 
 @NgModule({
 	declarations: [
@@ -17,6 +18,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 		MemberUnitCardComponent,
 		CounterComponent,
 		AsistanceFormComponent,
+		AsistenciaCardComponent,
 	],
 	imports: [
 		CommonModule,
