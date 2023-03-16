@@ -1,5 +1,5 @@
 <ion-header>
-	<ion-toolbar>
+	<ion-toolbar color="primary">
 		<ion-title>Inicio</ion-title>
 	</ion-toolbar>
 </ion-header>
@@ -11,25 +11,26 @@
 		[memberInfo]="infoUser"
 		[counter]="_asistencias.contadorAsistencias$ | async"
 	></app-member-unit-card>
-	<div class="list">
-		<!-- asistencias -->
-		<ion-list
-			*ngIf="_asistencias.asistencias$ as asistencias; else emptyList"
-		>
+	<div class="list" *ngIf="_asistencias.asistencias$ | async as asistencias">
+		<ion-list *ngIf="asistencias.length > 0; else emptyList">
 			<ion-list-header>
-				<ion-label>Asistencias de hoy</ion-label>
+				<ion-label class="list-title">Asistencias de hoy</ion-label>
 			</ion-list-header>
-			<ion-item *ngFor="let item of asistencias | async">
-				<app-asistencia-card [item]="item"></app-asistencia-card>
+			<!-- asistencias -->
+			<ion-item *ngFor="let item of asistencias">
+				<app-asistencia-card
+					[item]="item"
+					style="width: 100%"
+				></app-asistencia-card>
 			</ion-item>
 		</ion-list>
 		<!-- empty list -->
 		<ng-template #emptyList>
-			<ion-card>
-				<ion-card-content>
-					<h4>No hay asignaciones pendientes</h4>
-				</ion-card-content>
-			</ion-card>
+			<ion-list>
+				<ion-list-header>
+					<ion-label class="list-title">No hay registros</ion-label>
+				</ion-list-header>
+			</ion-list>
 		</ng-template>
 	</div>
 	<ion-fab slot="fixed" vertical="bottom" horizontal="end">

@@ -1,23 +1,32 @@
-<ion-card>
+<ion-card class="card-info">
 	<ion-card-header class="card-header">
-		<div class="unit-icon">
-			<ion-icon class="icon" name="car-outline"></ion-icon>
-		</div>
-		<div class="unit-info">
-			<ion-card-title class="text">Datos Unidad</ion-card-title>
-			<br />
-			<ion-card-subtitle class="text"
-				>Tramo: {{ memberInfo?.tramo }}</ion-card-subtitle
-			>
-			<ion-text class="text"
-				>Den.: {{ memberInfo?.denominacion }}</ion-text
-			>
-			<ion-text class="text">Ficha: {{ memberInfo?.ficha }} </ion-text>
-			<ion-text class="text">Placa: {{ memberInfo?.placa }} </ion-text>
-			<ion-text class="text">Miembro: {{ memberInfo?.miembro }}</ion-text>
-		</div>
+		<ion-row>
+			<ion-col size="3" class="icon-col">
+				<ion-icon class="icon" name="car-outline"></ion-icon>
+			</ion-col>
+			<ion-col size="9">
+				<ion-card-title class="text">Datos Unidad</ion-card-title>
+				<ion-text class="text">Tramo: {{ memberInfo?.tramo }}</ion-text>
+				<br />
+				<ion-text class="text"
+					>Den.: {{ memberInfo?.denominacion }}</ion-text
+				>
+				<br />
+				<ion-text class="text"
+					>Ficha: {{ memberInfo?.ficha }}
+				</ion-text>
+				<br />
+				<ion-text class="text"
+					>Placa: {{ memberInfo?.placa }}
+				</ion-text>
+				<br />
+				<ion-text class="text"
+					>Miembro: {{ memberInfo?.miembro }}</ion-text
+				>
+			</ion-col>
+		</ion-row>
 	</ion-card-header>
-	<ion-card-content>
+	<ion-card-content class="content">
 		<app-counter [counter]="counter"></app-counter>
 	</ion-card-content>
 </ion-card>

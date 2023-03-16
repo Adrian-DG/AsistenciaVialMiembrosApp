@@ -10,9 +10,12 @@ import { AuthService } from '../../services/auth.service';
 export class SigninComponent implements OnInit {
 	cedulaInput: string = '';
 	fichaInput: string = '';
+	isWriting: boolean = false;
 	constructor(public _auth: AuthService) {}
 
 	ngOnInit() {}
+
+	hideImage = () => (this.isWriting = true);
 
 	validateMember(): void {
 		this._auth.validateMember(this.cedulaInput);
@@ -23,6 +26,7 @@ export class SigninComponent implements OnInit {
 	}
 
 	loginUnitMember(): void {
+		this.isWriting = false;
 		const model: ILoginUnitMember = {
 			cedula: this.cedulaInput,
 			ficha: this.fichaInput,

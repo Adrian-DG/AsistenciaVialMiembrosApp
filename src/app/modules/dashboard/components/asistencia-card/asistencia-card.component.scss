@@ -1,7 +1,18 @@
-.emergency {
+.category-icon {
+	font-size: 2rem;
+	border: 1px solid gainsboro;
+	border-radius: 0.1em;
+	padding: 0.1em;
+}
+
+.status-icon {
+	font-size: 2rem;
+}
+
+.red {
 	color: rgb(226, 50, 50);
 }
 
-.asistance {
+.green {
 	color: rgb(37, 179, 37);
 }
