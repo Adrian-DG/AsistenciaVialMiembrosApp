@@ -1,0 +1,44 @@
+<ion-card style="width: 100%">
+	<ion-card-header>
+		<ion-row>
+			<!-- category icon-->
+			<ion-col size="2">
+				<ion-icon
+					[ngClass]="{
+						red: item.categoriaAsistencia == 1,
+						green: item.categoriaAsistencia == 2
+					}"
+					class="category-icon"
+					name="car-sport"
+				></ion-icon>
+			</ion-col>
+			<!-- card information -->
+			<ion-col size="8">
+				<ion-card-title>{{ item.tipoAsistencia }}</ion-card-title>
+			</ion-col>
+			<!-- card estatus -->
+			<ion-col size="2">
+				<ion-icon
+					class="green status-icon"
+					*ngIf="item.completada"
+					name="checkmark-done-circle"
+				></ion-icon>
+				<ion-icon
+					class="red status-icon"
+					*ngIf="!item.completada"
+					name="alert-circle"
+				></ion-icon>
+			</ion-col>
+		</ion-row>
+	</ion-card-header>
+	<ion-card-content>
+		<ion-text
+			>Nombre: {{ item.nombreCiudadano }} |
+			{{ item.reportadoPor }}</ion-text
+		>
+		<br />
+		<ion-text
+			>Ubicacion: {{ item.municipio }}, {{ item.provincia }}</ion-text
+		>
+	</ion-card-content>
+</ion-card>

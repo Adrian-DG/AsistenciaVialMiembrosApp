@@ -9,6 +9,7 @@ export interface IAsistenciaViewModel {
 	vehiculoTipo: string;
 	vehiculoColor: string;
 	tipoAsistencia: string;
+	categoriaAsistencia: number;
 	provincia: string;
 	municipio: string;
 	tramo: string;

@@ -24,7 +24,6 @@ export class AsistanceFormComponent implements OnInit {
 	asistanceForm: FormGroup = this.$fb.group({
 		identificacion: ['', [Validators.required, Validators.minLength(11)]],
 		nombreCiudadano: [''],
-		edad: [0, [Validators.min(18)]],
 		telefono: [''],
 		vehiculoTipoId: [],
 		vehiculoColorId: [],

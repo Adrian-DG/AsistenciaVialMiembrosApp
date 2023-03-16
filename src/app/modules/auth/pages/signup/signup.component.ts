@@ -12,12 +12,12 @@ import { AuthService } from '../../services/auth.service';
 export class SignupComponent implements OnInit {
 	rangos: IGenericEnum[] = [];
 	instituciones: IGenericEnum[] = [
+		{ id: 2, nombre: 'ERD' },
+		{ id: 3, nombre: 'ARD' },
+		{ id: 4, nombre: 'FARD' },
+		{ id: 5, nombre: 'PN' },
+		{ id: 6, nombre: 'MOPC' },
 		{ id: 0, nombre: 'ninguna' },
-		{ id: 1, nombre: 'Ministerio de Defensa' },
-		{ id: 2, nombre: 'Ejercito Dominicano' },
-		{ id: 3, nombre: 'Armada Dominicana' },
-		{ id: 4, nombre: 'Fuerza Aerea Dominicana' },
-		{ id: 5, nombre: 'Policia Nacional' },
 	];
 
 	constructor(

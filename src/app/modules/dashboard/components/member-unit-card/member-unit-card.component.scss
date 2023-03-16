@@ -1,33 +1,33 @@
-ion-card {
-	background-color: gainsboro;
+.card-info {
+	background-color: rgb(238, 238, 238);
 }
-
 .card-header {
+	padding: 0.5em;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	align-items: center;
-	.unit-icon {
-		width: 30%;
-		height: auto;
-		ion-icon {
-			font-size: 5.5rem;
-			border: 1px solid rgb(68, 67, 67);
-			border-radius: 0.1em;
-		}
-	}
-	.unit-info {
-		width: 70%;
-		height: auto;
+	align-items: start;
+	.icon-col {
 		display: flex;
 		flex-direction: column;
-		justify-content: start;
-		align-items: start;
+		justify-content: space-between;
+		align-items: center;
+		padding-top: 15%;
+		.icon {
+			font-size: 4rem;
+			border: 1px solid rgb(112, 112, 112);
+			border-radius: 0.2em;
+		}
 	}
+}
+
+.content {
+	padding: 0.3em;
+	background-color: rgb(218, 217, 217);
 }
 
 .text {
 	margin-top: 1em;
-	color: rgb(78, 78, 78);
+	color: rgb(80, 80, 80);
 	font-weight: bold;
 }

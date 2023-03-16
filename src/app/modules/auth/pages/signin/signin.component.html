@@ -9,18 +9,15 @@
 		<ion-img
 			id="logo"
 			src="../../../../../assets/logo_comipol.png"
+			*ngIf="!isWriting"
 		></ion-img>
 		<ion-card class="formulary">
 			<ion-card-header class="card-header">
-				<ion-card-title>Asistencia Vial</ion-card-title>
-				<ion-card-subtitle
+				<ion-card-title class="text">Asistencia Vial</ion-card-title>
+				<ion-card-subtitle class="text"
 					>Formulario de autenticación
 				</ion-card-subtitle>
-				<small class="header-text"
-					>Esta versión de la aplicación es solo para uso exclusivo de
-					los miembros uniformados que prestan servicio en las
-					vías.</small
-				>
+				<small class="text">Registro de asistencias</small>
 			</ion-card-header>
 			<ion-card-content>
 				<ion-item counter="true">
@@ -34,6 +31,7 @@
 						[maxlength]="11"
 						[(ngModel)]="cedulaInput"
 						(keyup.enter)="validateMember()"
+						(click)="hideImage()"
 					></ion-input>
 				</ion-item>
 

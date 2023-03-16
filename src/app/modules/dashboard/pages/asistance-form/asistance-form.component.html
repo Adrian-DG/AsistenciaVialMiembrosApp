@@ -30,7 +30,9 @@
 					</ion-row>
 				</ion-radio-group>
 				<ion-item counter="true">
-					<ion-label position="floating">Identificación</ion-label>
+					<ion-label position="floating"
+						>Identificación Ciudadano</ion-label
+					>
 					<ion-input
 						[maxlength]="11"
 						formControlName="identificacion"
@@ -39,10 +41,6 @@
 				<ion-item>
 					<ion-label>Nombre</ion-label>
 					<ion-input formControlName="nombreCiudadano"></ion-input>
-				</ion-item>
-				<ion-item>
-					<ion-label>Edad</ion-label>
-					<ion-input type="number" formControlName="edad"></ion-input>
 				</ion-item>
 				<ion-item [counter]="true">
 					<ion-label>Telefono</ion-label>
@@ -166,7 +164,6 @@
 					</ion-select>
 				</ion-item>
 				<ion-item>
-					<ion-label>Comentarios</ion-label>
 					<ion-textarea
 						formControlName="comentarios"
 						placeholder="Escribe cualquier otro detalle"
