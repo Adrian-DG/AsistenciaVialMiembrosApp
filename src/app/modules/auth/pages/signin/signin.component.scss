@@ -4,8 +4,13 @@
 	flex-direction: column;
 	justify-content: space-evenly;
 	align-items: center;
-	#logo {
+	.big-logo {
 		width: 60%;
+		height: auto;
+		margin-top: 10em;
+	}
+	.small-logo {
+		width: 25%;
 		height: auto;
 		margin-top: 10em;
 	}

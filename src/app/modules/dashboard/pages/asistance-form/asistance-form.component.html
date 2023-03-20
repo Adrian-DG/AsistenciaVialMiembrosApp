@@ -173,9 +173,10 @@
 					expand="block"
 					type="submit"
 					color="primary"
-					[disabled]="!asistanceForm.valid"
-					>Reportar Asistencia</ion-button
+					[disabled]="!asistanceForm.valid || isLoading"
 				>
+					{{ isLoading ? spinner : 'Registrar asistencia' }}
+				</ion-button>
 			</form>
 		</ion-card-content>
 	</ion-card>

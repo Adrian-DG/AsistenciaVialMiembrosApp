@@ -31,7 +31,10 @@ export class IndexComponent implements OnInit, AfterViewInit {
 
 	ngAfterViewInit(): void {
 		// TODO: asegurarse que la ficha pase
-		if (this.infoUser?.ficha) {
+		if (this.infoUser) {
+			this._asistencias.getTotalAsistenciasUnidad(
+				this.infoUser?.unidadMiembroId
+			);
 			this._asistencias.getAsistenciasUnidad(
 				this.infoUser?.ficha.toString()
 			);
@@ -41,6 +44,10 @@ export class IndexComponent implements OnInit, AfterViewInit {
 	handleRefresh(event: any) {
 		setTimeout(() => {
 			if (this.infoUser?.ficha) {
+				this._asistencias.getTotalAsistenciasUnidad(
+					this.infoUser?.unidadMiembroId
+				);
+
 				this._asistencias.getAsistenciasUnidad(
 					this.infoUser?.ficha.toString()
 				);
