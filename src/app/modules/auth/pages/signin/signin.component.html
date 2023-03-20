@@ -7,9 +7,8 @@
 <ion-content>
 	<div id="content">
 		<ion-img
-			id="logo"
 			src="../../../../../assets/logo_comipol.png"
-			*ngIf="!isWriting"
+			[ngClass]="isWriting ? 'small-logo' : 'big-logo'"
 		></ion-img>
 		<ion-card class="formulary">
 			<ion-card-header class="card-header">
