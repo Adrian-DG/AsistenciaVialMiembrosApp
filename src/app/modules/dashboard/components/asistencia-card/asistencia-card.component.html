@@ -3,42 +3,120 @@
 		<ion-row>
 			<!-- category icon-->
 			<ion-col size="2">
-				<ion-icon
-					[ngClass]="{
-						red: item.categoriaAsistencia == 1,
-						green: item.categoriaAsistencia == 2
-					}"
-					class="category-icon"
-					name="car-sport"
-				></ion-icon>
+				<ion-icon class="category-icon" name="car-sport"></ion-icon>
 			</ion-col>
 			<!-- card information -->
 			<ion-col size="8">
-				<ion-card-title>{{ item.tipoAsistencia }}</ion-card-title>
+				<ion-card-title style="text-align: center">{{
+					item.estatusAsistencia | uppercase
+				}}</ion-card-title>
 			</ion-col>
 			<!-- card estatus -->
 			<ion-col size="2">
 				<ion-icon
 					class="green status-icon"
-					*ngIf="item.completada"
+					*ngIf="item.estatus"
 					name="checkmark-done-circle"
 				></ion-icon>
 				<ion-icon
 					class="red status-icon"
-					*ngIf="!item.completada"
+					*ngIf="!item.estatus"
 					name="alert-circle"
 				></ion-icon>
 			</ion-col>
 		</ion-row>
 	</ion-card-header>
 	<ion-card-content>
-		<ion-text
-			>Nombre: {{ item.nombreCiudadano }} |
-			{{ item.reportadoPor }}</ion-text
-		>
-		<br />
-		<ion-text
-			>Ubicacion: {{ item.municipio }}, {{ item.provincia }}</ion-text
-		>
+		<ion-accordion-group>
+			<ion-accordion value="first">
+				<ion-item slot="header" color="light">
+					<ion-label>Datos ciudadano</ion-label>
+				</ion-item>
+				<div class="ion-padding" slot="content">
+					<ion-text
+						><strong>Identificacion: </strong
+						>{{ item.identificacion }}</ion-text
+					>
+					<br />
+					<ion-text
+						><strong>Nombre: </strong
+						>{{ item.nombreCiudadano }}</ion-text
+					>
+					<br />
+					<ion-text
+						><strong>Sexo: </strong>{{ item.genero }}</ion-text
+					>
+					<br />
+					<ion-text
+						><strong>Extranjero: </strong
+						>{{ item.esExtranjero ? 'Si' : 'No' }}</ion-text
+					>
+					<br />
+					<ion-text
+						><strong>Telefono: </strong
+						>{{ item.telefono }}</ion-text
+					>
+				</div>
+			</ion-accordion>
+			<ion-accordion value="second">
+				<ion-item slot="header" color="light">
+					<ion-label>Datos Vehiculo</ion-label></ion-item
+				>
+				<div class="ion-padding" slot="content">
+					<ion-text
+						><strong>Tipo: </strong
+						>{{ item.vehiculoTipo }}</ion-text
+					>
+					<br />
+					<ion-text
+						><strong>Color: </strong
+						>{{ item.vehiculoColor }}</ion-text
+					>
+					<br />
+					<ion-text
+						><strong>Marca: </strong
+						>{{ item.vehiculoMarca }}</ion-text
+					>
+					<br />
+					<ion-text
+						><strong>Modelo: </strong
+						>{{ item.vehiculoModelo }}</ion-text
+					>
+					<br />
+					<ion-text
+						><strong>Placa: </strong>{{ item.placa }}</ion-text
+					>
+				</div>
+			</ion-accordion>
+			<!-- datos asistencia -->
+			<ion-accordion value="third">
+				<ion-item slot="header" color="light">
+					<ion-label>Datos asistencia</ion-label>
+				</ion-item>
+				<div class="ion-padding" slot="content">
+					<ion-list>
+						<ion-list-header
+							><strong>Tipos asistencia</strong></ion-list-header
+						>
+						<ion-item *ngFor="let item of item.tipoAsistencias">
+							<ion-text
+								><ion-icon name="checkbox-outline"></ion-icon>
+								{{ item.nombre }}
+							</ion-text>
+						</ion-item>
+					</ion-list>
+					<br />
+					<ion-text
+						><strong>Creacion: </strong
+						>{{ item.fechaCreacion | date : 'short' }}</ion-text
+					>
+					<br />
+					<ion-text
+						><strong>Comentario: </strong
+						>{{ item.comentario }}</ion-text
+					>
+				</div>
+			</ion-accordion>
+		</ion-accordion-group>
 	</ion-card-content>
 </ion-card>

@@ -12,6 +12,7 @@ import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthModule } from './modules/auth/auth.module';
+import { JtwInterceptor } from './interceptors/jtw.interceptor';
 
 @NgModule({
 	declarations: [AppComponent],
@@ -23,7 +24,10 @@ import { AuthModule } from './modules/auth/auth.module';
 		IonicStorageModule.forRoot(),
 		AuthModule,
 	],
-	providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+	providers: [
+		{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+		{ provide: HTTP_INTERCEPTORS, useClass: JtwInterceptor, multi: true },
+	],
 	bootstrap: [AppComponent],
 })
 export class AppModule {}

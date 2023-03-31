@@ -34,13 +34,12 @@
 					></ion-input>
 				</ion-item>
 
-				<ion-item counter="true" *ngIf="_auth.isMemberValid$ | async">
+				<ion-item *ngIf="_auth.isMemberValid$ | async">
 					<ion-label>Ficha</ion-label>
 					<ion-input
 						type="text"
 						placeholder="Ficha unidad"
 						[clearInput]="true"
-						maxlength="6"
 						(keyup.enter)="validateUnit()"
 						[(ngModel)]="fichaInput"
 					></ion-input>

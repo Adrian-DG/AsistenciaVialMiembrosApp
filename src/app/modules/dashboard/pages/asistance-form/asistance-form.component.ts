@@ -25,23 +25,52 @@ export class AsistanceFormComponent implements OnInit {
 		private _asistencia: AsistanceService
 	) {}
 
-	asistanceForm: FormGroup = this.$fb.group({
+	// asistanceForm: FormGroup = this.$fb.group({
+	// 	identificacion: ['', [Validators.required, Validators.minLength(11)]],
+	// 	nombre: [''],
+	// 	apellido: [''],
+	// 	genero: [0],
+	// 	esExtranjero: [false],
+	// 	telefono: [''],
+	// 	vehiculoTipoId: [],
+	// 	vehiculoColorId: [],
+	// 	vehiculoModeloId: [],
+	// 	vehiculoMarcaId: [],
+	// 	placa: [''],
+	// 	municipioId: [],
+	// 	provinciaId: [],
+	// 	unidadMiembroId: [0],
+	// 	comentario: [''],
+	// 	reportadoPor: [],
+	// });
+
+	ciudadanoForm: FormGroup = this.$fb.group({
 		identificacion: ['', [Validators.required, Validators.minLength(11)]],
-		nombreCiudadano: [''],
+		nombre: [''],
+		apellido: [''],
+		genero: [0],
+		esExtranjero: [false],
 		telefono: [''],
+	});
+
+	vehiculoForm: FormGroup = this.$fb.group({
 		vehiculoTipoId: [],
 		vehiculoColorId: [],
 		vehiculoModeloId: [],
 		vehiculoMarcaId: [],
-		latitud: [''],
-		longitud: [''],
+		placa: [''],
+	});
+
+	ubicacionForm: FormGroup = this.$fb.group({
 		municipioId: [],
 		provinciaId: [],
-		unidadMiembroId: [0],
-		tipoAsistenciaId: [0],
-		comentarios: [''],
-		reportadoPor: [],
 	});
+
+	imagenes: string[] = [];
+	coordenadas: string = '';
+	reportadoPor: number = 0;
+	tipoAsistencias: number[] = [];
+	comentario: string = '';
 
 	ngOnInit() {
 		this.getUnitMemberId();
@@ -54,9 +83,54 @@ export class AsistanceFormComponent implements OnInit {
 
 	async createAsistance(): Promise<any> {
 		this.isLoading = true;
-		let asistance: IAsistanceCreate = this.asistanceForm.value;
-		asistance.unidadMiembroId = await this.getUnitMemberId();
-		this._asistencia.createAsistance(asistance);
+
+		const {
+			identificacion,
+			nombre,
+			apellido,
+			genero,
+			esExtranjero,
+			telefono,
+		} = this.ciudadanoForm.value;
+
+		const {
+			vehiculoTipoId,
+			vehiculoColorId,
+			vehiculoMarcaId,
+			vehiculoModeloId,
+			placa,
+		} = this.vehiculoForm.value;
+
+		const { provinciaId, municipioId } = this.ubicacionForm.value;
+
+		const newAsistencia: IAsistanceCreate = {
+			// ciudadano
+			identificacion: identificacion,
+			nombre: nombre,
+			apellido: apellido,
+			genero: genero,
+			esExtranjero: esExtranjero,
+			telefono: telefono,
+			// vehiculo
+			vehiculoColorId: vehiculoColorId,
+			vehiculoTipoId: vehiculoTipoId,
+			vehiculoMarcaId: vehiculoMarcaId,
+			vehiculoModeloId: vehiculoModeloId,
+			placa: placa,
+			// ubicacion
+			provinciaId: provinciaId,
+			municipioId: municipioId,
+			comentario: this.comentario,
+			coordenadas: this.coordenadas,
+			reportadoPor: this.reportadoPor,
+			tipoAsistencias: this.tipoAsistencias,
+			unidadMiembroId: 0,
+			imagenes: this.imagenes,
+		};
+
+		newAsistencia.unidadMiembroId = await this.getUnitMemberId();
+
+		this._asistencia.createAsistance(newAsistencia);
 		this.isLoading = false;
 	}
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { GenericService } from '../../generic/services/generic.service';
@@ -69,11 +69,13 @@ export class CacheService extends GenericService {
 	}
 
 	getResourceById(resource: string, id: number): void {
-		console.log(`${resource}/${id}`);
+		const params = new HttpParams().set('id', id);
 		const sourcesKeys = Object.entries(this.sources);
 		console.log(resource);
 		this.$http
-			.get<IGenericEnum[]>(`${this.endPoint}/${resource}/${id}`)
+			.get<IGenericEnum[]>(`${this.endPoint}/${resource}`, {
+				params: params,
+			})
 			.subscribe((data: IGenericEnum[]) => {
 				console.log(data);
 				const key = sourcesKeys.findIndex((x) => x[0] == resource);

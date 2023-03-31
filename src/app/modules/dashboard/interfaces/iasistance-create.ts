@@ -1,18 +1,21 @@
 export interface IAsistanceCreate {
 	identificacion: string;
-	nombreCiudadano: string;
-	edad: number;
+	nombre: string;
+	apellido: string;
+	genero: number;
+	esExtranjero: boolean;
 	telefono: string;
 	vehiculoTipoId: number;
 	vehiculoColorId: number;
 	vehiculoModeloId: number;
 	vehiculoMarcaId: number;
-	latitud: string;
-	longitud: string;
+	placa: string;
+	coordenadas: string;
 	municipioId: number;
 	provinciaId: number;
 	unidadMiembroId: number;
-	tipoAsistenciaId: number;
-	comentarios: string;
+	imagenes: string[];
+	tipoAsistencias: number[];
+	comentario: string;
 	reportadoPor: number;
 }

@@ -25,7 +25,6 @@ export class AuthService extends GenericService {
 		private _storage: Storage
 	) {
 		super($http);
-		this.endPoint += `/auth`;
 		this._storage.create();
 	}
 
@@ -43,7 +42,7 @@ export class AuthService extends GenericService {
 
 	validateMember(cedula: string): void {
 		this.$http
-			.get<boolean>(`${this.endPoint}/member/confirm`, {
+			.get<boolean>(`${this.endPoint}/miembros/confirm`, {
 				params: this.getParams('Cedula', cedula),
 			})
 			.subscribe((response: boolean) => {
@@ -56,7 +55,7 @@ export class AuthService extends GenericService {
 
 	validateUnit(ficha: string): void {
 		this.$http
-			.get<boolean>(`${this.endPoint}/unit/confirm`, {
+			.get<boolean>(`${this.endPoint}/unidades/confirm`, {
 				params: this.getParams('Ficha', ficha),
 			})
 			.subscribe((response: boolean) =>
@@ -66,7 +65,7 @@ export class AuthService extends GenericService {
 
 	registerMember(model: IMemberCreate): void {
 		this.$http
-			.post<boolean>(`${this.endPoint}/member/create`, model)
+			.post<boolean>(`${this.endPoint}/miembros/create`, model)
 			.subscribe((response: boolean) => {
 				if (response) {
 					this.$router.navigate(['auth/signin']);
@@ -103,7 +102,10 @@ export class AuthService extends GenericService {
 
 	loginUnitMember(model: ILoginUnitMember): void {
 		this.$http
-			.post<ILoginUnitResponse>(`${this.endPoint}/assign`, model)
+			.post<ILoginUnitResponse>(
+				`${this.endPoint}/unidadmiembro/create`,
+				model
+			)
 			.subscribe((response: ILoginUnitResponse) => {
 				if (response.estatus) {
 					console.log('The response was: ', response.estatus);
