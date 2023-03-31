@@ -7,12 +7,9 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { Drivers, Storage } from '@ionic/storage';
-import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthModule } from './modules/auth/auth.module';
-import { JtwInterceptor } from './interceptors/jtw.interceptor';
 
 @NgModule({
 	declarations: [AppComponent],
@@ -24,10 +21,7 @@ import { JtwInterceptor } from './interceptors/jtw.interceptor';
 		IonicStorageModule.forRoot(),
 		AuthModule,
 	],
-	providers: [
-		{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-		{ provide: HTTP_INTERCEPTORS, useClass: JtwInterceptor, multi: true },
-	],
+	providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
 	bootstrap: [AppComponent],
 })
 export class AppModule {}

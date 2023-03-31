@@ -65,7 +65,7 @@ export class AuthService extends GenericService {
 
 	registerMember(model: IMemberCreate): void {
 		this.$http
-			.post<boolean>(`${this.endPoint}/miembros/create`, model)
+			.post<boolean>(`${this.endPoint}/miembros/createApp`, model)
 			.subscribe((response: boolean) => {
 				if (response) {
 					this.$router.navigate(['auth/signin']);
