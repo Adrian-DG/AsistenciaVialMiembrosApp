@@ -9,6 +9,8 @@ import { ILoginUnitResponse } from '../interfaces/ilogin-unit-response';
 import { Storage } from '@ionic/storage-angular';
 import { IMemberCreate } from '../interfaces/imember-create';
 import { IMemberUnitInfo } from '../../dashboard/interfaces/imember-unit-info';
+import { ICreatedAuthorizedMember } from '../interfaces/icreated-authorized-member';
+import { ToastController } from '@ionic/angular';
 
 @Injectable({
 	providedIn: 'root',
@@ -19,10 +21,14 @@ export class AuthService extends GenericService {
 	private isUnitValidSource = new BehaviorSubject<boolean>(false);
 	public isUnitValid$ = this.isUnitValidSource.asObservable();
 
+	private isAuthorizedSource = new BehaviorSubject<boolean>(false);
+	public isAuthorized$ = this.isAuthorizedSource.asObservable();
+
 	constructor(
 		protected override $http: HttpClient,
 		protected $router: Router,
-		private _storage: Storage
+		private _storage: Storage,
+		private _toast: ToastController
 	) {
 		super($http);
 		this._storage.create();
@@ -40,16 +46,42 @@ export class AuthService extends GenericService {
 		return new HttpParams().set(key, value);
 	}
 
+	async showToast(message: string) {
+		const toast = await this._toast.create({
+			message: message,
+			duration: 5000,
+			position: 'middle',
+			animated: true,
+			icon: 'alert-circle-outline',
+			color: 'light',
+		});
+
+		await toast.present();
+	}
+
 	validateMember(cedula: string): void {
 		this.$http
-			.get<boolean>(`${this.endPoint}/miembros/confirm`, {
-				params: this.getParams('Cedula', cedula),
-			})
-			.subscribe((response: boolean) => {
-				if (!response) {
+			.get<ICreatedAuthorizedMember>(
+				`${this.endPoint}/miembros/confirm`,
+				{
+					params: this.getParams('Cedula', cedula),
+				}
+			)
+			.subscribe((response: ICreatedAuthorizedMember) => {
+				if (!response.created) {
 					this.$router.navigate(['auth/signup']);
 				}
-				this.isMemberValidSource.next(response);
+
+				if (!response.isAuthorized) {
+					console.log('display toast');
+					this.showToast(
+						'El usuario existe, pero aun no ha sido autorizado'
+					);
+				}
+
+				this.isMemberValidSource.next(
+					response.created && response.isAuthorized
+				);
 			});
 	}
 
@@ -58,9 +90,14 @@ export class AuthService extends GenericService {
 			.get<boolean>(`${this.endPoint}/unidades/confirm`, {
 				params: this.getParams('Ficha', ficha),
 			})
-			.subscribe((response: boolean) =>
-				this.isUnitValidSource.next(response)
-			);
+			.subscribe((response: boolean) => {
+				if (!response) {
+					this.showToast(
+						'No hay unidades registradas con esta ficha!!'
+					);
+				}
+				this.isUnitValidSource.next(response);
+			});
 	}
 
 	registerMember(model: IMemberCreate): void {

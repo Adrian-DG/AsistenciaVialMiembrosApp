@@ -4,25 +4,12 @@
 			<ion-col size="3" class="icon-col">
 				<ion-icon class="icon" name="car-outline"></ion-icon>
 			</ion-col>
-			<ion-col size="9">
-				<ion-card-title class="text">Datos Unidad</ion-card-title>
-				<ion-text class="text">Tramo: {{ memberInfo?.tramo }}</ion-text>
+			<ion-col class="info-col" size="9">
+				<ion-text>Den.: {{ memberInfo?.denominacion }}</ion-text>
 				<br />
-				<ion-text class="text"
-					>Den.: {{ memberInfo?.denominacion }}</ion-text
-				>
+				<ion-text>Ficha: {{ memberInfo?.ficha }}</ion-text>
 				<br />
-				<ion-text class="text"
-					>Ficha: {{ memberInfo?.ficha }}
-				</ion-text>
-				<br />
-				<ion-text class="text"
-					>Placa: {{ memberInfo?.placa }}
-				</ion-text>
-				<br />
-				<ion-text class="text"
-					>Miembro: {{ memberInfo?.miembro }}</ion-text
-				>
+				<ion-text>{{ memberInfo?.miembro }}</ion-text>
 			</ion-col>
 		</ion-row>
 	</ion-card-header>
