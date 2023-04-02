@@ -6,6 +6,7 @@ import { CacheService } from 'src/app/modules/cache/services/cache.service';
 import { IAsistanceCreate } from '../../interfaces/iasistance-create';
 import { IMemberUnitInfo } from '../../interfaces/imember-unit-info';
 import { AsistanceService } from '../../services/asistance/asistance.service';
+import { Geolocation } from '@capacitor/geolocation';
 
 @Component({
 	selector: 'app-asistance-form',
@@ -13,11 +14,6 @@ import { AsistanceService } from '../../services/asistance/asistance.service';
 	styleUrls: ['./asistance-form.component.scss'],
 })
 export class AsistanceFormComponent implements OnInit {
-	isLoading: boolean = false;
-	spinner: string = `
-	<ion-label>Default</ion-label>
-		<ion-spinner></ion-spinner> 
-	</ion-item>`;
 	constructor(
 		private $fb: FormBuilder,
 		public _cache: CacheService,
@@ -76,14 +72,18 @@ export class AsistanceFormComponent implements OnInit {
 		this.getUnitMemberId();
 	}
 
+	async getCurrentPosition(): Promise<void> {
+		const position = await Geolocation.getCurrentPosition();
+		console.log(position);
+		this.coordenadas = `${position.coords.latitude}, ${position.coords.longitude}`;
+	}
+
 	async getUnitMemberId(): Promise<number> {
 		const info = await this._auth.getStorageData();
 		return info[1];
 	}
 
 	async createAsistance(): Promise<any> {
-		this.isLoading = true;
-
 		const {
 			identificacion,
 			nombre,
@@ -131,6 +131,5 @@ export class AsistanceFormComponent implements OnInit {
 		newAsistencia.unidadMiembroId = await this.getUnitMemberId();
 
 		this._asistencia.createAsistance(newAsistencia);
-		this.isLoading = false;
 	}
 }

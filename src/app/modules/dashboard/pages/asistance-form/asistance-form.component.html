@@ -232,6 +232,19 @@
 							</ion-item>
 						</form>
 						<!-- TODO: GET GPS location add button here -->
+						<ion-row>
+							<ion-col size="12">
+								<ion-button
+									expand="block"
+									(click)="getCurrentPosition()"
+									color="primary"
+								>
+									<ion-icon name="location"></ion-icon>
+
+									Ubicación
+								</ion-button>
+							</ion-col>
+						</ion-row>
 					</div>
 				</ion-accordion>
 			</ion-accordion-group>
