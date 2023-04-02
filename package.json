@@ -23,6 +23,7 @@
     "@auth0/angular-jwt": "^5.1.2",
     "@capacitor/android": "^4.7.1",
     "@capacitor/app": "^4.1.1",
+    "@capacitor/camera": "^4.1.4",
     "@capacitor/core": "^4.7.1",
     "@capacitor/geolocation": "^4.1.0",
     "@ionic/angular": "^6.1.9",
