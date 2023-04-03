@@ -48,14 +48,14 @@ export class AsistanceService extends GenericService {
 			});
 	}
 
-	// getTotalAsistenciasUnidad(unidadMiembroId: number): void {
-	// 	const params = new HttpParams().set('unidadMiembroId', unidadMiembroId);
-	// 	this.$http
-	// 		.get<IContadorAsistenciaViewModel>(`${this.endPoint}/contador`, {
-	// 			params: params,
-	// 		})
-	// 		.subscribe((data: IContadorAsistenciaViewModel) =>
-	// 			this.contadorAsistenciasSource.next(data)
-	// 		);
-	// }
+	getTotalAsistenciasUnidad(unidadMiembroId: number): void {
+		const params = new HttpParams().set('unidadMiembroId', unidadMiembroId);
+		this.$http
+			.get<IContadorAsistenciaViewModel>(`${this.endPoint}/contador`, {
+				params: params,
+			})
+			.subscribe((data: IContadorAsistenciaViewModel) =>
+				this.contadorAsistenciasSource.next(data)
+			);
+	}
 }

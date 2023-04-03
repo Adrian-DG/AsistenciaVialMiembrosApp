@@ -44,9 +44,9 @@ export class IndexComponent implements OnInit, AfterViewInit {
 	handleRefresh(event: any) {
 		setTimeout(() => {
 			if (this.infoUser?.ficha) {
-				// this._asistencias.getTotalAsistenciasUnidad(
-				// 	this.infoUser?.unidadMiembroId
-				// );
+				this._asistencias.getTotalAsistenciasUnidad(
+					this.infoUser?.unidadMiembroId
+				);
 
 				this._asistencias.getAsistenciasUnidad(
 					this.infoUser?.ficha.toString()

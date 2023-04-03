@@ -127,14 +127,16 @@ export class AuthService extends GenericService {
 		]);
 	}
 
-	private saveToStorage(model: ILoginUnitResponse): void {
-		this._storage?.set('denominacion', model.denominacion);
-		this._storage?.set('unidadMiembroId', model.unidadMiembroId);
-		this._storage?.set('ficha', model.ficha);
-		this._storage?.set('placa', model.placa);
-		this._storage?.set('miembro', model.miembroInfo);
-		this._storage?.set('tramo', model.tramo);
-		this._storage?.set('token', model.token);
+	private async saveToStorage(model: ILoginUnitResponse): Promise<void> {
+		await Promise.all([
+			this._storage?.set('denominacion', model.denominacion),
+			this._storage?.set('unidadMiembroId', model.unidadMiembroId),
+			this._storage?.set('ficha', model.ficha),
+			this._storage?.set('placa', model.placa),
+			this._storage?.set('miembro', model.miembroInfo),
+			this._storage?.set('tramo', model.tramo),
+			this._storage?.set('token', model.token),
+		]);
 	}
 
 	loginUnitMember(model: ILoginUnitMember): void {
@@ -147,6 +149,7 @@ export class AuthService extends GenericService {
 				if (response.estatus) {
 					console.log('The response was: ', response.estatus);
 					this.saveToStorage(response);
+					console.log('to dashboard');
 					this.$router.navigate(['dashboard']);
 				}
 			});

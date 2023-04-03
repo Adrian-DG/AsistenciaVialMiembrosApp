@@ -4,9 +4,14 @@
 			<ion-back-button icon="caret-back"></ion-back-button>
 		</ion-buttons>
 		<ion-title>Formulario Asistencia</ion-title>
+		<ion-buttons slot="end" *ngIf="wantPictures">
+			<ion-button (click)="showPictureScreen()">
+				<ion-icon name="send"></ion-icon>
+			</ion-button>
+		</ion-buttons>
 	</ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content *ngIf="!wantPictures">
 	<ion-card>
 		<ion-card-header>
 			<ion-card-title>Formulario Asistencia</ion-card-title>
@@ -238,8 +243,12 @@
 									expand="block"
 									(click)="getCurrentPosition()"
 									color="primary"
+									[disabled]="hasPosition"
 								>
-									<ion-icon name="location"></ion-icon>
+									<ion-icon
+										class="form-icons"
+										name="location"
+									></ion-icon>
 
 									Ubicación
 								</ion-button>
@@ -293,6 +302,15 @@
 			</ion-item>
 			<ion-button
 				expand="block"
+				color="light"
+				(click)="showPictureScreen()"
+			>
+				<ion-icon class="form-icons" name="images-sharp"></ion-icon>
+				Agregar Fotos
+			</ion-button>
+			<br />
+			<ion-button
+				expand="block"
 				color="success"
 				[disabled]="
 					!(
@@ -306,4 +324,41 @@
 			>
 		</ion-card-content>
 	</ion-card>
+</ion-content>
+
+<ion-content *ngIf="wantPictures">
+	<ion-grid *ngIf="hasPictures">
+		<ion-row>
+			<ion-col
+				size="6"
+				*ngFor="let photo of imagesWeb; index as position"
+			>
+				<ion-img [src]="photo"></ion-img>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+
+	<div class="illustration" *ngIf="!hasPictures">
+		<ion-img
+			class="car-plate"
+			src="../../../../../assets/license_plate.png"
+		></ion-img>
+		<div class="picture-text">
+			<ion-text
+				>Las siguientes imagenes se utilizaran para comprobar la
+				veracidad de la asistencia.</ion-text
+			>
+		</div>
+	</div>
+
+	<ion-fab
+		(click)="takePicture()"
+		vertical="bottom"
+		horizontal="center"
+		style="margin-bottom: 2em"
+	>
+		<ion-fab-button>
+			<ion-icon name="camera-sharp"></ion-icon>
+		</ion-fab-button>
+	</ion-fab>
 </ion-content>
