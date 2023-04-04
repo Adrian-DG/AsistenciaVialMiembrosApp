@@ -25,6 +25,7 @@ export class IndexComponent implements OnInit, AfterViewInit {
 				miembro: response[3],
 				placa: response[4],
 				tramo: response[5],
+				esEncargado: response[6],
 			};
 		});
 	}
@@ -32,9 +33,9 @@ export class IndexComponent implements OnInit, AfterViewInit {
 	ngAfterViewInit(): void {
 		// TODO: asegurarse que la ficha pase
 		if (this.infoUser) {
-			this._asistencias.getTotalAsistenciasUnidad(
-				this.infoUser?.unidadMiembroId
-			);
+			// this._asistencias.getTotalAsistenciasUnidad(
+			// 	this.infoUser?.unidadMiembroId
+			// );
 			this._asistencias.getAsistenciasUnidad(
 				this.infoUser?.ficha.toString()
 			);
@@ -54,5 +55,9 @@ export class IndexComponent implements OnInit, AfterViewInit {
 			}
 			event.target.complete();
 		}, 2000);
+	}
+
+	logout(): void {
+		this._auth.logout();
 	}
 }

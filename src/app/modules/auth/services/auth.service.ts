@@ -9,6 +9,8 @@ import { ILoginUnitResponse } from '../interfaces/ilogin-unit-response';
 import { Storage } from '@ionic/storage-angular';
 import { IMemberCreate } from '../interfaces/imember-create';
 import { IMemberUnitInfo } from '../../dashboard/interfaces/imember-unit-info';
+import { ICreatedAuthorizedMember } from '../interfaces/icreated-authorized-member';
+import { ToastController } from '@ionic/angular';
 
 @Injectable({
 	providedIn: 'root',
@@ -19,13 +21,16 @@ export class AuthService extends GenericService {
 	private isUnitValidSource = new BehaviorSubject<boolean>(false);
 	public isUnitValid$ = this.isUnitValidSource.asObservable();
 
+	private isAuthorizedSource = new BehaviorSubject<boolean>(false);
+	public isAuthorized$ = this.isAuthorizedSource.asObservable();
+
 	constructor(
 		protected override $http: HttpClient,
 		protected $router: Router,
-		private _storage: Storage
+		private _storage: Storage,
+		private _toast: ToastController
 	) {
 		super($http);
-		this.endPoint += `/auth`;
 		this._storage.create();
 	}
 
@@ -41,32 +46,63 @@ export class AuthService extends GenericService {
 		return new HttpParams().set(key, value);
 	}
 
+	async showToast(message: string) {
+		const toast = await this._toast.create({
+			message: message,
+			duration: 5000,
+			position: 'middle',
+			animated: true,
+			icon: 'alert-circle-outline',
+			color: 'light',
+		});
+
+		await toast.present();
+	}
+
 	validateMember(cedula: string): void {
 		this.$http
-			.get<boolean>(`${this.endPoint}/member/confirm`, {
-				params: this.getParams('Cedula', cedula),
-			})
-			.subscribe((response: boolean) => {
-				if (!response) {
+			.get<ICreatedAuthorizedMember>(
+				`${this.endPoint}/miembros/confirm`,
+				{
+					params: this.getParams('Cedula', cedula),
+				}
+			)
+			.subscribe((response: ICreatedAuthorizedMember) => {
+				if (!response.created) {
 					this.$router.navigate(['auth/signup']);
 				}
-				this.isMemberValidSource.next(response);
+
+				if (!response.isAuthorized) {
+					console.log('display toast');
+					this.showToast(
+						'El usuario existe, pero aun no ha sido autorizado'
+					);
+				}
+
+				this.isMemberValidSource.next(
+					response.created && response.isAuthorized
+				);
 			});
 	}
 
 	validateUnit(ficha: string): void {
 		this.$http
-			.get<boolean>(`${this.endPoint}/unit/confirm`, {
+			.get<boolean>(`${this.endPoint}/unidades/confirm`, {
 				params: this.getParams('Ficha', ficha),
 			})
-			.subscribe((response: boolean) =>
-				this.isUnitValidSource.next(response)
-			);
+			.subscribe((response: boolean) => {
+				if (!response) {
+					this.showToast(
+						'No hay unidades registradas con esta ficha!!'
+					);
+				}
+				this.isUnitValidSource.next(response);
+			});
 	}
 
 	registerMember(model: IMemberCreate): void {
 		this.$http
-			.post<boolean>(`${this.endPoint}/member/create`, model)
+			.post<boolean>(`${this.endPoint}/miembros/createApp`, model)
 			.subscribe((response: boolean) => {
 				if (response) {
 					this.$router.navigate(['auth/signin']);
@@ -75,41 +111,48 @@ export class AuthService extends GenericService {
 	}
 
 	getStorageData(): Promise<any[]> {
-		const denominacion = this._storage.get('denominacion');
-		const unidadMiembroId = this._storage.get('unidadMiembroId');
-		const ficha = this._storage.get('ficha');
-		const miembro = this._storage.get('miembro');
-		const placa = this._storage.get('placa');
-		const tramo = this._storage.get('tramo');
 		return Promise.all([
-			denominacion,
-			unidadMiembroId,
-			ficha,
-			miembro,
-			placa,
-			tramo,
+			this._storage.get('denominacion'),
+			this._storage.get('unidadMiembroId'),
+			this._storage.get('ficha'),
+			this._storage.get('miembro'),
+			this._storage.get('placa'),
+			this._storage.get('tramo'),
+			this._storage.get('esEncargado'),
 		]);
 	}
 
-	private saveToStorage(model: ILoginUnitResponse): void {
-		this._storage?.set('denominacion', model.denominacion);
-		this._storage?.set('unidadMiembroId', model.unidadMiembroId);
-		this._storage?.set('ficha', model.ficha);
-		this._storage?.set('placa', model.placa);
-		this._storage?.set('miembro', model.miembroInfo);
-		this._storage?.set('tramo', model.tramo);
-		this._storage?.set('token', model.token);
+	private async saveToStorage(model: ILoginUnitResponse): Promise<void> {
+		await Promise.all([
+			this._storage?.set('denominacion', model.denominacion),
+			this._storage?.set('unidadMiembroId', model.unidadMiembroId),
+			this._storage?.set('ficha', model.ficha),
+			this._storage?.set('placa', model.placa),
+			this._storage?.set('miembro', model.miembroInfo),
+			this._storage?.set('tramo', model.tramo),
+			this._storage?.set('token', model.token),
+			this._storage.set('esEncargado', model.esEncargado),
+		]);
 	}
 
 	loginUnitMember(model: ILoginUnitMember): void {
 		this.$http
-			.post<ILoginUnitResponse>(`${this.endPoint}/assign`, model)
+			.post<ILoginUnitResponse>(
+				`${this.endPoint}/unidadmiembro/create`,
+				model
+			)
 			.subscribe((response: ILoginUnitResponse) => {
 				if (response.estatus) {
 					console.log('The response was: ', response.estatus);
 					this.saveToStorage(response);
+					console.log('to dashboard');
 					this.$router.navigate(['dashboard']);
 				}
 			});
+	}
+
+	logout(): void {
+		this._storage.clear();
+		this.$router.navigate(['']);
 	}
 }

@@ -28,11 +28,11 @@ export class SignupComponent implements OnInit {
 
 	registerForm: FormGroup = this.$fb.group({
 		cedula: ['', [Validators.required, Validators.maxLength(11)]],
-		nombre: ['', [Validators.required]],
-		lastname: ['', [Validators.required]],
-		sexo: [, [Validators.required]],
-		rangoId: [0, [Validators.required]],
-		institucion: [0, Validators.required],
+		nombre: [''],
+		apellido: [''],
+		genero: [0],
+		rangoId: [0],
+		institucion: [0],
 	});
 
 	ngOnInit() {

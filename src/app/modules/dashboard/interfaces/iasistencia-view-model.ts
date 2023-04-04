@@ -1,24 +1,38 @@
+import { ITipoAsistencia } from './itipo-asistencia';
+
 export interface IAsistenciaViewModel {
 	id: number;
+	// ciudadano
 	identificacion: string;
 	nombreCiudadano: string;
-	edad: number;
+	genero: string;
+	esExtranjero: boolean;
 	telefono: string;
+	// vehiculo
 	vehiculoMarca: string;
 	vehiculoModelo: string;
 	vehiculoTipo: string;
 	vehiculoColor: string;
-	tipoAsistencia: string;
-	categoriaAsistencia: number;
+	placa: string;
+	// Ubicacion
 	provincia: string;
 	municipio: string;
 	tramo: string;
-	unidad: string;
+	coordenadas: string;
+	// unidad
+	fichaUnidad: string;
+	denominacionUnidad: string;
+	tipoUnidad: string;
+	//agente
 	rangoAgente: string;
 	cedulaAgente: string;
 	nombreAgente: string;
-	reportadoPor: string;
+	// metadata
+	reportadaPor: string;
 	fechaCreacion: string;
 	fechaModificacion: string;
-	completada: boolean;
+	comentario: string;
+	estatusAsistencia: string;
+	estatus: boolean;
+	tipoAsistencias: ITipoAsistencia[];
 }

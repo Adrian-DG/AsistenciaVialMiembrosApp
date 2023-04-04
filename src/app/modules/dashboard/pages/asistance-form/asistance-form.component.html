@@ -4,9 +4,14 @@
 			<ion-back-button icon="caret-back"></ion-back-button>
 		</ion-buttons>
 		<ion-title>Formulario Asistencia</ion-title>
+		<ion-buttons slot="end" *ngIf="wantPictures">
+			<ion-button (click)="showPictureScreen()">
+				<ion-icon name="send"></ion-icon>
+			</ion-button>
+		</ion-buttons>
 	</ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content *ngIf="!wantPictures">
 	<ion-card>
 		<ion-card-header>
 			<ion-card-title>Formulario Asistencia</ion-card-title>
@@ -16,8 +21,9 @@
 			>
 		</ion-card-header>
 		<ion-card-content>
-			<form [formGroup]="asistanceForm" (ngSubmit)="createAsistance()">
-				<ion-radio-group formControlName="reportadoPor">
+			<fieldset>
+				<legend>Quien Reporta</legend>
+				<ion-radio-group [(ngModel)]="reportadoPor">
 					<ion-row>
 						<ion-col class="radio-col">
 							<ion-radio [value]="2"></ion-radio>
@@ -29,109 +35,231 @@
 						</ion-col>
 					</ion-row>
 				</ion-radio-group>
-				<ion-item counter="true">
-					<ion-label position="floating"
-						>Identificación Ciudadano</ion-label
-					>
-					<ion-input
-						[maxlength]="11"
-						formControlName="identificacion"
-					></ion-input>
-				</ion-item>
-				<ion-item>
-					<ion-label>Nombre</ion-label>
-					<ion-input formControlName="nombreCiudadano"></ion-input>
-				</ion-item>
-				<ion-item [counter]="true">
-					<ion-label>Telefono</ion-label>
-					<ion-input
-						formControlName="telefono"
-						maxlength="10"
-					></ion-input>
-				</ion-item>
-				<ion-item>
-					<ion-select
-						(click)="_cache.getResource('VehiculoTipo')"
-						formControlName="vehiculoTipoId"
-						placeholder="Tipo de Vehiculo"
-					>
-						<ion-select-option
-							[value]="item.id"
-							*ngFor="let item of _cache.vehiculoTipos$ | async"
-							>{{ item.nombre }}</ion-select-option
-						>
-					</ion-select>
-				</ion-item>
-				<ion-item (click)="_cache.getResource('VehiculoColores')">
-					<ion-select
-						formControlName="vehiculoColorId"
-						placeholder="Seleccionar Color"
-					>
-						<ion-select-option
-							[value]="item.id"
-							*ngFor="let item of _cache.vehiculoColor$ | async"
-							>{{ item.nombre }}</ion-select-option
-						>
-					</ion-select>
-				</ion-item>
-				<ion-item (click)="_cache.getResource('VehiculoMarca')">
-					<ion-select
-						formControlName="vehiculoMarcaId"
-						placeholder="Seleccionar Marca"
-						#marcaId
-					>
-						<ion-select-option
-							[value]="item.id"
-							*ngFor="let item of _cache.vehiculoMarca$ | async"
-							>{{ item.nombre }}</ion-select-option
-						>
-					</ion-select>
-				</ion-item>
-				<ion-item
-					(click)="
-						_cache.getResourceById('VehiculoModelo', marcaId.value)
-					"
-				>
-					<ion-select
-						formControlName="vehiculoModeloId"
-						placeholder="Seleccionar Modelo"
-					>
-						<ion-select-option
-							[value]="item.id"
-							*ngFor="let item of _cache.vehiculoModelo$ | async"
-							>{{ item.nombre }}</ion-select-option
-						>
-					</ion-select>
-				</ion-item>
-				<ion-item (click)="_cache.getResource('provincias')">
-					<ion-select
-						formControlName="provinciaId"
-						placeholder="Seleccionar Provincia"
-						#provinciaId
-					>
-						<ion-select-option
-							[value]="item.id"
-							*ngFor="let item of _cache.provincias$ | async"
-							>{{ item.nombre }}</ion-select-option
-						>
-					</ion-select>
-				</ion-item>
-				<ion-item
-					(click)="
-						_cache.getResourceById('municipios', provinciaId.value)
-					"
-				>
-					<ion-select
-						formControlName="municipioId"
-						placeholder="Seleccionar Municipio"
-					>
-						<ion-select-option
-							[value]="item.id"
-							*ngFor="let item of _cache.municipios$ | async"
-							>{{ item.nombre }}</ion-select-option
-						>
-					</ion-select>
-				</ion-item>
+			</fieldset>
+			<br />
+			<ion-accordion-group>
+				<ion-accordion value="first">
+					<ion-item slot="header" color="light">
+						<ion-label>Datos ciudadano</ion-label>
+					</ion-item>
+					<div class="ion-padding" slot="content">
+						<form [formGroup]="ciudadanoForm">
+							<ion-item counter="true">
+								<ion-label position="floating"
+									>Identificación Ciudadano</ion-label
+								>
+								<ion-input
+									formControlName="identificacion"
+									[maxlength]="15"
+								></ion-input>
+							</ion-item>
+							<ion-item>
+								<ion-label>Nombre</ion-label>
+								<ion-input formControlName="nombre"></ion-input>
+							</ion-item>
+							<ion-item>
+								<ion-label>Apellido</ion-label>
+								<ion-input
+									formControlName="apellido"
+								></ion-input>
+							</ion-item>
+							<br />
+							<fieldset>
+								<legend>Sexo</legend>
+								<ion-radio-group formControlName="genero">
+									<ion-row>
+										<ion-col class="radio-col">
+											<ion-radio [value]="1"></ion-radio>
+											<ion-label>Hombre</ion-label>
+										</ion-col>
+										<ion-col class="radio-col">
+											<ion-radio [value]="2"></ion-radio>
+											<ion-label>Mujer</ion-label>
+										</ion-col>
+									</ion-row>
+								</ion-radio-group>
+							</fieldset>
+							<br />
+							<ion-item>
+								<div class="row">
+									<ion-label>Extranjero</ion-label>
+									<ion-toggle formControlName="esExtranjero"
+										>Extranjero</ion-toggle
+									>
+								</div>
+							</ion-item>
+							<ion-item [counter]="true">
+								<ion-label>Telefono</ion-label>
+								<ion-input
+									formControlName="telefono"
+									maxlength="10"
+								></ion-input>
+							</ion-item>
+						</form>
+					</div>
+				</ion-accordion>
+				<!-- Datos vehiculo -->
+				<ion-accordion value="second">
+					<ion-item slot="header" color="light">
+						<ion-label>Datos vehiculo</ion-label>
+					</ion-item>
+					<div class="ion-padding" slot="content">
+						<form [formGroup]="vehiculoForm">
+							<ion-item>
+								<ion-select
+									(click)="_cache.getResource('VehiculoTipo')"
+									formControlName="vehiculoTipoId"
+									placeholder="Tipo de Vehiculo"
+								>
+									<ion-select-option
+										[value]="item.id"
+										*ngFor="
+											let item of _cache.vehiculoTipos$
+												| async
+										"
+										>{{ item.nombre }}</ion-select-option
+									>
+								</ion-select>
+							</ion-item>
+							<ion-item
+								(click)="_cache.getResource('VehiculoColores')"
+							>
+								<ion-select
+									formControlName="vehiculoColorId"
+									placeholder="Seleccionar Color"
+								>
+									<ion-select-option
+										[value]="item.id"
+										*ngFor="
+											let item of _cache.vehiculoColor$
+												| async
+										"
+										>{{ item.nombre }}</ion-select-option
+									>
+								</ion-select>
+							</ion-item>
+							<ion-item
+								(click)="_cache.getResource('VehiculoMarca')"
+							>
+								<ion-select
+									formControlName="vehiculoMarcaId"
+									placeholder="Seleccionar Marca"
+									#marcaId
+								>
+									<ion-select-option
+										[value]="item.id"
+										*ngFor="
+											let item of _cache.vehiculoMarca$
+												| async
+										"
+										>{{ item.nombre }}</ion-select-option
+									>
+								</ion-select>
+							</ion-item>
+							<ion-item
+								(click)="
+									_cache.getResourceById(
+										'VehiculoModelo',
+										marcaId.value
+									)
+								"
+							>
+								<ion-select
+									formControlName="vehiculoModeloId"
+									placeholder="Seleccionar Modelo"
+								>
+									<ion-select-option
+										[value]="item.id"
+										*ngFor="
+											let item of _cache.vehiculoModelo$
+												| async
+										"
+										>{{ item.nombre }}</ion-select-option
+									>
+								</ion-select>
+							</ion-item>
+							<ion-item [counter]="true">
+								<ion-label>Placa</ion-label>
+								<ion-input
+									formControlName="placa"
+									[maxlength]="10"
+								></ion-input>
+							</ion-item>
+						</form>
+					</div>
+				</ion-accordion>
+				<!-- Datos ubicacion -->
+				<ion-accordion value="third">
+					<ion-item slot="header" color="light">
+						<ion-label>Datos ubicación</ion-label>
+					</ion-item>
+					<div class="ion-padding" slot="content">
+						<form [formGroup]="ubicacionForm">
+							<ion-item
+								(click)="_cache.getResource('provincias')"
+							>
+								<ion-select
+									formControlName="provinciaId"
+									placeholder="Seleccionar Provincia"
+									#provinciaId
+								>
+									<ion-select-option
+										[value]="item.id"
+										*ngFor="
+											let item of _cache.provincias$
+												| async
+										"
+										>{{ item.nombre }}</ion-select-option
+									>
+								</ion-select>
+							</ion-item>
+							<ion-item
+								(click)="
+									_cache.getResourceById(
+										'municipios',
+										provinciaId.value
+									)
+								"
+							>
+								<ion-select
+									formControlName="municipioId"
+									placeholder="Seleccionar Municipio"
+								>
+									<ion-select-option
+										[value]="item.id"
+										*ngFor="
+											let item of _cache.municipios$
+												| async
+										"
+										>{{ item.nombre }}</ion-select-option
+									>
+								</ion-select>
+							</ion-item>
+						</form>
+						<!-- TODO: GET GPS location add button here -->
+						<ion-row>
+							<ion-col size="12">
+								<ion-button
+									expand="block"
+									(click)="getCurrentPosition()"
+									color="primary"
+									[disabled]="hasPosition"
+								>
+									<ion-icon
+										class="form-icons"
+										name="location"
+									></ion-icon>
+
+									Ubicación
+								</ion-button>
+							</ion-col>
+						</ion-row>
+					</div>
+				</ion-accordion>
+			</ion-accordion-group>
+			<br /><br />
+			<fieldset>
+				<legend>Categoria de asistencia</legend>
 				<ion-radio-group #categoriaAsistencia>
 					<ion-row>
 						<ion-col class="radio-col">
@@ -144,40 +272,93 @@
 						</ion-col>
 					</ion-row>
 				</ion-radio-group>
-				<ion-item
-					(click)="
-						_cache.getResourceById(
-							'TipoAsistencia',
-							categoriaAsistencia.value
-						)
-					"
+			</fieldset>
+			<br />
+			<ion-item
+				(click)="
+					_cache.getResourceById(
+						'TipoAsistencia',
+						categoriaAsistencia.value
+					)
+				"
+			>
+				<ion-select
+					[multiple]="true"
+					[(ngModel)]="tipoAsistencias"
+					placeholder="Seleccionar Tipo Asistencia"
 				>
-					<ion-select
-						formControlName="tipoAsistenciaId"
-						placeholder="Seleccionar Tipo Asistencia"
+					<ion-select-option
+						[value]="item.id"
+						*ngFor="let item of _cache.tipoAsistencia$ | async"
+						>{{ item.nombre }}</ion-select-option
 					>
-						<ion-select-option
-							[value]="item.id"
-							*ngFor="let item of _cache.tipoAsistencia$ | async"
-							>{{ item.nombre }}</ion-select-option
-						>
-					</ion-select>
-				</ion-item>
-				<ion-item>
-					<ion-textarea
-						formControlName="comentarios"
-						placeholder="Escribe cualquier otro detalle"
-					></ion-textarea>
-				</ion-item>
-				<ion-button
-					expand="block"
-					type="submit"
-					color="primary"
-					[disabled]="!asistanceForm.valid || isLoading"
-				>
-					{{ isLoading ? spinner : 'Registrar asistencia' }}
-				</ion-button>
-			</form>
+				</ion-select>
+			</ion-item>
+			<ion-item>
+				<ion-textarea
+					[(ngModel)]="comentario"
+					placeholder="Escribe cualquier otro detalle"
+				></ion-textarea>
+			</ion-item>
+			<ion-button
+				expand="block"
+				color="light"
+				(click)="showPictureScreen()"
+			>
+				<ion-icon class="form-icons" name="images-sharp"></ion-icon>
+				Agregar Fotos
+			</ion-button>
+			<br />
+			<ion-button
+				expand="block"
+				color="success"
+				[disabled]="
+					!(
+						ciudadanoForm.valid &&
+						vehiculoForm.valid &&
+						ubicacionForm.valid
+					)
+				"
+				(click)="createAsistance()"
+				>Crear Asistencia</ion-button
+			>
 		</ion-card-content>
 	</ion-card>
+</ion-content>
+
+<ion-content *ngIf="wantPictures">
+	<ion-grid *ngIf="hasPictures">
+		<ion-row>
+			<ion-col
+				size="6"
+				*ngFor="let photo of imagesWeb; index as position"
+			>
+				<ion-img [src]="photo"></ion-img>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+
+	<div class="illustration" *ngIf="!hasPictures">
+		<ion-img
+			class="car-plate"
+			src="../../../../../assets/license_plate.png"
+		></ion-img>
+		<div class="picture-text">
+			<ion-text
+				>Las siguientes imagenes se utilizaran para comprobar la
+				veracidad de la asistencia.</ion-text
+			>
+		</div>
+	</div>
+
+	<ion-fab
+		(click)="takePicture()"
+		vertical="bottom"
+		horizontal="center"
+		style="margin-bottom: 2em"
+	>
+		<ion-fab-button>
+			<ion-icon name="camera-sharp"></ion-icon>
+		</ion-fab-button>
+	</ion-fab>
 </ion-content>

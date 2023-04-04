@@ -6,6 +6,14 @@ import { CacheService } from 'src/app/modules/cache/services/cache.service';
 import { IAsistanceCreate } from '../../interfaces/iasistance-create';
 import { IMemberUnitInfo } from '../../interfaces/imember-unit-info';
 import { AsistanceService } from '../../services/asistance/asistance.service';
+import { Geolocation } from '@capacitor/geolocation';
+import {
+	Camera,
+	CameraDirection,
+	CameraResultType,
+	CameraSource,
+	Photo,
+} from '@capacitor/camera';
 
 @Component({
 	selector: 'app-asistance-form',
@@ -13,11 +21,8 @@ import { AsistanceService } from '../../services/asistance/asistance.service';
 	styleUrls: ['./asistance-form.component.scss'],
 })
 export class AsistanceFormComponent implements OnInit {
-	isLoading: boolean = false;
-	spinner: string = `
-	<ion-label>Default</ion-label>
-		<ion-spinner></ion-spinner> 
-	</ion-item>`;
+	wantPictures: boolean = false;
+
 	constructor(
 		private $fb: FormBuilder,
 		public _cache: CacheService,
@@ -25,26 +30,112 @@ export class AsistanceFormComponent implements OnInit {
 		private _asistencia: AsistanceService
 	) {}
 
-	asistanceForm: FormGroup = this.$fb.group({
+	// asistanceForm: FormGroup = this.$fb.group({
+	// 	identificacion: ['', [Validators.required, Validators.minLength(11)]],
+	// 	nombre: [''],
+	// 	apellido: [''],
+	// 	genero: [0],
+	// 	esExtranjero: [false],
+	// 	telefono: [''],
+	// 	vehiculoTipoId: [],
+	// 	vehiculoColorId: [],
+	// 	vehiculoModeloId: [],
+	// 	vehiculoMarcaId: [],
+	// 	placa: [''],
+	// 	municipioId: [],
+	// 	provinciaId: [],
+	// 	unidadMiembroId: [0],
+	// 	comentario: [''],
+	// 	reportadoPor: [],
+	// });
+
+	ciudadanoForm: FormGroup = this.$fb.group({
 		identificacion: ['', [Validators.required, Validators.minLength(11)]],
-		nombreCiudadano: [''],
+		nombre: [''],
+		apellido: [''],
+		genero: [0],
+		esExtranjero: [false],
 		telefono: [''],
+	});
+
+	vehiculoForm: FormGroup = this.$fb.group({
 		vehiculoTipoId: [],
 		vehiculoColorId: [],
 		vehiculoModeloId: [],
 		vehiculoMarcaId: [],
-		latitud: [''],
-		longitud: [''],
+		placa: [''],
+	});
+
+	ubicacionForm: FormGroup = this.$fb.group({
 		municipioId: [],
 		provinciaId: [],
-		unidadMiembroId: [0],
-		tipoAsistenciaId: [0],
-		comentarios: [''],
-		reportadoPor: [],
 	});
+
+	imagesWeb: string[] = [];
+	imagenes64: string[] = [];
+	hasPictures = false;
+	hasPosition = false;
+
+	coordenadas: string = '';
+	reportadoPor: number = 0;
+	tipoAsistencias: number[] = [];
+	comentario: string = '';
 
 	ngOnInit() {
 		this.getUnitMemberId();
+	}
+
+	async getCurrentPosition(): Promise<void> {
+		const position = await Geolocation.getCurrentPosition();
+		console.log(position);
+		this.coordenadas = `${position.coords.latitude}, ${position.coords.longitude}`;
+		this.hasPosition = !this.hasPosition;
+	}
+
+	private async readAsBase64(photo: Photo) {
+		// Fetch the photo, read as a blob, then convert to base64 format
+		const response = await fetch(photo.webPath!);
+		const blob = await response.blob();
+
+		return (await this.convertBlobToBase64(blob)) as string;
+	}
+
+	private convertBlobToBase64 = (blob: Blob) =>
+		new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.onerror = reject;
+			reader.onload = () => {
+				resolve(reader.result);
+			};
+			reader.readAsDataURL(blob);
+		});
+
+	async takePicture() {
+		const image = await Camera.getPhoto({
+			quality: 100,
+			allowEditing: true,
+			direction: CameraDirection.Rear,
+			resultType: CameraResultType.Uri,
+			correctOrientation: true,
+			saveToGallery: true,
+			source: CameraSource.Camera,
+		});
+
+		// image.webPath will contain a path that can be set as an image src.
+		// You can access the original file using image.path, which can be
+		// passed to the Filesystem API to read the raw data of the image,
+		// if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+		const imageWeb = image.webPath ?? '';
+
+		const image64 = await this.readAsBase64(image);
+		this.imagenes64.unshift(image64);
+
+		this.imagesWeb.unshift(imageWeb);
+		this.hasPictures = true;
+	}
+
+	showPictureScreen(): void {
+		this.wantPictures = !this.wantPictures;
 	}
 
 	async getUnitMemberId(): Promise<number> {
@@ -53,10 +144,52 @@ export class AsistanceFormComponent implements OnInit {
 	}
 
 	async createAsistance(): Promise<any> {
-		this.isLoading = true;
-		let asistance: IAsistanceCreate = this.asistanceForm.value;
-		asistance.unidadMiembroId = await this.getUnitMemberId();
-		this._asistencia.createAsistance(asistance);
-		this.isLoading = false;
+		const {
+			identificacion,
+			nombre,
+			apellido,
+			genero,
+			esExtranjero,
+			telefono,
+		} = this.ciudadanoForm.value;
+
+		const {
+			vehiculoTipoId,
+			vehiculoColorId,
+			vehiculoMarcaId,
+			vehiculoModeloId,
+			placa,
+		} = this.vehiculoForm.value;
+
+		const { provinciaId, municipioId } = this.ubicacionForm.value;
+
+		const newAsistencia: IAsistanceCreate = {
+			// ciudadano
+			identificacion: identificacion,
+			nombre: nombre,
+			apellido: apellido,
+			genero: genero,
+			esExtranjero: esExtranjero,
+			telefono: telefono,
+			// vehiculo
+			vehiculoColorId: vehiculoColorId,
+			vehiculoTipoId: vehiculoTipoId,
+			vehiculoMarcaId: vehiculoMarcaId,
+			vehiculoModeloId: vehiculoModeloId,
+			placa: placa,
+			// ubicacion
+			provinciaId: provinciaId,
+			municipioId: municipioId,
+			comentario: this.comentario,
+			coordenadas: this.coordenadas,
+			reportadoPor: this.reportadoPor,
+			tipoAsistencias: this.tipoAsistencias,
+			unidadMiembroId: 0,
+			imagenes: this.imagenes64,
+		};
+
+		newAsistencia.unidadMiembroId = await this.getUnitMemberId();
+
+		this._asistencia.createAsistance(newAsistencia);
 	}
 }

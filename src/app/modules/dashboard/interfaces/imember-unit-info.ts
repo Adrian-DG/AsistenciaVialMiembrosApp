@@ -5,4 +5,5 @@ export interface IMemberUnitInfo {
 	miembro: string;
 	placa: string;
 	tramo: string;
+	esEncargado: boolean;
 }

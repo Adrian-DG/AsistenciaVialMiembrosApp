@@ -1,6 +1,11 @@
 <ion-header>
 	<ion-toolbar color="primary">
 		<ion-title>Inicio</ion-title>
+		<ion-buttons slot="end">
+			<ion-button (click)="logout()">
+				<ion-icon name="log-out"></ion-icon>
+			</ion-button>
+		</ion-buttons>
 	</ion-toolbar>
 </ion-header>
 <ion-content>
@@ -33,6 +38,7 @@
 			</ion-list>
 		</ng-template>
 	</div>
+
 	<ion-fab slot="fixed" vertical="bottom" horizontal="end">
 		<ion-fab-button [routerLink]="['create']">
 			<ion-icon name="add"></ion-icon>
