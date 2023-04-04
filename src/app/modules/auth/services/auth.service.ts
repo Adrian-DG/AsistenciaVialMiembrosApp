@@ -72,8 +72,7 @@ export class AuthService extends GenericService {
 					this.$router.navigate(['auth/signup']);
 				}
 
-				if (!response.isAuthorized) {
-					console.log('display toast');
+				if (!response.isAuthorized && response.created) {
 					this.showToast(
 						'El usuario existe, pero aun no ha sido autorizado'
 					);

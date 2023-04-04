@@ -1,0 +1,5 @@
+{
+	"appService.defaultWebAppToDeploy": "/subscriptions/ad6a2b4f-627f-4ddb-881c-2bf9850247cb/resourceGroups/AsistenciaVialGroup/providers/Microsoft.Web/sites/SiGAVClient",
+	"appService.deploySubpath": "www",
+	"appService.showBuildDuringDeployPrompt": false
+}
