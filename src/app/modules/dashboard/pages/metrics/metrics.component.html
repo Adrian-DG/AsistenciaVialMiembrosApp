@@ -1,0 +1,67 @@
+<ion-header>
+	<ion-toolbar color="primary">
+		<ion-buttons slot="start">
+			<ion-back-button icon="caret-back"></ion-back-button>
+		</ion-buttons>
+		<ion-title>Estadisticas</ion-title>
+	</ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+	<!-- refresh page -->
+	<ion-refresher slot="fixed" (ionRefresh)="loadData()">
+		<ion-refresher-content></ion-refresher-content>
+	</ion-refresher>
+	<ion-card>
+		<ion-card-header>
+			<ion-card-title>Listado de Tramos</ion-card-title>
+			<ion-card-subtitle
+				>A continuacion se muestran los tramos asignados a supervisar y
+				las asistencias completadas por unidad.</ion-card-subtitle
+			>
+		</ion-card-header>
+		<ion-card-content>
+			<!-- example-->
+			<ion-accordion-group>
+				<ion-accordion
+					*ngFor="let item of _asistencias.tramosSupervisor$ | async"
+					(click)="
+						_asistencias.getMetricasAsistenciasUnidadByTramo(
+							item.id
+						)
+					"
+				>
+					<ion-item slot="header" color="light">
+						<ion-label>{{ item.nombre }}</ion-label>
+					</ion-item>
+					<div class="ion-padding" slot="content">
+						<ion-grid>
+							<ion-row style="border-bottom: 1px solid gray">
+								<ion-col style="text-align: center"
+									>Ficha</ion-col
+								>
+								<ion-col style="text-align: center"
+									>Total</ion-col
+								>
+							</ion-row>
+							<ion-row
+								style="border-bottom: 1px solid gray"
+								*ngFor="
+									let row of _asistencias.metricasByTramoUnidad$
+										| async
+								"
+							>
+								<ion-col style="text-align: center">{{
+									row.ficha
+								}}</ion-col>
+								<ion-col style="text-align: center">{{
+									row.total
+								}}</ion-col>
+							</ion-row>
+						</ion-grid>
+					</div>
+				</ion-accordion>
+			</ion-accordion-group>
+			<!-- -->
+		</ion-card-content>
+	</ion-card>
+</ion-content>

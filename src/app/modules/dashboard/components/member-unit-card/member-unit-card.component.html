@@ -6,12 +6,20 @@
 			</ion-col>
 			<ion-col class="info-col" size="9">
 				<ion-text>Den.: {{ memberInfo?.denominacion }}</ion-text>
-				<br />
 				<ion-text>Ficha: {{ memberInfo?.ficha }}</ion-text>
-				<br />
 				<ion-text>{{ memberInfo?.miembro }}</ion-text>
 			</ion-col>
 		</ion-row>
+		<ion-button
+			expand="block"
+			style="width: 100%"
+			color="medium"
+			*ngIf="memberInfo?.esEncargado"
+			[routerLink]="['metrics', memberInfo?.ficha]"
+		>
+			<ion-icon slot="start" name="stats-chart"></ion-icon>
+			Estadisticas
+		</ion-button>
 	</ion-card-header>
 	<ion-card-content class="content">
 		<app-counter [counter]="counter"></app-counter>

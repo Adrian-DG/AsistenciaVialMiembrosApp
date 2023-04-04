@@ -11,6 +11,7 @@ import { CounterComponent } from './components/counter/counter.component';
 import { AsistanceFormComponent } from './pages/asistance-form/asistance-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AsistenciaCardComponent } from './components/asistencia-card/asistencia-card.component';
+import { MetricsComponent } from './pages/metrics/metrics.component';
 
 @NgModule({
 	declarations: [
@@ -19,6 +20,7 @@ import { AsistenciaCardComponent } from './components/asistencia-card/asistencia
 		CounterComponent,
 		AsistanceFormComponent,
 		AsistenciaCardComponent,
+		MetricsComponent,
 	],
 	imports: [
 		CommonModule,

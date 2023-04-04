@@ -6,6 +6,8 @@ import { GenericService } from '../../../generic/services/generic.service';
 import { IAsistanceCreate } from '../../interfaces/iasistance-create';
 import { IAsistenciaViewModel } from '../../interfaces/iasistencia-view-model';
 import { IContadorAsistenciaViewModel } from '../../interfaces/icontador-asistencia-view-model';
+import { IGenericEnum } from 'src/app/modules/cache/interfaces/igeneric-enum';
+import { IMetricasViewModel } from '../../interfaces/imetricas-view-model';
 
 @Injectable({
 	providedIn: 'root',
@@ -13,6 +15,15 @@ import { IContadorAsistenciaViewModel } from '../../interfaces/icontador-asisten
 export class AsistanceService extends GenericService {
 	private asistenciasSource = new BehaviorSubject<IAsistenciaViewModel[]>([]);
 	public asistencias$ = this.asistenciasSource.asObservable();
+
+	private tramosSupervisorSource = new BehaviorSubject<IGenericEnum[]>([]);
+	public tramosSupervisor$ = this.tramosSupervisorSource.asObservable();
+
+	private metricasByTramoUnidadSource = new BehaviorSubject<
+		IMetricasViewModel[]
+	>([]);
+	public metricasByTramoUnidad$ =
+		this.metricasByTramoUnidadSource.asObservable();
 
 	private contadorAsistenciasSource =
 		new BehaviorSubject<IContadorAsistenciaViewModel>({
@@ -56,6 +67,28 @@ export class AsistanceService extends GenericService {
 			})
 			.subscribe((data: IContadorAsistenciaViewModel) =>
 				this.contadorAsistenciasSource.next(data)
+			);
+	}
+
+	getTramosEncargadoSupervisor(ficha: string): void {
+		const param = new HttpParams().set('ficha', ficha);
+		this.$http
+			.get<IGenericEnum[]>(`${this.env}/tramos/supervisar`, {
+				params: param,
+			})
+			.subscribe((data: IGenericEnum[]) => {
+				this.tramosSupervisorSource.next(data);
+			});
+	}
+
+	getMetricasAsistenciasUnidadByTramo(tramoId: number): void {
+		const param = new HttpParams().set('tramoId', tramoId);
+		this.$http
+			.get<IMetricasViewModel[]>(`${this.endPoint}/metricas`, {
+				params: param,
+			})
+			.subscribe((data: IMetricasViewModel[]) =>
+				this.metricasByTramoUnidadSource.next(data)
 			);
 	}
 }

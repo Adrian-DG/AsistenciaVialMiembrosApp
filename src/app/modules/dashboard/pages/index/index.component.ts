@@ -25,6 +25,7 @@ export class IndexComponent implements OnInit, AfterViewInit {
 				miembro: response[3],
 				placa: response[4],
 				tramo: response[5],
+				esEncargado: response[6],
 			};
 		});
 	}
@@ -54,5 +55,9 @@ export class IndexComponent implements OnInit, AfterViewInit {
 			}
 			event.target.complete();
 		}, 2000);
+	}
+
+	logout(): void {
+		this._auth.logout();
 	}
 }

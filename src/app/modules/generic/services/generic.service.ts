@@ -8,7 +8,10 @@ import { environment as Prod } from 'src/environments/environment.prod';
 })
 export abstract class GenericService {
 	protected endPoint: string = '';
+	protected env: string = '';
+
 	constructor(protected $http: HttpClient) {
-		this.endPoint += `${isDevMode() ? Dev.api_url : Prod.api_url}`;
+		this.env += isDevMode() ? Dev.api_url : Prod.api_url;
+		this.endPoint += this.env;
 	}
 }

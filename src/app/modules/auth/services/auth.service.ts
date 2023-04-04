@@ -111,19 +111,14 @@ export class AuthService extends GenericService {
 	}
 
 	getStorageData(): Promise<any[]> {
-		const denominacion = this._storage.get('denominacion');
-		const unidadMiembroId = this._storage.get('unidadMiembroId');
-		const ficha = this._storage.get('ficha');
-		const miembro = this._storage.get('miembro');
-		const placa = this._storage.get('placa');
-		const tramo = this._storage.get('tramo');
 		return Promise.all([
-			denominacion,
-			unidadMiembroId,
-			ficha,
-			miembro,
-			placa,
-			tramo,
+			this._storage.get('denominacion'),
+			this._storage.get('unidadMiembroId'),
+			this._storage.get('ficha'),
+			this._storage.get('miembro'),
+			this._storage.get('placa'),
+			this._storage.get('tramo'),
+			this._storage.get('esEncargado'),
 		]);
 	}
 
@@ -136,6 +131,7 @@ export class AuthService extends GenericService {
 			this._storage?.set('miembro', model.miembroInfo),
 			this._storage?.set('tramo', model.tramo),
 			this._storage?.set('token', model.token),
+			this._storage.set('esEncargado', model.esEncargado),
 		]);
 	}
 
@@ -153,5 +149,10 @@ export class AuthService extends GenericService {
 					this.$router.navigate(['dashboard']);
 				}
 			});
+	}
+
+	logout(): void {
+		this._storage.clear();
+		this.$router.navigate(['']);
 	}
 }
