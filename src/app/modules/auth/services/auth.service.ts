@@ -56,7 +56,7 @@ export class AuthService extends GenericService {
 			color: 'light',
 		});
 
-		await toast.present();
+		toast.present();
 	}
 
 	validateMember(cedula: string): void {

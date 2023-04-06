@@ -11,6 +11,8 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthModule } from './modules/auth/auth.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { LoadingInterceptor } from './interceptors/loading.interceptor';
+import { GenericModule } from './modules/generic/generic.module';
 
 @NgModule({
 	declarations: [AppComponent],
@@ -21,14 +23,22 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 		HttpClientModule,
 		IonicStorageModule.forRoot(),
 		AuthModule,
-  ServiceWorkerModule.register('ngsw-worker.js', {
-    enabled: !isDevMode(),
-    // Register the ServiceWorker as soon as the application is stable
-    // or after 30 seconds (whichever comes first).
-    registrationStrategy: 'registerWhenStable:30000'
-  }),
+		GenericModule,
+		ServiceWorkerModule.register('ngsw-worker.js', {
+			enabled: !isDevMode(),
+			// Register the ServiceWorker as soon as the application is stable
+			// or after 30 seconds (whichever comes first).
+			registrationStrategy: 'registerWhenStable:30000',
+		}),
 	],
-	providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+	providers: [
+		{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: LoadingInterceptor,
+			multi: true,
+		},
+	],
 	bootstrap: [AppComponent],
 })
 export class AppModule {}
