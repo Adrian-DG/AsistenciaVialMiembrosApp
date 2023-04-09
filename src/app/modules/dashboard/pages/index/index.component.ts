@@ -32,10 +32,10 @@ export class IndexComponent implements OnInit, AfterViewInit {
 
 	ngAfterViewInit(): void {
 		// TODO: asegurarse que la ficha pase
-		if (this.infoUser) {
-			// this._asistencias.getTotalAsistenciasUnidad(
-			// 	this.infoUser?.unidadMiembroId
-			// );
+		if (this.infoUser != null) {
+			this._asistencias.getTotalAsistenciasUnidad(
+				this.infoUser?.unidadMiembroId
+			);
 			this._asistencias.getAsistenciasUnidad(
 				this.infoUser?.ficha.toString()
 			);

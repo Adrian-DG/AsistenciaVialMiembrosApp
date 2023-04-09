@@ -10,7 +10,9 @@ import { Storage } from '@ionic/storage-angular';
 import { IMemberCreate } from '../interfaces/imember-create';
 import { IMemberUnitInfo } from '../../dashboard/interfaces/imember-unit-info';
 import { ICreatedAuthorizedMember } from '../interfaces/icreated-authorized-member';
-import { ToastController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
+
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
 	providedIn: 'root',
@@ -28,14 +30,31 @@ export class AuthService extends GenericService {
 		protected override $http: HttpClient,
 		protected $router: Router,
 		private _storage: Storage,
-		private _toast: ToastController
+		private _toast: ToastController,
+		private _alert: AlertController,
+		private _jwt: JwtHelperService
 	) {
 		super($http);
 		this._storage.create();
 	}
 
-	checkIfAuthenticated() {
-		return this._storage.length();
+	async checkIfAuthenticated(): Promise<boolean> {
+		const storageExist = (await this._storage.length()) > 0;
+		console.log('Does storage exists: ', storageExist);
+		if (storageExist) {
+			const token = await this._storage.get('token');
+			const hasExpired = this._jwt.isTokenExpired(token);
+			console.log('Has Token expire: ', hasExpired);
+
+			// Si el token expiro se borraran los datos del storage
+			if (hasExpired) {
+				this._storage.clear();
+			}
+			return hasExpired;
+		} else {
+			console.log('Storage not exists');
+			return false;
+		}
 	}
 
 	getToken(): Promise<any> {
@@ -56,7 +75,7 @@ export class AuthService extends GenericService {
 			color: 'light',
 		});
 
-		await toast.present();
+		toast.present();
 	}
 
 	validateMember(cedula: string): void {
@@ -143,15 +162,35 @@ export class AuthService extends GenericService {
 			.subscribe((response: ILoginUnitResponse) => {
 				if (response.estatus) {
 					console.log('The response was: ', response.estatus);
-					this.saveToStorage(response);
-					console.log('to dashboard');
-					this.$router.navigate(['dashboard']);
+					this.saveToStorage(response).then(() => {
+						console.log('to dashboard');
+						this.$router.navigate(['dashboard']);
+					});
 				}
 			});
 	}
 
-	logout(): void {
-		this._storage.clear();
-		this.$router.navigate(['']);
+	async logout(): Promise<void> {
+		const confirm = await this._alert.create({
+			header: 'Confimación',
+			subHeader: 'Confirmar cierre de sesión',
+			message:
+				'Si acepta se cerrar esta sessión tendra que loggearse nuevamente para usar la aplicación.',
+			buttons: [
+				{ text: 'cancelar' },
+				{
+					text: 'aceptar',
+					handler: () => {
+						this._storage.clear();
+						this.$router.navigate(['']);
+					},
+				},
+			],
+			animated: true,
+			translucent: true,
+			keyboardClose: true,
+		});
+
+		confirm.present();
 	}
 }
