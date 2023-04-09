@@ -13,6 +13,11 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { GenericModule } from './modules/generic/generic.module';
+import { JwtModule } from '@auth0/angular-jwt';
+
+export function tokenGetter() {
+	return localStorage.getItem('access_token');
+}
 
 @NgModule({
 	declarations: [AppComponent],
@@ -24,6 +29,11 @@ import { GenericModule } from './modules/generic/generic.module';
 		IonicStorageModule.forRoot(),
 		AuthModule,
 		GenericModule,
+		JwtModule.forRoot({
+			config: {
+				tokenGetter: tokenGetter,
+			},
+		}),
 		ServiceWorkerModule.register('ngsw-worker.js', {
 			enabled: !isDevMode(),
 			// Register the ServiceWorker as soon as the application is stable

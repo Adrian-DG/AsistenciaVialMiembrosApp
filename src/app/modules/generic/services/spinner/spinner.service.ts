@@ -15,6 +15,9 @@ export class SpinnerService {
 			animated: true,
 			spinner: 'circular',
 			translucent: true,
+			keyboardClose: true,
+			backdropDismiss: true,
+			showBackdrop: true,
 		});
 
 		state ? loading.present() : loading.dismiss();
