@@ -44,13 +44,15 @@ export class AuthService extends GenericService {
 		if (storageExist) {
 			const token = await this._storage.get('token');
 			const hasExpired = this._jwt.isTokenExpired(token);
-			console.log('Has Token expire: ', hasExpired);
+			console.log('Has Token expire: ', !hasExpired);
 
 			// Si el token expiro se borraran los datos del storage
 			if (hasExpired) {
 				this._storage.clear();
+				return false;
+			} else {
+				return true;
 			}
-			return hasExpired;
 		} else {
 			console.log('Storage not exists');
 			return false;

@@ -19,7 +19,7 @@ export class AuthenticationGuard implements CanActivate {
 		route: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot
 	): Promise<boolean> {
-		if (await this._auth.checkIfAuthenticated()) {
+		if (!(await this._auth.checkIfAuthenticated())) {
 			console.log('not authenticated');
 			this.$router.navigateByUrl('auth/signin');
 			return false;

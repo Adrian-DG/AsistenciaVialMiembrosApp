@@ -12,10 +12,7 @@
 	<ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
 		<ion-refresher-content></ion-refresher-content>
 	</ion-refresher>
-	<app-member-unit-card
-		[memberInfo]="infoUser"
-		[counter]="_asistencias.contadorAsistencias$ | async"
-	></app-member-unit-card>
+	<app-member-unit-card [memberInfo]="infoUser"></app-member-unit-card>
 	<div class="list" *ngIf="_asistencias.asistencias$ | async as asistencias">
 		<ion-list *ngIf="asistencias.length > 0; else emptyList">
 			<ion-list-header>

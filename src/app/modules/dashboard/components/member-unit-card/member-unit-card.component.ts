@@ -9,7 +9,6 @@ import { IMemberUnitInfo } from '../../interfaces/imember-unit-info';
 })
 export class MemberUnitCardComponent implements OnInit {
 	@Input() memberInfo!: IMemberUnitInfo | null;
-	@Input() counter!: IContadorAsistenciaViewModel | null;
 	constructor() {}
 
 	ngOnInit() {}

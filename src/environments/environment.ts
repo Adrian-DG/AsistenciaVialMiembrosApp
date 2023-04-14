@@ -4,7 +4,7 @@
 
 export const environment = {
 	production: false,
-	api_url: 'https://asistenciavial.azurewebsites.net/api',
+	api_url: 'https://localhost:7234/api',
 };
 
 /*

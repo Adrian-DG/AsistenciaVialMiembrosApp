@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IContadorAsistenciaViewModel } from '../../interfaces/icontador-asistencia-view-model';
+import { AsistanceService } from '../../services/asistance/asistance.service';
 
 @Component({
 	selector: 'app-counter',
@@ -7,9 +8,7 @@ import { IContadorAsistenciaViewModel } from '../../interfaces/icontador-asisten
 	styleUrls: ['./counter.component.scss'],
 })
 export class CounterComponent implements OnInit {
-	@Input() counter!: IContadorAsistenciaViewModel | null;
-
-	constructor() {}
+	constructor(public _asistencia: AsistanceService) {}
 
 	ngOnInit() {}
 }
