@@ -8,7 +8,7 @@ import { AsistanceService } from '../../services/asistance/asistance.service';
 	templateUrl: './index.component.html',
 	styleUrls: ['./index.component.scss'],
 })
-export class IndexComponent implements OnInit, AfterViewInit {
+export class IndexComponent implements OnInit {
 	infoUser: IMemberUnitInfo | null = null;
 	constructor(
 		private _auth: AuthService,
@@ -27,19 +27,15 @@ export class IndexComponent implements OnInit, AfterViewInit {
 				tramo: response[5],
 				esEncargado: response[6],
 			};
-		});
-	}
 
-	ngAfterViewInit(): void {
-		// TODO: asegurarse que la ficha pase
-		if (this.infoUser != null) {
 			this._asistencias.getTotalAsistenciasUnidad(
 				this.infoUser?.unidadMiembroId
 			);
+
 			this._asistencias.getAsistenciasUnidad(
 				this.infoUser?.ficha.toString()
 			);
-		}
+		});
 	}
 
 	handleRefresh(event: any) {

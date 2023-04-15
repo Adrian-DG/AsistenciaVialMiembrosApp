@@ -91,4 +91,11 @@ export class AsistanceService extends GenericService {
 				this.metricasByTramoUnidadSource.next(data)
 			);
 	}
+
+	iniciarAsistenciaR5(id: number) {
+		return this.$http.put(`${this.endPoint}/iniciar`, {
+			Id: id,
+			EstatusAsistencia: 2,
+		});
+	}
 }

@@ -21,6 +21,7 @@
 			<!-- asistencias -->
 			<ion-item *ngFor="let item of asistencias">
 				<app-asistencia-card
+					[ficha]="infoUser?.ficha"
 					[item]="item"
 					style="width: 100%"
 				></app-asistencia-card>
