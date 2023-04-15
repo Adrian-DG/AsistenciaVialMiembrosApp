@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthenticationGuard } from './guard/authentication.guard';
-import { SessionGuard } from './guard/session/session.guard';
+import { LeaveGuard } from './guard/leave.guard';
 
 const routes: Routes = [
 	{
@@ -11,6 +11,7 @@ const routes: Routes = [
 				(m) => m.DashboardModule
 			),
 		canActivate: [AuthenticationGuard],
+		canDeactivate: [LeaveGuard],
 	},
 	{
 		path: 'auth',

@@ -59,6 +59,10 @@ export class AuthService extends GenericService {
 		}
 	}
 
+	clearSession(): void {
+		this._storage.clear();
+	}
+
 	getToken(): Promise<any> {
 		return this._storage.get('token');
 	}
