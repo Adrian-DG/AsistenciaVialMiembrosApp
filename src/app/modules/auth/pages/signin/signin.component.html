@@ -18,38 +18,55 @@
 				</ion-card-subtitle>
 			</ion-card-header>
 			<ion-card-content>
-				<ion-item counter="true">
-					<ion-label>Cedula</ion-label>
-					<ion-input
-						type="text"
-						placeholder="Cedula agente"
-						[clearInput]="true"
-						[required]="true"
-						[minlength]="11"
-						[maxlength]="11"
-						[(ngModel)]="cedulaInput"
-						(keyup.enter)="validateMember()"
-						(click)="hideImage()"
-					></ion-input>
-				</ion-item>
-
-				<ion-item *ngIf="_auth.isMemberValid$ | async">
-					<ion-label>Ficha</ion-label>
-					<ion-input
-						type="text"
-						placeholder="Ficha unidad"
-						[clearInput]="true"
-						(keyup.enter)="validateUnit()"
-						[(ngModel)]="fichaInput"
-					></ion-input>
-				</ion-item>
+				<ion-row>
+					<ion-col size="10">
+						<ion-item counter="true">
+							<ion-label>Cedula</ion-label>
+							<ion-input
+								type="text"
+								placeholder="Cedula agente"
+								[clearInput]="true"
+								[required]="true"
+								[minlength]="11"
+								[maxlength]="11"
+								[(ngModel)]="cedulaInput"								
+								(click)="hideImage()"
+							></ion-input>
+						</ion-item>
+					</ion-col>
+					<ion-col size="2">
+						<ion-button color="primary" (click)="validateMember()">
+							<ion-icon name="checkmark-done-outline" ></ion-icon>
+						</ion-button>
+					</ion-col>
+				</ion-row>
+				
+				<ion-row *ngIf="_auth.isMemberValid$ | async">
+					<ion-col size="10">
+						<ion-item>
+							<ion-label>Ficha</ion-label>
+							<ion-input
+								type="text"
+								placeholder="Ficha unidad"
+								[clearInput]="true"								
+								[(ngModel)]="fichaInput"
+							></ion-input>
+						</ion-item>
+					</ion-col>
+					<ion-col size="2">
+						<ion-button color="primary" (click)="validateUnit()">
+							<ion-icon name="checkmark-done-outline" ></ion-icon>
+						</ion-button>
+					</ion-col>					
+				</ion-row>
+				
 			</ion-card-content>
 			<ion-button
 				(click)="loginUnitMember()"
 				color="primary"
 				expand="block"
 				class="btn"
-				[disabled]="!(_auth.isUnitValid$ | async)"
+				*ngIf="(_auth.isUnitValid$ | async) && (_auth.isMemberValid$ | async)"
 			>
 				<ion-icon name="log-in-outline"></ion-icon>
 				Ingresar
