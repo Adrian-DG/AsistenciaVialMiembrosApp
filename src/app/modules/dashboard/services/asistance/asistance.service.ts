@@ -92,10 +92,13 @@ export class AsistanceService extends GenericService {
 			);
 	}
 
-	iniciarAsistenciaR5(id: number) {
+	/* iniciamos la asistencia creada previamente en el centro de operaciones de R5 */
+
+	iniciarAsistenciaR5(id: number, unidadMiembroId: number) {
 		return this.$http.put(`${this.endPoint}/iniciar`, {
 			Id: id,
 			EstatusAsistencia: 2,
+			UnidadMiembroId: unidadMiembroId,
 		});
 	}
 }

@@ -110,6 +110,7 @@
 									(click)="_cache.getResource('VehiculoTipo')"
 									formControlName="vehiculoTipoId"
 									placeholder="Tipo de Vehiculo"
+									#tipo
 								>
 									<ion-select-option
 										[value]="item.id"
@@ -144,7 +145,7 @@
 								<ion-select
 									formControlName="vehiculoMarcaId"
 									placeholder="Seleccionar Marca"
-									#marcaId
+									#marca
 								>
 									<ion-select-option
 										[value]="item.id"
@@ -158,9 +159,10 @@
 							</ion-item>
 							<ion-item
 								(click)="
-									_cache.getResourceById(
+									_cache.getDataOnIdFilters(
 										'VehiculoModelo',
-										marcaId.value
+										tipo.value,
+										marca.value
 									)
 								"
 							>

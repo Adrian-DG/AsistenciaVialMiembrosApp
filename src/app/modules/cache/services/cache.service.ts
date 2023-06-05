@@ -84,4 +84,21 @@ export class CacheService extends GenericService {
 				sourcesKeys[key][1](data);
 			});
 	}
+
+	getDataOnIdFilters(resource: string, tipo: number, marca: number): void {
+		const params = new HttpParams().set('tipo', tipo).set('marca', marca);
+		const sourcesKeys = Object.entries(this.sources);
+		console.log(resource);
+		this.$http
+			.get<IGenericEnum[]>(`${this.endPoint}/${resource}`, {
+				params: params,
+			})
+			.subscribe((data: IGenericEnum[]) => {
+				console.log(data);
+				const key = sourcesKeys.findIndex((x) => x[0] == resource);
+				console.log(key);
+				console.log(sourcesKeys[key]);
+				sourcesKeys[key][1](data);
+			});
+	}
 }

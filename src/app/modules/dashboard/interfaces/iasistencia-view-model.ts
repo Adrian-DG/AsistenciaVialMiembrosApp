@@ -35,4 +35,6 @@ export interface IAsistenciaViewModel {
 	estatusAsistencia: string;
 	estatus: boolean;
 	tipoAsistencias: ITipoAsistencia[];
+
+	tieneDatosCompletados: boolean;
 }

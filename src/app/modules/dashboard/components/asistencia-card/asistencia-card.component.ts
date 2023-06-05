@@ -10,6 +10,7 @@ import { AsistanceService } from '../../services/asistance/asistance.service';
 export class AsistenciaCardComponent implements OnInit {
 	@Input() ficha!: string | undefined;
 	@Input() item!: IAsistenciaViewModel;
+	@Input() unidadMiembroId!: number | undefined;
 
 	constructor(private _asistencia: AsistanceService) {}
 
@@ -17,10 +18,9 @@ export class AsistenciaCardComponent implements OnInit {
 
 	iniciar(id: number): void {
 		const ficha = this.ficha ?? null;
-
-		if (ficha != null) {
+		if (ficha != null && this.unidadMiembroId != null) {
 			this._asistencia
-				.iniciarAsistenciaR5(id)
+				.iniciarAsistenciaR5(id, this.unidadMiembroId)
 				.subscribe(() => this._asistencia.getAsistenciasUnidad(ficha));
 		}
 	}
