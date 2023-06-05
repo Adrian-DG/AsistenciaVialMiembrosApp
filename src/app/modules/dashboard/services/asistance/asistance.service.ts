@@ -1,13 +1,14 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { GenericService } from '../../../generic/services/generic.service';
 import { IAsistanceCreate } from '../../interfaces/iasistance-create';
 import { IAsistenciaViewModel } from '../../interfaces/iasistencia-view-model';
 import { IContadorAsistenciaViewModel } from '../../interfaces/icontador-asistencia-view-model';
 import { IGenericEnum } from 'src/app/modules/cache/interfaces/igeneric-enum';
 import { IMetricasViewModel } from '../../interfaces/imetricas-view-model';
+import { IAsistenciaEditViewModel } from '../../interfaces/iasistencia-edit-view-model';
 
 @Injectable({
 	providedIn: 'root',
@@ -100,5 +101,24 @@ export class AsistanceService extends GenericService {
 			EstatusAsistencia: 2,
 			UnidadMiembroId: unidadMiembroId,
 		});
+	}
+
+	getEditAsistenciaViewModel(
+		id: number
+	): Observable<IAsistenciaEditViewModel> {
+		return this.$http.get<IAsistenciaEditViewModel>(
+			`${this.endPoint}/edit/${id}`
+		);
+	}
+
+	guardarCambios(model: IAsistenciaEditViewModel): void {
+		this.$http
+			.put<boolean>(`${this.endPoint}/edit`, model)
+			.subscribe((response: boolean) => {
+				if (response) {
+					this.$router.navigate(['dashboard']);
+				}
+				console.log(response);
+			});
 	}
 }

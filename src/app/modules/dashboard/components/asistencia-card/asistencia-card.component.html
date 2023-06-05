@@ -118,14 +118,28 @@
 				</div>
 			</ion-accordion>
 		</ion-accordion-group>
-		<ion-button
-			*ngIf="item.estatusAsistencia == 'PENDIENTE'"
-			color="primary"
-			expand="block"
-			(click)="iniciar(item.id)"
-		>
-			<ion-icon name="timer-outline" slot="start"></ion-icon>
-			Iniciar</ion-button
-		>
+		<ion-item *ngIf="!item.tieneDatosCompletados">
+			<ion-button
+				style="width: 100%"
+				color="medium"
+				expand="block"
+				[routerLink]="['edit', item.id]"
+				><ion-icon name="create-outline"></ion-icon> Editar</ion-button
+			>
+		</ion-item>
+
+		<ion-item>
+			<ion-button
+				style="width: 100%"
+				[disabled]="!item.tieneDatosCompletados"
+				*ngIf="item.estatusAsistencia == 'PENDIENTE'"
+				color="primary"
+				expand="block"
+				(click)="iniciar(item.id)"
+			>
+				<ion-icon name="timer-outline" slot="start"></ion-icon>
+				Iniciar</ion-button
+			>
+		</ion-item>
 	</ion-card-content>
 </ion-card>

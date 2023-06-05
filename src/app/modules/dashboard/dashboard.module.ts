@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-
+import { CommonModule } from '@angular/common';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { GenericModule } from '../generic/generic.module';
 import { CacheModule } from '../cache/cache.module';
@@ -12,6 +11,7 @@ import { AsistanceFormComponent } from './pages/asistance-form/asistance-form.co
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AsistenciaCardComponent } from './components/asistencia-card/asistencia-card.component';
 import { MetricsComponent } from './pages/metrics/metrics.component';
+import { EditComponent } from './pages/edit/edit.component';
 
 @NgModule({
 	declarations: [
@@ -21,6 +21,7 @@ import { MetricsComponent } from './pages/metrics/metrics.component';
 		AsistanceFormComponent,
 		AsistenciaCardComponent,
 		MetricsComponent,
+		EditComponent,
 	],
 	imports: [
 		CommonModule,
