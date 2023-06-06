@@ -50,12 +50,12 @@ export class AsistanceFormComponent implements OnInit {
 	// });
 
 	ciudadanoForm: FormGroup = this.$fb.group({
-		identificacion: ['', [Validators.required, Validators.minLength(11)]],
+		identificacion: ['', Validators.pattern(/^[0-9]{11,15}$/)],
 		nombre: [''],
 		apellido: [''],
 		genero: [0],
 		esExtranjero: [false],
-		telefono: [''],
+		telefono: ['', [Validators.pattern(/^[0-9]{10,15}$/)]],
 	});
 
 	vehiculoForm: FormGroup = this.$fb.group({
@@ -63,7 +63,7 @@ export class AsistanceFormComponent implements OnInit {
 		vehiculoColorId: [],
 		vehiculoModeloId: [],
 		vehiculoMarcaId: [],
-		placa: [''],
+		placa: ['', Validators.pattern(/^[A-Za-z0-9]{1,10}$/)],
 	});
 
 	ubicacionForm: FormGroup = this.$fb.group({
