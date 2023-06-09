@@ -9,11 +9,20 @@
 	</ion-toolbar>
 </ion-header>
 <ion-content>
+	<!-- Refresher, pull down -->
 	<ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
 		<ion-refresher-content></ion-refresher-content>
 	</ion-refresher>
+	<!-- Unit information card -->
 	<app-member-unit-card [memberInfo]="infoUser"></app-member-unit-card>
 	<div class="list" *ngIf="_asistencias.asistencias$ | async as asistencias">
+		<ion-row>
+			<ion-col>
+				<ion-button color="light" expand="block" (click)="refresh()"
+					>Refrescar</ion-button
+				>
+			</ion-col>
+		</ion-row>
 		<ion-list *ngIf="asistencias.length > 0; else emptyList">
 			<ion-list-header>
 				<ion-label class="list-title">Asistencias de hoy</ion-label>

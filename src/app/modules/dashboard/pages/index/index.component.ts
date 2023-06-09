@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { IMemberUnitInfo } from '../../interfaces/imember-unit-info';
 import { AsistanceService } from '../../services/asistance/asistance.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
 	selector: 'app-index',
@@ -12,7 +13,8 @@ export class IndexComponent implements OnInit {
 	infoUser: IMemberUnitInfo | null = null;
 	constructor(
 		private _auth: AuthService,
-		public _asistencias: AsistanceService
+		public _asistencias: AsistanceService,
+		private _alert: AlertController
 	) {}
 
 	ngOnInit() {
@@ -40,20 +42,22 @@ export class IndexComponent implements OnInit {
 
 	handleRefresh(event: any) {
 		setTimeout(() => {
-			if (this.infoUser?.ficha) {
-				this._asistencias.getTotalAsistenciasUnidad(
-					this.infoUser?.unidadMiembroId
-				);
-
-				this._asistencias.getAsistenciasUnidad(
-					this.infoUser?.ficha.toString()
-				);
-			}
+			this.refresh();
 			event.target.complete();
 		}, 2000);
 	}
 
-	logout(): void {
-		this._auth.logout();
+	refresh(): void {
+		if (this.infoUser?.ficha) {
+			this._asistencias.getTotalAsistenciasUnidad(
+				this.infoUser?.unidadMiembroId
+			);
+
+			this._asistencias.getAsistenciasUnidad(
+				this.infoUser?.ficha.toString()
+			);
+		}
 	}
+
+	logout(): void {}
 }
