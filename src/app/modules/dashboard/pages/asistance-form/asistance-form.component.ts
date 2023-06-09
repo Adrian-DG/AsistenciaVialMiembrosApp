@@ -27,27 +27,9 @@ export class AsistanceFormComponent implements OnInit {
 		private $fb: FormBuilder,
 		public _cache: CacheService,
 		private _auth: AuthService,
-		private _asistencia: AsistanceService
+		private _asistencia: AsistanceService,
+		private _alert: AlertController
 	) {}
-
-	// asistanceForm: FormGroup = this.$fb.group({
-	// 	identificacion: ['', [Validators.required, Validators.minLength(11)]],
-	// 	nombre: [''],
-	// 	apellido: [''],
-	// 	genero: [0],
-	// 	esExtranjero: [false],
-	// 	telefono: [''],
-	// 	vehiculoTipoId: [],
-	// 	vehiculoColorId: [],
-	// 	vehiculoModeloId: [],
-	// 	vehiculoMarcaId: [],
-	// 	placa: [''],
-	// 	municipioId: [],
-	// 	provinciaId: [],
-	// 	unidadMiembroId: [0],
-	// 	comentario: [''],
-	// 	reportadoPor: [],
-	// });
 
 	ciudadanoForm: FormGroup = this.$fb.group({
 		identificacion: ['', Validators.pattern(/^[0-9]{11,15}$/)],
@@ -69,6 +51,7 @@ export class AsistanceFormComponent implements OnInit {
 	ubicacionForm: FormGroup = this.$fb.group({
 		municipioId: [],
 		provinciaId: [],
+		//direccion: [],
 	});
 
 	imagesWeb: string[] = [];
@@ -143,7 +126,65 @@ export class AsistanceFormComponent implements OnInit {
 		return info[1];
 	}
 
+	generateAlertMessage(fields: string[]) {
+		let finalString = '<ul>';
+		fields.forEach((item) => {
+			finalString += `<li>${item}</li>`;
+		});
+
+		return `${finalString}</ul>`;
+	}
+
+	async confirmCreate(): Promise<void> {
+		let emptyOrInvalidFields: string[] = [];
+
+		let forms = [
+			this.ciudadanoForm.controls,
+			this.vehiculoForm.controls,
+			this.ubicacionForm.controls,
+		];
+
+		forms.forEach((item) => {
+			Object.keys(item).forEach((key) => {
+				if (
+					item[key].invalid ||
+					item[key].value == '' ||
+					item[key].value == 0
+				) {
+					emptyOrInvalidFields.push(key);
+				}
+			});
+		});
+
+		let formatedMessage: string =
+			emptyOrInvalidFields.length == 0
+				? 'Se revisaron todos los campos, y estan completos !!'
+				: `Los siguientes campos estan vacios o no seleccionaste una opcion: ${this.generateAlertMessage(
+						emptyOrInvalidFields
+				  )}`;
+
+		const alert = await this._alert.create({
+			header: 'Confirmar reporte de asistencia',
+			subHeader: 'Se enviara la siguiente asistencia.',
+			message: formatedMessage,
+			buttons: [
+				{ text: 'cancelar', role: 'cancel' },
+				{
+					text: 'aceptar',
+					role: 'confirm',
+					handler: () => {
+						this.createAsistance();
+					},
+				},
+			],
+		});
+
+		await alert.present();
+	}
+
 	async createAsistance(): Promise<any> {
+		console.log('start creating asistance...');
+
 		const {
 			identificacion,
 			nombre,
@@ -161,7 +202,8 @@ export class AsistanceFormComponent implements OnInit {
 			placa,
 		} = this.vehiculoForm.value;
 
-		const { provinciaId, municipioId } = this.ubicacionForm.value;
+		const { provinciaId, municipioId, direccion } =
+			this.ubicacionForm.value;
 
 		const newAsistencia: IAsistanceCreate = {
 			// ciudadano
@@ -180,6 +222,7 @@ export class AsistanceFormComponent implements OnInit {
 			// ubicacion
 			provinciaId: provinciaId,
 			municipioId: municipioId,
+			//direccion: direccion,
 			comentario: this.comentario,
 			coordenadas: this.coordenadas,
 			reportadoPor: this.reportadoPor,

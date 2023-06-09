@@ -16,9 +16,11 @@ export class LoadingInterceptor implements HttpInterceptor {
 		request: HttpRequest<unknown>,
 		next: HttpHandler
 	): Observable<HttpEvent<unknown>> {
-		this._spinner.showLoading(true);
-		return next
-			.handle(request)
-			.pipe(finalize(() => this._spinner.showLoading(false)));
+		// this._spinner.showLoading(true);
+		return next.handle(request).pipe(
+			finalize(() => {
+				// this._spinner.showLoading(false)
+			})
+		);
 	}
 }

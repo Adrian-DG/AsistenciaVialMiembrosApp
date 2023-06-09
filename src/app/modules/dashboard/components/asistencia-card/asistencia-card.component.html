@@ -118,7 +118,7 @@
 				</div>
 			</ion-accordion>
 		</ion-accordion-group>
-		<ion-item *ngIf="!item.tieneDatosCompletados">
+		<ion-item *ngIf="item.estatusAsistencia != 'COMPLETADA'">
 			<ion-button
 				style="width: 100%"
 				color="medium"
@@ -128,11 +128,9 @@
 			>
 		</ion-item>
 
-		<ion-item>
+		<ion-item *ngIf="item.estatusAsistencia == 'PENDIENTE'">
 			<ion-button
 				style="width: 100%"
-				[disabled]="!item.tieneDatosCompletados"
-				*ngIf="item.estatusAsistencia == 'PENDIENTE'"
 				color="primary"
 				expand="block"
 				(click)="iniciar(item.id)"

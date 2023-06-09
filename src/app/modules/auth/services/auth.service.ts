@@ -13,6 +13,7 @@ import { ICreatedAuthorizedMember } from '../interfaces/icreated-authorized-memb
 import { AlertController, ToastController } from '@ionic/angular';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { SpinnerService } from '../../generic/services/spinner/spinner.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -32,7 +33,8 @@ export class AuthService extends GenericService {
 		private _storage: Storage,
 		private _toast: ToastController,
 		private _alert: AlertController,
-		private _jwt: JwtHelperService
+		private _jwt: JwtHelperService,
+		private _spinner: SpinnerService
 	) {
 		super($http);
 		this._storage.create();
@@ -85,6 +87,7 @@ export class AuthService extends GenericService {
 	}
 
 	validateMember(cedula: string): void {
+		this._spinner.showLoading(true);
 		this.$http
 			.get<ICreatedAuthorizedMember>(
 				`${this.endPoint}/miembros/confirm`,
@@ -106,10 +109,12 @@ export class AuthService extends GenericService {
 				this.isMemberValidSource.next(
 					response.created && response.isAuthorized
 				);
+				this._spinner.showLoading(false);
 			});
 	}
 
 	validateUnit(ficha: string): void {
+		this._spinner.showLoading(true);
 		this.$http
 			.get<boolean>(`${this.endPoint}/unidades/confirm`, {
 				params: this.getParams('Ficha', ficha),
@@ -121,15 +126,18 @@ export class AuthService extends GenericService {
 					);
 				}
 				this.isUnitValidSource.next(response);
+				this._spinner.showLoading(false);
 			});
 	}
 
 	registerMember(model: IMemberCreate): void {
+		this._spinner.showLoading(true);
 		this.$http
 			.post<boolean>(`${this.endPoint}/miembros/createApp`, model)
 			.subscribe((response: boolean) => {
 				if (response) {
 					this.$router.navigate(['auth/signin']);
+					this._spinner.showLoading(false);
 				}
 			});
 	}

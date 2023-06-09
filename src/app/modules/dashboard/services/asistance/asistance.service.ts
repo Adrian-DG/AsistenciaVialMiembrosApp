@@ -9,6 +9,8 @@ import { IContadorAsistenciaViewModel } from '../../interfaces/icontador-asisten
 import { IGenericEnum } from 'src/app/modules/cache/interfaces/igeneric-enum';
 import { IMetricasViewModel } from '../../interfaces/imetricas-view-model';
 import { IAsistenciaEditViewModel } from '../../interfaces/iasistencia-edit-view-model';
+import { AlertController } from '@ionic/angular';
+import { SpinnerService } from 'src/app/modules/generic/services/spinner/spinner.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -33,21 +35,51 @@ export class AsistanceService extends GenericService {
 		});
 	public contadorAsistencias$ = this.contadorAsistenciasSource.asObservable();
 
-	constructor(protected override $http: HttpClient, private $router: Router) {
+	constructor(
+		protected override $http: HttpClient,
+		private $router: Router,
+		private _alert: AlertController,
+		private _spinner: SpinnerService
+	) {
 		super($http);
 		this.endPoint += '/asistencias';
 	}
 
+	private async generateRequestResultAlert(
+		header: string,
+		subHeader: string,
+		message: string
+	): Promise<void> {
+		const alert = await this._alert.create({
+			header: header,
+			subHeader: subHeader,
+			message: message,
+			buttons: ['ok'],
+			animated: true,
+		});
+		await alert.present();
+	}
+
 	createAsistance(model: IAsistanceCreate): void {
 		console.log('Enter asistance service');
-		this.$http
-			.post<boolean>(`${this.endPoint}/create`, model)
-			.subscribe((response: boolean) => {
+		this.$http.post<boolean>(`${this.endPoint}/create`, model).subscribe(
+			(response: boolean) => {
 				if (response) {
-					console.log('Se creo la asistencia');
+					this.generateRequestResultAlert(
+						'Exito',
+						'',
+						'La asistencia se registro de forma correctamente'
+					);
 					this.$router.navigate(['dashboard']);
 				}
-			});
+			},
+			(error) =>
+				this.generateRequestResultAlert(
+					'Error',
+					'',
+					'Algo salio, no se pudo crear la asistencia!!'
+				)
+		);
 	}
 
 	getAsistenciasUnidad(ficha: string): void {
@@ -112,13 +144,23 @@ export class AsistanceService extends GenericService {
 	}
 
 	guardarCambios(model: IAsistenciaEditViewModel): void {
-		this.$http
-			.put<boolean>(`${this.endPoint}/edit`, model)
-			.subscribe((response: boolean) => {
+		this.$http.put<boolean>(`${this.endPoint}/edit`, model).subscribe(
+			(response: boolean) => {
 				if (response) {
+					this.generateRequestResultAlert(
+						'Ok',
+						'',
+						'Se guardaron los cambios'
+					);
 					this.$router.navigate(['dashboard']);
 				}
-				console.log(response);
-			});
+			},
+			(error) =>
+				this.generateRequestResultAlert(
+					'Error',
+					'',
+					'Algo salio al guardar los cambios'
+				)
+		);
 	}
 }

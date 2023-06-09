@@ -18,4 +18,5 @@ export interface IAsistanceCreate {
 	tipoAsistencias: number[];
 	comentario: string;
 	reportadoPor: number;
+	//direccion: string;
 }
