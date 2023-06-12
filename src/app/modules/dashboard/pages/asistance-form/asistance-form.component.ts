@@ -51,7 +51,7 @@ export class AsistanceFormComponent implements OnInit {
 	ubicacionForm: FormGroup = this.$fb.group({
 		municipioId: [],
 		provinciaId: [],
-		//direccion: [],
+		direccion: [],
 	});
 
 	imagesWeb: string[] = [];
@@ -222,7 +222,7 @@ export class AsistanceFormComponent implements OnInit {
 			// ubicacion
 			provinciaId: provinciaId,
 			municipioId: municipioId,
-			//direccion: direccion,
+			direccion: direccion,
 			comentario: this.comentario,
 			coordenadas: this.coordenadas,
 			reportadoPor: this.reportadoPor,

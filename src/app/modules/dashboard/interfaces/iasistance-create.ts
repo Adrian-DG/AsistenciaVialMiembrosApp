@@ -13,6 +13,7 @@ export interface IAsistanceCreate {
 	coordenadas: string;
 	municipioId: number;
 	provinciaId: number;
+	direccion: string;
 	unidadMiembroId: number;
 	imagenes: string[];
 	tipoAsistencias: number[];

@@ -11,8 +11,8 @@ export class SpinnerService {
 	async showLoading(state: boolean): Promise<void> {
 		const loading = await this._loading.create({
 			message: 'Espere mientras se completa el proceso...',
-			duration: 5000,
 			animated: true,
+			duration: 2000,
 			spinner: 'circular',
 			translucent: true,
 			keyboardClose: true,
