@@ -11,6 +11,7 @@ import { IMetricasViewModel } from '../../interfaces/imetricas-view-model';
 import { IAsistenciaEditViewModel } from '../../interfaces/iasistencia-edit-view-model';
 import { AlertController } from '@ionic/angular';
 import { SpinnerService } from 'src/app/modules/generic/services/spinner/spinner.service';
+import { IUpdateStatusUnit } from '../../interfaces/iupdate-status-unit';
 
 @Injectable({
 	providedIn: 'root',
@@ -34,6 +35,9 @@ export class AsistanceService extends GenericService {
 			totalAsistencias: 0,
 		});
 	public contadorAsistencias$ = this.contadorAsistenciasSource.asObservable();
+
+	private unidadStatusSource = new BehaviorSubject<boolean>(true);
+	public unidadStatus$ = this.unidadStatusSource.asObservable();
 
 	constructor(
 		protected override $http: HttpClient,
@@ -141,6 +145,32 @@ export class AsistanceService extends GenericService {
 		return this.$http.get<IAsistenciaEditViewModel>(
 			`${this.endPoint}/edit/${id}`
 		);
+	}
+
+	confirmUnidadEstatus(ficha: string): void {
+		const param = new HttpParams().set('ficha', ficha);
+		this.$http
+			.get<boolean>(`${this.env}/unidades/confirmStatus`, {
+				params: param,
+			})
+			.subscribe((response: boolean) =>
+				this.unidadStatusSource.next(response)
+			);
+	}
+
+	changeUnidadStatus(model: IUpdateStatusUnit): void {
+		this.$http
+			.put<boolean>(`${this.env}/unidades/changeStatus`, model)
+			.subscribe((respose: boolean) => {
+				if (respose) {
+					this.confirmUnidadEstatus(model.ficha);
+				}
+				this.generateRequestResultAlert(
+					'Cambio de Estatus',
+					'Se desea cambiar el estatus de la unidad',
+					`El estatus de la unidad ficha ${model.ficha} ha cambiado.`
+				);
+			});
 	}
 
 	guardarCambios(model: IAsistenciaEditViewModel): void {

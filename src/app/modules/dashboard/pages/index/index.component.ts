@@ -3,13 +3,14 @@ import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { IMemberUnitInfo } from '../../interfaces/imember-unit-info';
 import { AsistanceService } from '../../services/asistance/asistance.service';
 import { AlertController } from '@ionic/angular';
+import { IUpdateStatusUnit } from '../../interfaces/iupdate-status-unit';
 
 @Component({
 	selector: 'app-index',
 	templateUrl: './index.component.html',
 	styleUrls: ['./index.component.scss'],
 })
-export class IndexComponent implements OnInit {
+export class IndexComponent implements OnInit, AfterViewInit {
 	infoUser: IMemberUnitInfo | null = null;
 	constructor(
 		private _auth: AuthService,
@@ -29,15 +30,11 @@ export class IndexComponent implements OnInit {
 				tramo: response[5],
 				esEncargado: response[6],
 			};
-
-			this._asistencias.getTotalAsistenciasUnidad(
-				this.infoUser?.unidadMiembroId
-			);
-
-			this._asistencias.getAsistenciasUnidad(
-				this.infoUser?.ficha.toString()
-			);
 		});
+	}
+
+	ngAfterViewInit(): void {
+		this.refresh();
 	}
 
 	handleRefresh(event: any) {
@@ -49,6 +46,8 @@ export class IndexComponent implements OnInit {
 
 	refresh(): void {
 		if (this.infoUser?.ficha) {
+			this._asistencias.confirmUnidadEstatus(this.infoUser?.ficha);
+
 			this._asistencias.getTotalAsistenciasUnidad(
 				this.infoUser?.unidadMiembroId
 			);
@@ -56,6 +55,13 @@ export class IndexComponent implements OnInit {
 			this._asistencias.getAsistenciasUnidad(
 				this.infoUser?.ficha.toString()
 			);
+		}
+	}
+
+	changeStatus(): void {
+		if (this.infoUser?.ficha) {
+			const model: IUpdateStatusUnit = { ficha: this.infoUser?.ficha };
+			this._asistencias.changeUnidadStatus(model);
 		}
 	}
 
