@@ -25,12 +25,33 @@ export class LeaveGuard implements CanDeactivate<IndexComponent> {
 		private _alert: AlertController
 	) {}
 
-	canDeactivate<IndexComponent>(
+	async canDeactivate<IndexComponent>(
 		component: IndexComponent,
 		currentRoute: ActivatedRouteSnapshot,
 		currentState: RouterStateSnapshot,
 		nextState?: RouterStateSnapshot
-	): boolean {
-		return true;
+	): Promise<boolean> {
+		return new Promise(async (resolve) => {
+			const confirm = await this._alert.create({
+				header: 'Completar formulario',
+				subHeader: 'Se perderan los cambios',
+				message:
+					'Si acepta, se perderan los datos de la asistencia y el formulario.',
+				translucent: true,
+				animated: true,
+				buttons: [
+					{ text: 'cancelar', role: 'cancel' },
+					{
+						text: 'aceptar',
+						role: 'confirm',
+						handler: () => {
+							return resolve(true);
+						},
+					},
+				],
+			});
+
+			await confirm.present();
+		});
 	}
 }
