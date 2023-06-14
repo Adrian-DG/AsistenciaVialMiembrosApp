@@ -1,7 +1,13 @@
 <ion-header>
 	<ion-toolbar color="tertiary">
 		<ion-buttons slot="start">
-			<ion-back-button icon="caret-back"></ion-back-button>
+			<ion-back-button
+				icon="caret-back"
+				*ngIf="!wantPictures"
+			></ion-back-button>
+			<ion-button *ngIf="wantPictures" (click)="wantPictures = false">
+				<ion-icon name="caret-back"></ion-icon>
+			</ion-button>
 		</ion-buttons>
 		<ion-title>Formulario Asistencia</ion-title>
 		<ion-buttons slot="end" *ngIf="wantPictures">
