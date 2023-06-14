@@ -10,6 +10,9 @@ export interface IAsistenciaEditViewModel {
 	vehiculoColorId: number;
 	vehiculoModeloId: number;
 	vehiculoMarcaId: number;
+	provinciaId: number;
+	municipioId: number;
+	direccion: string;
 	tipoAsistencias: number[];
 	comentario: string;
 }

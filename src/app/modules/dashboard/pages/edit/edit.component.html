@@ -3,6 +3,11 @@
 		<ion-buttons slot="start">
 			<ion-back-button icon="caret-back"></ion-back-button>
 		</ion-buttons>
+		<ion-buttons slot="end">
+			<ion-button (click)="saveChanges()">
+				<ion-icon name="save"></ion-icon>
+			</ion-button>
+		</ion-buttons>
 		<ion-title>Editar Asistencia</ion-title>
 	</ion-toolbar>
 </ion-header>
@@ -38,22 +43,114 @@
 					[maxlength]="15"
 				></ion-input>
 			</ion-item>
+
+			<!-- Datos vehiculo -->
+			<ion-item>
+				<ion-select
+					(click)="_cache.getResource('VehiculoTipo')"
+					[value]="asistenciaObject.vehiculoTipoId"
+					[(ngModel)]="asistenciaObject.vehiculoTipoId"
+					placeholder="Tipo de Vehiculo"
+					#tipo
+				>
+					<ion-select-option
+						[value]="item.id"
+						*ngFor="let item of _cache.vehiculoTipos$ | async"
+						>{{ item.nombre }}</ion-select-option
+					>
+				</ion-select>
+			</ion-item>
+
+			<ion-item (click)="_cache.getResource('VehiculoColores')">
+				<ion-select
+					[value]="asistenciaObject.vehiculoColorId"
+					[(ngModel)]="asistenciaObject.vehiculoColorId"
+					placeholder="Seleccionar Color"
+				>
+					<ion-select-option
+						[value]="item.id"
+						*ngFor="let item of _cache.vehiculoColor$ | async"
+						>{{ item.nombre }}</ion-select-option
+					>
+				</ion-select>
+			</ion-item>
+			<ion-item (click)="_cache.getResource('VehiculoMarca')">
+				<ion-select
+					[value]="asistenciaObject.vehiculoMarcaId"
+					[(ngModel)]="asistenciaObject.vehiculoMarcaId"
+					placeholder="Seleccionar Marca"
+					#marca
+				>
+					<ion-select-option
+						[value]="item.id"
+						*ngFor="let item of _cache.vehiculoMarca$ | async"
+						>{{ item.nombre }}</ion-select-option
+					>
+				</ion-select>
+			</ion-item>
+			<ion-item
+				(click)="
+					_cache.getDataOnIdFilters(
+						'VehiculoModelo',
+						tipo.value,
+						marca.value
+					)
+				"
+			>
+				<ion-select
+					[value]="asistenciaObject.vehiculoModeloId"
+					[(ngModel)]="asistenciaObject.vehiculoModeloId"
+					placeholder="Seleccionar Modelo"
+				>
+					<ion-select-option
+						[value]="item.id"
+						*ngFor="let item of _cache.vehiculoModelo$ | async"
+						>{{ item.nombre }}</ion-select-option
+					>
+				</ion-select>
+			</ion-item>
+
+			<ion-item (click)="_cache.getResource('provincias')">
+				<ion-select
+					[value]="asistenciaObject.provinciaId"
+					[(ngModel)]="asistenciaObject.provinciaId"
+					placeholder="Seleccionar Provincia"
+					#provinciaId
+				>
+					<ion-select-option
+						[value]="item.id"
+						*ngFor="let item of _cache.provincias$ | async"
+						>{{ item.nombre }}</ion-select-option
+					>
+				</ion-select>
+			</ion-item>
+			<ion-item
+				(click)="
+					_cache.getResourceById('municipios', provinciaId.value)
+				"
+			>
+				<ion-select
+					[value]="asistenciaObject.municipioId"
+					[(ngModel)]="asistenciaObject.municipioId"
+					placeholder="Seleccionar Municipio"
+				>
+					<ion-select-option
+						[value]="item.id"
+						*ngFor="let item of _cache.municipios$ | async"
+						>{{ item.nombre }}</ion-select-option
+					>
+				</ion-select>
+			</ion-item>
+			<ion-item>
+				<ion-label>Dirección (opcional)</ion-label>
+				<ion-input [(ngModel)]="asistenciaObject.direccion"></ion-input>
+			</ion-item>
+
 			<ion-item>
 				<ion-label>Comentario</ion-label>
 				<ion-textarea
 					[(ngModel)]="asistenciaObject.comentario"
 				></ion-textarea>
-			</ion-item>
-			<ion-item>
-				<ion-button
-					expand="block"
-					color="success"
-					style="width: 100%"
-					(click)="saveChanges()"
-				>
-					<ion-icon name="save-outline"></ion-icon>
-					Guardar cambios
-				</ion-button>
 			</ion-item>
 		</ion-card-content>
 	</ion-card>

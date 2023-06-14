@@ -2,8 +2,16 @@
 	<ion-toolbar color="tertiary ">
 		<ion-title>Inicio</ion-title>
 		<ion-buttons slot="end">
+			<div
+				class="status"
+				[ngClass]="
+					(_asistencias.unidadStatus$ | async)
+						? 'disponible'
+						: 'noDisponible'
+				"
+			></div>
 			<ion-toggle
-				color="warning"
+				color="light"
 				[checked]="_asistencias.unidadStatus$ | async"
 				(ionChange)="changeStatus()"
 			></ion-toggle>

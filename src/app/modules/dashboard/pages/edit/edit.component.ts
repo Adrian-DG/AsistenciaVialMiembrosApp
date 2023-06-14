@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AsistanceService } from '../../services/asistance/asistance.service';
 import { IAsistenciaEditViewModel } from '../../interfaces/iasistencia-edit-view-model';
 import { FormControl, FormGroup } from '@angular/forms';
+import { CacheService } from 'src/app/modules/cache/services/cache.service';
 
 @Component({
 	selector: 'AsistenciaVial-edit',
@@ -15,7 +16,8 @@ export class EditComponent implements OnInit, AfterViewInit {
 
 	constructor(
 		private $activeRoute: ActivatedRoute,
-		private _asistencias: AsistanceService
+		private _asistencias: AsistanceService,
+		public _cache: CacheService
 	) {}
 
 	ngOnInit() {
@@ -30,6 +32,20 @@ export class EditComponent implements OnInit, AfterViewInit {
 				.getEditAsistenciaViewModel(this.id)
 				.subscribe((data: IAsistenciaEditViewModel) => {
 					this.asistenciaObject = data;
+
+					this._cache.getResource('VehiculoTipo');
+					this._cache.getResource('VehiculoColores');
+					this._cache.getResource('VehiculoMarca');
+					this._cache.getDataOnIdFilters(
+						'VehiculoModelo',
+						this.asistenciaObject.vehiculoTipoId,
+						this.asistenciaObject.vehiculoMarcaId
+					);
+					this._cache.getResource('provincias');
+					this._cache.getResourceById(
+						'municipios',
+						this.asistenciaObject.provinciaId
+					);
 				});
 		}
 	}

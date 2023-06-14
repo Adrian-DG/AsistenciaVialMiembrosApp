@@ -11,3 +11,18 @@
 	font-size: 1.1rem;
 	text-align: center;
 }
+
+.disponible {
+	background-color: rgb(71, 236, 71);
+}
+
+.noDisponible {
+	background-color: rgb(252, 56, 56);
+}
+
+.status {
+	width: 1.2em;
+	height: 1.2em;
+	border: 3px solid white;
+	border-radius: 100%;
+}
