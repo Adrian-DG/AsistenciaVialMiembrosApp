@@ -4,11 +4,16 @@ import { AsistanceFormComponent } from './pages/asistance-form/asistance-form.co
 import { IndexComponent } from './pages/index/index.component';
 import { MetricsComponent } from './pages/metrics/metrics.component';
 import { EditComponent } from './pages/edit/edit.component';
+import { LeaveGuard } from 'src/app/guard/leave.guard';
 
 const routes: Routes = [
 	{ path: 'edit/:id', component: EditComponent },
 	{ path: 'metrics/:ficha', component: MetricsComponent },
-	{ path: 'create', component: AsistanceFormComponent },
+	{
+		path: 'create',
+		component: AsistanceFormComponent,
+		canDeactivate: [LeaveGuard],
+	},
 	{ path: '', component: IndexComponent, pathMatch: 'full' },
 ];
 

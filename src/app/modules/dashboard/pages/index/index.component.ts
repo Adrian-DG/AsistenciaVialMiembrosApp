@@ -65,5 +65,7 @@ export class IndexComponent implements OnInit, AfterViewInit {
 		}
 	}
 
-	logout(): void {}
+	async logout(): Promise<void> {
+		await this._auth.logout();
+	}
 }

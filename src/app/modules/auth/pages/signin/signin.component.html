@@ -1,5 +1,5 @@
 <ion-header>
-	<ion-toolbar color="primary">
+	<ion-toolbar color="tertiary">
 		<ion-title>Inicio</ion-title>
 	</ion-toolbar>
 </ion-header>
@@ -29,18 +29,18 @@
 								[required]="true"
 								[minlength]="11"
 								[maxlength]="11"
-								[(ngModel)]="cedulaInput"								
+								[(ngModel)]="cedulaInput"
 								(click)="hideImage()"
 							></ion-input>
 						</ion-item>
 					</ion-col>
 					<ion-col size="2">
 						<ion-button color="primary" (click)="validateMember()">
-							<ion-icon name="checkmark-done-outline" ></ion-icon>
+							<ion-icon name="checkmark-done-outline"></ion-icon>
 						</ion-button>
 					</ion-col>
 				</ion-row>
-				
+
 				<ion-row *ngIf="_auth.isMemberValid$ | async">
 					<ion-col size="10">
 						<ion-item>
@@ -48,25 +48,27 @@
 							<ion-input
 								type="text"
 								placeholder="Ficha unidad"
-								[clearInput]="true"								
+								[clearInput]="true"
 								[(ngModel)]="fichaInput"
 							></ion-input>
 						</ion-item>
 					</ion-col>
 					<ion-col size="2">
 						<ion-button color="primary" (click)="validateUnit()">
-							<ion-icon name="checkmark-done-outline" ></ion-icon>
+							<ion-icon name="checkmark-done-outline"></ion-icon>
 						</ion-button>
-					</ion-col>					
+					</ion-col>
 				</ion-row>
-				
 			</ion-card-content>
 			<ion-button
 				(click)="loginUnitMember()"
 				color="primary"
 				expand="block"
 				class="btn"
-				*ngIf="(_auth.isUnitValid$ | async) && (_auth.isMemberValid$ | async)"
+				*ngIf="
+					(_auth.isUnitValid$ | async) &&
+					(_auth.isMemberValid$ | async)
+				"
 			>
 				<ion-icon name="log-in-outline"></ion-icon>
 				Ingresar

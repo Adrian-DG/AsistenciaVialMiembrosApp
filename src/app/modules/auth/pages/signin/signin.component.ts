@@ -8,12 +8,16 @@ import { AuthService } from '../../services/auth.service';
 	styleUrls: ['./signin.component.scss'],
 })
 export class SigninComponent implements OnInit {
-	cedulaInput: string = '';
-	fichaInput: string = '';
-	isWriting: boolean = false;
+	cedulaInput!: string;
+	fichaInput!: string;
+	isWriting!: boolean;
 	constructor(public _auth: AuthService) {}
 
-	ngOnInit() {}
+	ngOnInit() {
+		this.cedulaInput = '';
+		this.fichaInput = '';
+		this.isWriting = false;
+	}
 
 	hideImage = () => (this.isWriting = true);
 

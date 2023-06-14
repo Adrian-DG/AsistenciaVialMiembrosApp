@@ -61,8 +61,11 @@ export class AuthService extends GenericService {
 		}
 	}
 
-	clearSession(): void {
-		this._storage.clear();
+	async clearSession(): Promise<void> {
+		await this._storage.clear();
+		this.isMemberValidSource.next(false);
+		this.isUnitValidSource.next(false);
+		this.isAuthorizedSource.next(false);
 	}
 
 	getToken(): Promise<any> {
@@ -185,26 +188,24 @@ export class AuthService extends GenericService {
 	}
 
 	async logout(): Promise<void> {
-		const confirm = await this._alert.create({
-			header: 'Confimación',
-			subHeader: 'Confirmar cierre de sesión',
-			message:
-				'Si acepta se cerrar esta sessión tendra que loggearse nuevamente para usar la aplicación.',
+		const alert = await this._alert.create({
+			header: 'Cerrar Sesión',
+			message: 'Si acepta se cerrara la sesión de la aplicación.',
+			animated: true,
+			translucent: true,
 			buttons: [
-				{ text: 'cancelar' },
+				{ text: 'Cancelar', role: 'cancenl' },
 				{
-					text: 'aceptar',
-					handler: () => {
-						this._storage.clear();
-						this.$router.navigate(['']);
+					text: 'Aceptar',
+					role: 'confirm',
+					handler: async () => {
+						await this.clearSession();
+						this.$router.navigateByUrl('auth/signin');
 					},
 				},
 			],
-			animated: true,
-			translucent: true,
-			keyboardClose: true,
 		});
 
-		confirm.present();
+		await alert.present();
 	}
 }
