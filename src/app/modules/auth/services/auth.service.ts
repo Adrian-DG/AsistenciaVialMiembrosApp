@@ -37,7 +37,11 @@ export class AuthService extends GenericService {
 		private _spinner: SpinnerService
 	) {
 		super($http);
-		this._storage.create();
+		this.initStorage();
+	}
+
+	async initStorage(): Promise<void> {
+		await this._storage.create();
 	}
 
 	async checkIfAuthenticated(): Promise<boolean> {
@@ -46,11 +50,11 @@ export class AuthService extends GenericService {
 		if (storageExist) {
 			const token = await this._storage.get('token');
 			const hasExpired = this._jwt.isTokenExpired(token);
-			console.log('Has Token expire: ', !hasExpired);
+			console.log('Has Token expire: ', hasExpired ? 'Si' : 'No');
 
 			// Si el token expiro se borraran los datos del storage
 			if (hasExpired) {
-				this._storage.clear();
+				await this._storage.clear();
 				return false;
 			} else {
 				return true;
