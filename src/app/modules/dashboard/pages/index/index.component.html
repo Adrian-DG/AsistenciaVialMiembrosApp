@@ -31,7 +31,7 @@
 	<div class="list" *ngIf="_asistencias.asistencias$ | async as asistencias">
 		<ion-row>
 			<ion-col>
-				<ion-button color="light" expand="block" (click)="refresh()"
+				<ion-button color="primary" expand="block" (click)="refresh()"
 					>Refrescar</ion-button
 				>
 			</ion-col>
@@ -61,7 +61,7 @@
 	</div>
 
 	<ion-fab slot="fixed" vertical="bottom" horizontal="end">
-		<ion-fab-button [routerLink]="['create']" color="tertiary">
+		<ion-fab-button [routerLink]="['create']" color="primary">
 			<ion-icon name="add"></ion-icon>
 		</ion-fab-button>
 	</ion-fab>

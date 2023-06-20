@@ -1,6 +1,6 @@
 {
-	"name": "ReportarAsistencia",
-	"short_name": "Reportar",
+	"name": "Registrar Asistencia",
+	"short_name": "Registrar",
 	"theme_color": "#1976d2",
 	"background_color": "#fafafa",
 	"display": "standalone",

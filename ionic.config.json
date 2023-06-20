@@ -1,5 +1,5 @@
 {
-	"name": "ReportarAsistencia",
+	"name": "RegistrarAsistencia",
 	"integrations": {
 		"cordova": {}
 	},

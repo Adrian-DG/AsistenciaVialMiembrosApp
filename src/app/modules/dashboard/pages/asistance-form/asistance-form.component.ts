@@ -41,17 +41,17 @@ export class AsistanceFormComponent implements OnInit {
 	});
 
 	vehiculoForm: FormGroup = this.$fb.group({
-		vehiculoTipoId: [],
-		vehiculoColorId: [],
-		vehiculoModeloId: [],
-		vehiculoMarcaId: [],
+		vehiculoTipoId: [0],
+		vehiculoColorId: [0],
+		vehiculoModeloId: [0],
+		vehiculoMarcaId: [0],
 		placa: ['', Validators.pattern(/^[A-Za-z0-9]{1,10}$/)],
 	});
 
 	ubicacionForm: FormGroup = this.$fb.group({
-		municipioId: [],
-		provinciaId: [],
-		direccion: [],
+		municipioId: [0],
+		provinciaId: [0],
+		direccion: [''],
 	});
 
 	imagesWeb: string[] = [];

@@ -12,6 +12,7 @@ import { IAsistenciaEditViewModel } from '../../interfaces/iasistencia-edit-view
 import { AlertController } from '@ionic/angular';
 import { SpinnerService } from 'src/app/modules/generic/services/spinner/spinner.service';
 import { IUpdateStatusUnit } from '../../interfaces/iupdate-status-unit';
+import { resolve } from 'dns';
 
 @Injectable({
 	providedIn: 'root',
@@ -80,8 +81,8 @@ export class AsistanceService extends GenericService {
 			(error) =>
 				this.generateRequestResultAlert(
 					'Error',
-					'',
-					'Algo salio, no se pudo crear la asistencia!!'
+					'Algo salió mal',
+					'No se pudo crear la asistencia, es posible que fue algunos campos no esten correctos o fallara el servicio!!'
 				)
 		);
 	}
@@ -189,7 +190,7 @@ export class AsistanceService extends GenericService {
 				this.generateRequestResultAlert(
 					'Error',
 					'',
-					'Algo salio al guardar los cambios'
+					'Algo salio mal al guardar los cambios'
 				)
 		);
 	}
