@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { GenericService } from '../../generic/services/generic.service';
 import { IGenericEnum } from '../interfaces/igeneric-enum';
+import { AlertController } from '@ionic/angular';
 
 @Injectable({
 	providedIn: 'root',
@@ -49,8 +50,11 @@ export class CacheService extends GenericService {
 		rangos: (value: IGenericEnum[]) => this.rangosSource.next(value),
 	};
 
-	constructor(protected override $http: HttpClient) {
-		super($http);
+	constructor(
+		protected override $http: HttpClient,
+		protected override _alert: AlertController
+	) {
+		super($http, _alert);
 		this.endPoint += '/cache';
 	}
 

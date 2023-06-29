@@ -30,13 +30,13 @@ export class AuthService extends GenericService {
 	constructor(
 		protected override $http: HttpClient,
 		protected $router: Router,
+		protected override _alert: AlertController,
 		private _storage: Storage,
 		private _toast: ToastController,
-		private _alert: AlertController,
 		private _jwt: JwtHelperService,
 		private _spinner: SpinnerService
 	) {
-		super($http);
+		super($http, _alert);
 		this.initStorage();
 	}
 
@@ -141,12 +141,30 @@ export class AuthService extends GenericService {
 		this._spinner.showLoading(true);
 		this.$http
 			.post<boolean>(`${this.endPoint}/miembros/createApp`, model)
-			.subscribe((response: boolean) => {
-				if (response) {
-					this.$router.navigate(['auth/signin']);
-					this._spinner.showLoading(false);
-				}
-			});
+			.subscribe(
+				(response: boolean) => {
+					if (response) {
+						this.$router.navigate(['auth/signin']);
+						this._spinner.showLoading(false);
+					}
+
+					this.generateRequestResultAlert(
+						`${response ? 'Exito' : 'Error'}`,
+						'',
+						`${
+							response
+								? 'El soldado se registro con exito!!'
+								: 'Es probable que esta cédula ya este registrada!!'
+						}`
+					);
+				},
+				(error) =>
+					this.generateRequestResultAlert(
+						'Error',
+						'',
+						'Algo salio mal, no se pudo registrar al soldado!!'
+					)
+			);
 	}
 
 	getStorageData(): Promise<any[]> {

@@ -35,6 +35,7 @@ export class AsistanceService extends GenericService {
 			totalAccidentes: 0,
 			totalAsistencias: 0,
 		});
+
 	public contadorAsistencias$ = this.contadorAsistenciasSource.asObservable();
 
 	private unidadStatusSource = new BehaviorSubject<boolean>(true);
@@ -43,26 +44,11 @@ export class AsistanceService extends GenericService {
 	constructor(
 		protected override $http: HttpClient,
 		private $router: Router,
-		private _alert: AlertController,
-		private _spinner: SpinnerService
+		private _spinner: SpinnerService,
+		protected override _alert: AlertController
 	) {
-		super($http);
+		super($http, _alert);
 		this.endPoint += '/asistencias';
-	}
-
-	private async generateRequestResultAlert(
-		header: string,
-		subHeader: string,
-		message: string
-	): Promise<void> {
-		const alert = await this._alert.create({
-			header: header,
-			subHeader: subHeader,
-			message: message,
-			buttons: ['ok'],
-			animated: true,
-		});
-		await alert.present();
 	}
 
 	createAsistance(model: IAsistanceCreate): void {
