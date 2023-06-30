@@ -69,7 +69,9 @@ export class AsistanceFormComponent implements OnInit {
 	}
 
 	async getCurrentPosition(): Promise<void> {
-		const position = await Geolocation.getCurrentPosition();
+		const position = await Geolocation.getCurrentPosition({
+			enableHighAccuracy: true,
+		});
 		console.log(position);
 		this.coordenadas = `${position.coords.latitude}, ${position.coords.longitude}`;
 		this.hasPosition = !this.hasPosition;

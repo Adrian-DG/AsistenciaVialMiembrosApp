@@ -3,20 +3,20 @@
 	*ngIf="_asistencia.contadorAsistencias$ | async as counter; else noCount"
 >
 	<div class="col">
-		<span>Asistencia</span><span>{{ counter.totalAsistencias }}</span>
+		<span>Asistencias</span><span>{{ counter.totalAsistencias }}</span>
 	</div>
 	<div class="col">
-		<span>Emergencia</span><span>{{ counter.totalAccidentes }}</span>
+		<span>Emergencias</span><span>{{ counter.totalAccidentes }}</span>
 	</div>
 </div>
 
 <ng-template #noCount>
 	<div class="row">
 		<div class="col">
-			<span>Asistencia</span><span>{{ 0 }}</span>
+			<span>Asistencias</span><span>{{ 0 }}</span>
 		</div>
 		<div class="col">
-			<span>Emergencia</span><span>{{ 0 }}</span>
+			<span>Emergencias</span><span>{{ 0 }}</span>
 		</div>
 	</div>
 </ng-template>
