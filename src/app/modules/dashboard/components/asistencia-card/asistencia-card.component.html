@@ -3,7 +3,11 @@
 		<ion-row>
 			<!-- category icon-->
 			<ion-col size="2">
-				<ion-icon class="category-icon" name="car-sport"></ion-icon>
+				<ion-icon
+					class="category-icon"
+					[ngClass]="item.esEmergencia ? 'emergencia' : 'asistencia'"
+					name="car-sport"
+				></ion-icon>
 			</ion-col>
 			<!-- card information -->
 			<ion-col size="8">
@@ -141,7 +145,7 @@
 		<ion-item *ngIf="item.estatusAsistencia == 'PENDIENTE'">
 			<ion-button
 				style="width: 100%"
-				color="primary"
+				color="success"
 				expand="block"
 				(click)="iniciar(item.id)"
 			>

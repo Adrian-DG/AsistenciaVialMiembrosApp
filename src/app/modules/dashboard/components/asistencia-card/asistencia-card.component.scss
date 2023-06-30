@@ -12,6 +12,18 @@
 	}
 }
 
+.emergencia {
+	color: red;
+	border-color: red !important;
+	background-color: rgb(240, 165, 165);
+}
+
+.asistencia {
+	color: green;
+	border-color: green !important;
+	background-color: rgb(167, 240, 167);
+}
+
 .pendiente {
 	color: rgb(218, 218, 10);
 }
