@@ -29,6 +29,18 @@
 	<!-- Unit information card -->
 	<app-member-unit-card [memberInfo]="infoUser"></app-member-unit-card>
 	<div class="list" *ngIf="_asistencias.asistencias$ | async as asistencias">
+		<ion-item>
+			<ion-label>Filtrar por estatus</ion-label>
+			<ion-select
+				placeholder="estatus asistencia"
+				[(ngModel)]="estatusAsistenciaSelected"
+				(ionChange)="refresh()"
+			>
+				<ion-select-option [value]="1">Pendiente</ion-select-option>
+				<ion-select-option [value]="2">En Proceso </ion-select-option>
+				<ion-select-option [value]="3">Completadas</ion-select-option>
+			</ion-select>
+		</ion-item>
 		<ion-row>
 			<ion-col>
 				<ion-button color="primary" expand="block" (click)="refresh()"
@@ -38,7 +50,11 @@
 		</ion-row>
 		<ion-list *ngIf="asistencias.length > 0; else emptyList">
 			<ion-list-header>
-				<ion-label class="list-title">Asistencias de hoy</ion-label>
+				<ion-label class="list-title">{{
+					estatusAsistenciaSelected == 3
+						? 'Asistencia de hoy'
+						: 'Listado de asistencia'
+				}}</ion-label>
 			</ion-list-header>
 			<!-- asistencias -->
 			<ion-item *ngFor="let item of asistencias">

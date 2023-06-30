@@ -12,6 +12,9 @@ import { IUpdateStatusUnit } from '../../interfaces/iupdate-status-unit';
 })
 export class IndexComponent implements OnInit, AfterViewInit {
 	infoUser: IMemberUnitInfo | null = null;
+
+	estatusAsistenciaSelected: number = 1;
+
 	constructor(
 		private _auth: AuthService,
 		public _asistencias: AsistanceService,
@@ -34,7 +37,7 @@ export class IndexComponent implements OnInit, AfterViewInit {
 	}
 
 	ngAfterViewInit(): void {
-		this.refresh();
+		setTimeout(() => this.refresh(), 2000);
 	}
 
 	handleRefresh(event: any) {
@@ -53,7 +56,8 @@ export class IndexComponent implements OnInit, AfterViewInit {
 			);
 
 			this._asistencias.getAsistenciasUnidad(
-				this.infoUser?.ficha.toString()
+				this.infoUser?.ficha.toString(),
+				this.estatusAsistenciaSelected
 			);
 		}
 	}

@@ -7,12 +7,19 @@
 
 .status-icon {
 	font-size: 2rem;
+	ion-icon {
+		border: 2px solid rgb(131, 130, 130);
+	}
 }
 
-.red {
+.pendiente {
+	color: rgb(218, 218, 10);
+}
+
+.enCurso {
 	color: rgb(226, 50, 50);
 }
 
-.green {
+.completada {
 	color: rgb(37, 179, 37);
 }

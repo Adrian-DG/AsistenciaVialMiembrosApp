@@ -73,10 +73,15 @@ export class AsistanceService extends GenericService {
 		);
 	}
 
-	getAsistenciasUnidad(ficha: string): void {
-		// const params = new HttpParams().set('ficha', ficha);
+	getAsistenciasUnidad(ficha: string, estatus: number): void {
+		const params = new HttpParams()
+			.set('ficha', ficha)
+			.set('estatusAsistencia', estatus);
+
 		this.$http
-			.get<IAsistenciaViewModel[]>(`${this.endPoint}/all/${ficha}`)
+			.get<IAsistenciaViewModel[]>(`${this.endPoint}/all/filterBy`, {
+				params: params,
+			})
 			.subscribe((data: IAsistenciaViewModel[]) => {
 				console.log(data);
 				this.asistenciasSource.next(data);

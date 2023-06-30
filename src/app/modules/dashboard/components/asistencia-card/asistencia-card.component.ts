@@ -21,7 +21,9 @@ export class AsistenciaCardComponent implements OnInit {
 		if (ficha != null && this.unidadMiembroId != null) {
 			this._asistencia
 				.iniciarAsistenciaR5(id, this.unidadMiembroId)
-				.subscribe(() => this._asistencia.getAsistenciasUnidad(ficha));
+				.subscribe(() =>
+					this._asistencia.getAsistenciasUnidad(ficha, 2)
+				);
 		}
 	}
 }
