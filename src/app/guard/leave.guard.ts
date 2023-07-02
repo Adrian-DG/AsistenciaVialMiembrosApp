@@ -8,22 +8,52 @@ import {
 	UrlTree,
 } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { BehaviorSubject, Observable } from 'rxjs';
+import {
+	BehaviorSubject,
+	Observable,
+	firstValueFrom,
+	lastValueFrom,
+} from 'rxjs';
 import { AuthService } from '../modules/auth/services/auth.service';
 import { IndexComponent } from '../modules/dashboard/pages/index/index.component';
+import { GenericService } from '../modules/generic/services/generic.service';
+import { resolve } from 'dns';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class LeaveGuard implements CanDeactivate<IndexComponent> {
-	private canLeaveSource = new BehaviorSubject<boolean>(false);
-	public canLeave$ = this.canLeaveSource.asObservable();
-
 	constructor(
-		private _auth: AuthService,
+		private _generic: GenericService,
 		private $router: Router,
 		private _alert: AlertController
 	) {}
+
+	async getAlertResolver(): Promise<boolean> {
+		return new Promise(async (resolve) => {
+			const confirm = await this._alert.create({
+				header: 'Completar formulario',
+				subHeader: 'Se perderan los cambios',
+				message: 'Si acepta, se perderan los datos del formulario.',
+				translucent: true,
+				animated: true,
+				buttons: [
+					{
+						text: 'cancelar',
+						role: 'cancel',
+						handler: () => resolve(false),
+					},
+					{
+						text: 'aceptar',
+						role: 'confirm',
+						handler: () => resolve(true),
+					},
+				],
+			});
+
+			await confirm.present();
+		});
+	}
 
 	async canDeactivate<IndexComponent>(
 		component: IndexComponent,
@@ -31,27 +61,8 @@ export class LeaveGuard implements CanDeactivate<IndexComponent> {
 		currentState: RouterStateSnapshot,
 		nextState?: RouterStateSnapshot
 	): Promise<boolean> {
-		return new Promise(async (resolve) => {
-			const confirm = await this._alert.create({
-				header: 'Completar formulario',
-				subHeader: 'Se perderan los cambios',
-				message:
-					'Si acepta, se perderan los datos de la asistencia y el formulario.',
-				translucent: true,
-				animated: true,
-				buttons: [
-					{ text: 'cancelar', role: 'cancel' },
-					{
-						text: 'aceptar',
-						role: 'confirm',
-						handler: () => {
-							return resolve(true);
-						},
-					},
-				],
-			});
-
-			await confirm.present();
-		});
+		return !(await firstValueFrom(this._generic.canLeave$))
+			? await this.getAlertResolver()
+			: new Promise(async (resolve) => resolve(true));
 	}
 }

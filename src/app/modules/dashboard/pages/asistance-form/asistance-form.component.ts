@@ -1,5 +1,10 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+	FormBuilder,
+	FormControl,
+	FormGroup,
+	Validators,
+} from '@angular/forms';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { CacheService } from 'src/app/modules/cache/services/cache.service';
@@ -64,8 +69,8 @@ export class AsistanceFormComponent implements OnInit {
 	tipoAsistencias: number[] = [];
 	comentario: string = '';
 
-	ngOnInit() {
-		this.getUnitMemberId();
+	async ngOnInit() {
+		await this.getUnitMemberId();
 	}
 
 	async getCurrentPosition(): Promise<void> {
@@ -186,6 +191,8 @@ export class AsistanceFormComponent implements OnInit {
 
 	async createAsistance(): Promise<any> {
 		console.log('start creating asistance...');
+
+		this._asistencia.setCanleaveSource(true);
 
 		const {
 			identificacion,
