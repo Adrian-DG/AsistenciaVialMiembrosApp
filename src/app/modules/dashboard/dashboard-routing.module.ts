@@ -7,7 +7,7 @@ import { EditComponent } from './pages/edit/edit.component';
 import { LeaveGuard } from 'src/app/guard/leave.guard';
 
 const routes: Routes = [
-	{ path: 'edit/:id', component: EditComponent },
+	{ path: 'edit/:id', component: EditComponent, canDeactivate: [LeaveGuard] },
 	{ path: 'metrics/:ficha', component: MetricsComponent },
 	{
 		path: 'create',
