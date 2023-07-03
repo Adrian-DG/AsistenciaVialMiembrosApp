@@ -14,6 +14,7 @@ import { AlertController, ToastController } from '@ionic/angular';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { SpinnerService } from '../../generic/services/spinner/spinner.service';
+import { IUpdateStatusUnit } from '../../dashboard/interfaces/iupdate-status-unit';
 
 @Injectable({
 	providedIn: 'root',
@@ -94,7 +95,6 @@ export class AuthService extends GenericService {
 	}
 
 	validateMember(cedula: string): void {
-		this._spinner.showLoading(true);
 		this.$http
 			.get<ICreatedAuthorizedMember>(
 				`${this.endPoint}/miembros/confirm`,
@@ -121,7 +121,6 @@ export class AuthService extends GenericService {
 	}
 
 	validateUnit(ficha: string): void {
-		this._spinner.showLoading(true);
 		this.$http
 			.get<boolean>(`${this.endPoint}/unidades/confirm`, {
 				params: this.getParams('Ficha', ficha),
@@ -138,7 +137,6 @@ export class AuthService extends GenericService {
 	}
 
 	registerMember(model: IMemberCreate): void {
-		this._spinner.showLoading(true);
 		this.$http
 			.post<boolean>(`${this.endPoint}/miembros/createApp`, model)
 			.subscribe(
@@ -209,7 +207,7 @@ export class AuthService extends GenericService {
 			});
 	}
 
-	async logout(): Promise<void> {
+	async logout(ficha: IUpdateStatusUnit): Promise<void> {
 		const alert = await this._alert.create({
 			header: 'Cerrar Sesión',
 			message: 'Si acepta se cerrara la sesión de la aplicación.',
@@ -222,7 +220,14 @@ export class AuthService extends GenericService {
 					role: 'confirm',
 					handler: async () => {
 						await this.clearSession();
-						this.$router.navigateByUrl('auth/signin');
+						this.$http
+							.put<boolean>(
+								`${this.endPoint}/unidades/changeStatus`,
+								ficha
+							)
+							.subscribe((response: boolean) =>
+								this.$router.navigateByUrl('auth/signin')
+							);
 					},
 				},
 			],

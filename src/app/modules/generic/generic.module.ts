@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 @NgModule({
-	declarations: [ToolbarComponent],
+	declarations: [ToolbarComponent, SpinnerComponent],
 	imports: [CommonModule, IonicModule, HttpClientModule],
-	exports: [ToolbarComponent],
+	exports: [ToolbarComponent, SpinnerComponent],
 })
 export class GenericModule {}

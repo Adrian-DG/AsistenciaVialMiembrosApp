@@ -6,20 +6,10 @@ import { ReplaySubject, BehaviorSubject } from 'rxjs';
 	providedIn: 'root',
 })
 export class SpinnerService {
-	constructor(private _loading: LoadingController) {}
+	private isLoadingSource = new BehaviorSubject<boolean>(false);
+	public isLoading$ = this.isLoadingSource.asObservable();
 
-	async showLoading(state: boolean): Promise<void> {
-		const loading = await this._loading.create({
-			message: 'Espere mientras se completa el proceso...',
-			animated: true,
-			duration: 2000,
-			spinner: 'circular',
-			translucent: true,
-			keyboardClose: true,
-			backdropDismiss: true,
-			showBackdrop: true,
-		});
-
-		state ? loading.present() : loading.dismiss();
+	showLoading(value: boolean): void {
+		this.isLoadingSource.next(value);
 	}
 }

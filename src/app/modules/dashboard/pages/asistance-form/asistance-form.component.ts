@@ -179,8 +179,8 @@ export class AsistanceFormComponent implements OnInit {
 				{
 					text: 'aceptar',
 					role: 'confirm',
-					handler: () => {
-						this.createAsistance();
+					handler: async () => {
+						await this.createAsistance();
 					},
 				},
 			],

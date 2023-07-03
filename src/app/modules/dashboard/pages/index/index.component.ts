@@ -70,6 +70,9 @@ export class IndexComponent implements OnInit, AfterViewInit {
 	}
 
 	async logout(): Promise<void> {
-		await this._auth.logout();
+		if (this.infoUser?.ficha) {
+			const model: IUpdateStatusUnit = { ficha: this.infoUser?.ficha };
+			await this._auth.logout(model);
+		}
 	}
 }

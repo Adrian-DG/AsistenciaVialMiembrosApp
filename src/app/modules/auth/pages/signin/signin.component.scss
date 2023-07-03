@@ -2,22 +2,25 @@
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-evenly;
+	justify-content: flex-end;
 	align-items: center;
+	gap: 1em;
 	.big-logo {
-		width: 60%;
+		min-width: 40%;
+		max-width: 50%;
 		height: auto;
-		margin-top: 10em;
 	}
+
 	.small-logo {
-		width: 25%;
+		min-width: 15%;
+		max-width: 30%;
 		height: auto;
-		margin-top: 10em;
 	}
 	.formulary {
 		width: 90%;
 		height: auto;
 		padding: 1em auto;
+		margin-bottom: 4em;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
