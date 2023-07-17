@@ -12,7 +12,6 @@ import { IAsistenciaEditViewModel } from '../../interfaces/iasistencia-edit-view
 import { AlertController } from '@ionic/angular';
 import { SpinnerService } from 'src/app/modules/generic/services/spinner/spinner.service';
 import { IUpdateStatusUnit } from '../../interfaces/iupdate-status-unit';
-import { resolve } from 'dns';
 
 @Injectable({
 	providedIn: 'root',

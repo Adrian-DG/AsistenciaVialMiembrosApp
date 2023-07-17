@@ -17,7 +17,6 @@ import {
 import { AuthService } from '../modules/auth/services/auth.service';
 import { IndexComponent } from '../modules/dashboard/pages/index/index.component';
 import { GenericService } from '../modules/generic/services/generic.service';
-import { resolve } from 'dns';
 
 @Injectable({
 	providedIn: 'root',

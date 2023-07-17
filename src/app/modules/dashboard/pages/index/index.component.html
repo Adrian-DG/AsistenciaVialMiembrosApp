@@ -5,7 +5,8 @@
 			<div
 				class="status"
 				[ngClass]="
-					(_asistencias.unidadStatus$ | async)
+					(_asistencias.unidadStatus$ | async) &&
+					(_asistencias.isConnected$ | async)
 						? 'disponible'
 						: 'noDisponible'
 				"
