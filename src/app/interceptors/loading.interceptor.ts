@@ -4,8 +4,9 @@ import {
 	HttpHandler,
 	HttpEvent,
 	HttpInterceptor,
+	HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable, filter, finalize } from 'rxjs';
+import { Observable, catchError, filter, finalize, throwError } from 'rxjs';
 import { SpinnerService } from '../modules/generic/services/spinner/spinner.service';
 
 @Injectable()
@@ -22,6 +23,9 @@ export class LoadingInterceptor implements HttpInterceptor {
 				isDevMode()
 					? setTimeout(() => this._spinner.showLoading(false), 2000)
 					: this._spinner.showLoading(false);
+			}),
+			catchError((error: HttpErrorResponse) => {
+				return throwError(Object.entries(error));
 			})
 		);
 	}
