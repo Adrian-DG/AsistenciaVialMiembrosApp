@@ -19,13 +19,15 @@ import {
 	CameraSource,
 	Photo,
 } from '@capacitor/camera';
+import { ComponentCanDeactivate } from 'src/app/guard/leave.guard';
+import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'app-asistance-form',
 	templateUrl: './asistance-form.component.html',
 	styleUrls: ['./asistance-form.component.scss'],
 })
-export class AsistanceFormComponent implements OnInit {
+export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	wantPictures: boolean = false;
 
 	constructor(
@@ -35,6 +37,14 @@ export class AsistanceFormComponent implements OnInit {
 		private _asistencia: AsistanceService,
 		private _alert: AlertController
 	) {}
+
+	public canDeactivate(): boolean {
+		return (
+			this.ciudadanoForm.dirty ||
+			this.vehiculoForm.dirty ||
+			this.ubicacionForm.dirty
+		);
+	}
 
 	ciudadanoForm: FormGroup = this.$fb.group({
 		identificacion: ['', Validators.pattern(/^[0-9]{11,15}$/)],

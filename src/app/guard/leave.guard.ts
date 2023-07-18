@@ -18,10 +18,14 @@ import { AuthService } from '../modules/auth/services/auth.service';
 import { IndexComponent } from '../modules/dashboard/pages/index/index.component';
 import { GenericService } from '../modules/generic/services/generic.service';
 
+export interface ComponentCanDeactivate {
+	canDeactivate: () => boolean | Observable<boolean>;
+}
+
 @Injectable({
 	providedIn: 'root',
 })
-export class LeaveGuard implements CanDeactivate<IndexComponent> {
+export class LeaveGuard implements CanDeactivate<ComponentCanDeactivate> {
 	constructor(
 		private _generic: GenericService,
 		private $router: Router,
@@ -54,13 +58,13 @@ export class LeaveGuard implements CanDeactivate<IndexComponent> {
 		});
 	}
 
-	async canDeactivate<IndexComponent>(
-		component: IndexComponent,
+	async canDeactivate(
+		component: ComponentCanDeactivate,
 		currentRoute: ActivatedRouteSnapshot,
 		currentState: RouterStateSnapshot,
 		nextState?: RouterStateSnapshot
 	): Promise<boolean> {
-		return !(await firstValueFrom(this._generic.canLeave$))
+		return component.canDeactivate()
 			? await this.getAlertResolver()
 			: new Promise(async (resolve) => resolve(true));
 	}

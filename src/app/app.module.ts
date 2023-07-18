@@ -14,6 +14,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { GenericModule } from './modules/generic/generic.module';
 import { JwtModule } from '@auth0/angular-jwt';
+import { LeaveGuard } from './guard/leave.guard';
 
 export function tokenGetter() {
 	return localStorage.getItem('access_token');
@@ -42,6 +43,7 @@ export function tokenGetter() {
 		}),
 	],
 	providers: [
+		LeaveGuard,
 		{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
 		{
 			provide: HTTP_INTERCEPTORS,
