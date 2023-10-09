@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AsistenciaCardComponent } from './components/asistencia-card/asistencia-card.component';
 import { MetricsComponent } from './pages/metrics/metrics.component';
 import { EditComponent } from './pages/edit/edit.component';
+import { FilterPipe } from './pipes/filter.pipe';
 
 @NgModule({
 	declarations: [
@@ -22,6 +23,7 @@ import { EditComponent } from './pages/edit/edit.component';
 		AsistenciaCardComponent,
 		MetricsComponent,
 		EditComponent,
+  FilterPipe,
 	],
 	imports: [
 		CommonModule,

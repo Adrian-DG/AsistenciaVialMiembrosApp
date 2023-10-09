@@ -8,4 +8,5 @@ export interface ILoginUnitResponse {
 	token: string;
 	esEncargado: boolean;
 	estatus: boolean;
+	accesoTotal: boolean;
 }

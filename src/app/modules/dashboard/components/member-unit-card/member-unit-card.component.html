@@ -16,6 +16,7 @@
 			color="primary"
 			*ngIf="memberInfo?.esEncargado"
 			[routerLink]="['metrics', memberInfo?.ficha]"
+			[queryParams]="{ accesoTotal: memberInfo?.accesoTotal }"
 		>
 			<ion-icon slot="start" name="stats-chart"></ion-icon>
 			Estadísticas

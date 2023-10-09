@@ -6,4 +6,5 @@ export interface IMemberUnitInfo {
 	placa: string;
 	tramo: string;
 	esEncargado: boolean;
+	accesoTotal: boolean;
 }

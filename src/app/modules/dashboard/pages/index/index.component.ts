@@ -32,6 +32,7 @@ export class IndexComponent implements OnInit, AfterViewInit {
 				placa: response[4],
 				tramo: response[5],
 				esEncargado: response[6],
+				accesoTotal: response[7],
 			};
 		});
 	}

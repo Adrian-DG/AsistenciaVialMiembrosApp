@@ -7,7 +7,10 @@ import { IAsistanceCreate } from '../../interfaces/iasistance-create';
 import { IAsistenciaViewModel } from '../../interfaces/iasistencia-view-model';
 import { IContadorAsistenciaViewModel } from '../../interfaces/icontador-asistencia-view-model';
 import { IGenericEnum } from 'src/app/modules/cache/interfaces/igeneric-enum';
-import { IMetricasViewModel } from '../../interfaces/imetricas-view-model';
+import {
+	IMetricasByTramoViewModel,
+	IMetricasViewModel,
+} from '../../interfaces/imetricas-view-model';
 import { IAsistenciaEditViewModel } from '../../interfaces/iasistencia-edit-view-model';
 import { AlertController } from '@ionic/angular';
 import { SpinnerService } from 'src/app/modules/generic/services/spinner/spinner.service';
@@ -24,10 +27,16 @@ export class AsistanceService extends GenericService {
 	public tramosSupervisor$ = this.tramosSupervisorSource.asObservable();
 
 	private metricasByTramoUnidadSource = new BehaviorSubject<
-		IMetricasViewModel[]
+		IMetricasByTramoViewModel[]
 	>([]);
 	public metricasByTramoUnidad$ =
 		this.metricasByTramoUnidadSource.asObservable();
+
+	private metricasByUnidadTipoAsistenciaSource = new BehaviorSubject<
+		IMetricasViewModel[]
+	>([]);
+	public metricasByUnidadTipoAsistencia$ =
+		this.metricasByUnidadTipoAsistenciaSource.asObservable();
 
 	private contadorAsistenciasSource =
 		new BehaviorSubject<IContadorAsistenciaViewModel>({
@@ -98,8 +107,13 @@ export class AsistanceService extends GenericService {
 			);
 	}
 
-	getTramosEncargadoSupervisor(ficha: string): void {
-		const param = new HttpParams().set('ficha', ficha);
+	getTramosEncargadoSupervisor(
+		ficha: string,
+		hasSpecialAccess: boolean
+	): void {
+		const param = new HttpParams()
+			.set('Ficha', ficha)
+			.set('AccesoTotal', hasSpecialAccess);
 		this.$http
 			.get<IGenericEnum[]>(`${this.env}/tramos/supervisar`, {
 				params: param,
@@ -112,11 +126,26 @@ export class AsistanceService extends GenericService {
 	getMetricasAsistenciasUnidadByTramo(tramoId: number): void {
 		const param = new HttpParams().set('tramoId', tramoId);
 		this.$http
-			.get<IMetricasViewModel[]>(`${this.endPoint}/metricas`, {
-				params: param,
-			})
-			.subscribe((data: IMetricasViewModel[]) =>
+			.get<IMetricasByTramoViewModel[]>(
+				`${this.endPoint}/metricas/unidadByTramo`,
+				{
+					params: param,
+				}
+			)
+			.subscribe((data: IMetricasByTramoViewModel[]) =>
 				this.metricasByTramoUnidadSource.next(data)
+			);
+	}
+
+	getMetricasAsistenciasUnidadByTipo(unidadId: number): void {
+		const param = new HttpParams().set('unidadId', unidadId);
+		this.$http
+			.get<IMetricasViewModel[]>(
+				`${this.endPoint}/metricas/tipoByUnidad`,
+				{ params: param }
+			)
+			.subscribe((data: IMetricasViewModel[]) =>
+				this.metricasByUnidadTipoAsistenciaSource.next(data)
 			);
 	}
 

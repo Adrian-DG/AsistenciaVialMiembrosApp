@@ -19,49 +19,53 @@
 				las asistencias completadas por unidad.</ion-card-subtitle
 			>
 		</ion-card-header>
-		<ion-card-content>
-			<!-- example-->
-			<ion-accordion-group>
-				<ion-accordion
-					*ngFor="let item of _asistencias.tramosSupervisor$ | async"
-					(click)="
-						_asistencias.getMetricasAsistenciasUnidadByTramo(
-							item.id
-						)
-					"
-				>
-					<ion-item slot="header" color="light">
-						<ion-label>{{ item.nombre }}</ion-label>
-					</ion-item>
-					<div class="ion-padding" slot="content">
-						<ion-grid>
-							<ion-row style="border-bottom: 1px solid gray">
-								<ion-col style="text-align: center"
-									>Ficha</ion-col
-								>
-								<ion-col style="text-align: center"
-									>Total</ion-col
-								>
-							</ion-row>
-							<ion-row
-								style="border-bottom: 1px solid gray"
-								*ngFor="
-									let row of _asistencias.metricasByTramoUnidad$
-										| async
-								"
-							>
-								<ion-col style="text-align: center">{{
-									row.ficha
-								}}</ion-col>
-								<ion-col style="text-align: center">{{
-									row.total
-								}}</ion-col>
+		<ion-item-divider></ion-item-divider>
+		<ion-card-content
+			*ngIf="_asistencias.tramosSupervisor$ | async as listadoTramos"
+		>
+			<ion-item>
+				<ion-input
+					[(ngModel)]="search"
+					placeholder="filtro"
+					type="text"
+				></ion-input>
+			</ion-item>
+
+			<details
+				[id]="'tramoDetail#' + tramo.id"
+				*ngFor="let tramo of listadoTramos | filter : search"
+				(click)="displayUnidadesByTramo(tramo.id)"
+			>
+				<summary style="padding: 0.5em">
+					{{ tramo.nombre }}
+				</summary>
+				<div style="margin-left: 1em; margin-top: 1em">
+					<details
+						[id]="'unidadDetail#' + unidad.id"
+						*ngFor="
+							let unidad of _asistencias.metricasByTramoUnidad$
+								| async
+						"
+						(click)="displayAsistenciasByUnidad(unidad.id)"
+					>
+						<summary>
+							{{ unidad.unidad }}
+						</summary>
+						<ion-grid
+							*ngFor="
+								let tipo of _asistencias.metricasByUnidadTipoAsistencia$
+									| async
+							"
+						>
+							<ion-row>
+								<ion-col>{{ tipo.nombre }}</ion-col>
+								<ion-col>{{ tipo.total }}</ion-col>
 							</ion-row>
 						</ion-grid>
-					</div>
-				</ion-accordion>
-			</ion-accordion-group>
-			<!-- -->
+					</details>
+				</div>
+				<ng-template></ng-template>
+			</details>
 		</ion-card-content>
 	</ion-card>
 </ion-content>
