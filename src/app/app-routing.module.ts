@@ -4,6 +4,11 @@ import { AuthenticationGuard } from './guard/authentication.guard';
 
 const routes: Routes = [
 	{
+		path: 'guest',
+		loadChildren: () =>
+			import('./modules/guest/guest.module').then((m) => m.GuestModule),
+	},
+	{
 		path: 'dashboard',
 		loadChildren: () =>
 			import('./modules/dashboard/dashboard.module').then(
