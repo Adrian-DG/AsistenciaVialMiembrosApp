@@ -6,11 +6,7 @@ import { GenericService } from '../../../generic/services/generic.service';
 import { IAsistanceCreate } from '../../interfaces/iasistance-create';
 import { IAsistenciaViewModel } from '../../interfaces/iasistencia-view-model';
 import { IContadorAsistenciaViewModel } from '../../interfaces/icontador-asistencia-view-model';
-import { IGenericEnum } from 'src/app/modules/cache/interfaces/igeneric-enum';
-import {
-	IMetricasByTramoViewModel,
-	IMetricasViewModel,
-} from '../../interfaces/imetricas-view-model';
+import { IMetricasViewModel } from '../../interfaces/imetricas-view-model';
 import { IAsistenciaEditViewModel } from '../../interfaces/iasistencia-edit-view-model';
 import { AlertController } from '@ionic/angular';
 import { SpinnerService } from 'src/app/modules/generic/services/spinner/spinner.service';
@@ -23,11 +19,13 @@ export class AsistanceService extends GenericService {
 	private asistenciasSource = new BehaviorSubject<IAsistenciaViewModel[]>([]);
 	public asistencias$ = this.asistenciasSource.asObservable();
 
-	private tramosSupervisorSource = new BehaviorSubject<IGenericEnum[]>([]);
+	private tramosSupervisorSource = new BehaviorSubject<IMetricasViewModel[]>(
+		[]
+	);
 	public tramosSupervisor$ = this.tramosSupervisorSource.asObservable();
 
 	private metricasByTramoUnidadSource = new BehaviorSubject<
-		IMetricasByTramoViewModel[]
+		IMetricasViewModel[]
 	>([]);
 	public metricasByTramoUnidad$ =
 		this.metricasByTramoUnidadSource.asObservable();
@@ -115,10 +113,11 @@ export class AsistanceService extends GenericService {
 			.set('Ficha', ficha)
 			.set('AccesoTotal', hasSpecialAccess);
 		this.$http
-			.get<IGenericEnum[]>(`${this.env}/tramos/supervisar`, {
+			.get<IMetricasViewModel[]>(`${this.env}/tramos/supervisar`, {
 				params: param,
 			})
-			.subscribe((data: IGenericEnum[]) => {
+			.subscribe((data: IMetricasViewModel[]) => {
+				console.log(data);
 				this.tramosSupervisorSource.next(data);
 			});
 	}
@@ -126,13 +125,13 @@ export class AsistanceService extends GenericService {
 	getMetricasAsistenciasUnidadByTramo(tramoId: number): void {
 		const param = new HttpParams().set('tramoId', tramoId);
 		this.$http
-			.get<IMetricasByTramoViewModel[]>(
+			.get<IMetricasViewModel[]>(
 				`${this.endPoint}/metricas/unidadByTramo`,
 				{
 					params: param,
 				}
 			)
-			.subscribe((data: IMetricasByTramoViewModel[]) =>
+			.subscribe((data: IMetricasViewModel[]) =>
 				this.metricasByTramoUnidadSource.next(data)
 			);
 	}

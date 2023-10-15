@@ -1,7 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { AsistanceService } from '../../services/asistance/asistance.service';
 import { ActivatedRoute } from '@angular/router';
-import { FilterPipe } from '../../pipes/filter.pipe';
 
 @Component({
 	selector: 'app-metrics',
@@ -35,21 +34,11 @@ export class MetricsComponent implements OnInit, AfterViewInit {
 	}
 
 	displayUnidadesByTramo(tramoId: number): void {
-		this.tramosDetailsElm = document.getElementById(
-			`tramoDetail#${tramoId}`
-		) as HTMLDetailsElement;
-		if (!this.tramosDetailsElm.open) {
-			this._asistencias.getMetricasAsistenciasUnidadByTramo(tramoId);
-		}
+		this._asistencias.getMetricasAsistenciasUnidadByTramo(tramoId);
 	}
 
 	displayAsistenciasByUnidad(unidadId: number): void {
-		this.unidadDetailElm = document.getElementById(
-			`unidadDetail#${unidadId}`
-		) as HTMLDetailsElement;
-		if (!this.unidadDetailElm.open) {
-			this._asistencias.getMetricasAsistenciasUnidadByTipo(unidadId);
-		}
+		this._asistencias.getMetricasAsistenciasUnidadByTipo(unidadId);
 	}
 
 	loadData(): void {
@@ -57,5 +46,12 @@ export class MetricsComponent implements OnInit, AfterViewInit {
 			this.ficha,
 			this.hasSpecialAccess
 		);
+	}
+
+	handleRefresh(event: any) {
+		setTimeout(() => {
+			this.loadData();
+			event.target.complete();
+		});
 	}
 }

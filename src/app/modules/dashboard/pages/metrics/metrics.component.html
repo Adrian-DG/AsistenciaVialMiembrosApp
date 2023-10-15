@@ -7,65 +7,64 @@
 	</ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-	<!-- refresh page -->
-	<ion-refresher slot="fixed" (ionRefresh)="loadData()">
+	<ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
 		<ion-refresher-content></ion-refresher-content>
 	</ion-refresher>
 	<ion-card>
 		<ion-card-header>
 			<ion-card-title>Listado de Tramos</ion-card-title>
 			<ion-card-subtitle
-				>A continuacion se muestran los tramos asignados a supervisar y
+				>A continuación se muestran los tramos asignados a supervisar y
 				las asistencias completadas por unidad.</ion-card-subtitle
 			>
 		</ion-card-header>
-		<ion-item-divider></ion-item-divider>
-		<ion-card-content
-			*ngIf="_asistencias.tramosSupervisor$ | async as listadoTramos"
-		>
-			<ion-item>
-				<ion-input
-					[(ngModel)]="search"
-					placeholder="filtro"
-					type="text"
-				></ion-input>
-			</ion-item>
-
-			<details
-				[id]="'tramoDetail#' + tramo.id"
-				*ngFor="let tramo of listadoTramos | filter : search"
-				(click)="displayUnidadesByTramo(tramo.id)"
-			>
-				<summary style="padding: 0.5em">
-					{{ tramo.nombre }}
-				</summary>
-				<div style="margin-left: 1em; margin-top: 1em">
-					<details
-						[id]="'unidadDetail#' + unidad.id"
-						*ngFor="
-							let unidad of _asistencias.metricasByTramoUnidad$
-								| async
-						"
-						(click)="displayAsistenciasByUnidad(unidad.id)"
-					>
-						<summary>
-							{{ unidad.unidad }}
-						</summary>
-						<ion-grid
-							*ngFor="
-								let tipo of _asistencias.metricasByUnidadTipoAsistencia$
-									| async
-							"
-						>
-							<ion-row>
-								<ion-col>{{ tipo.nombre }}</ion-col>
-								<ion-col>{{ tipo.total }}</ion-col>
-							</ion-row>
-						</ion-grid>
-					</details>
-				</div>
-				<ng-template></ng-template>
-			</details>
+		<ion-card-content>
+			<ion-accordion-group>
+				<ion-accordion
+					[value]="'tramo' + tramo.id"
+					*ngFor="let tramo of _asistencias.tramosSupervisor$ | async"
+					(click)="displayUnidadesByTramo(tramo.id)"
+				>
+					<ion-item slot="header">
+						<ion-label>{{ tramo.nombre }}</ion-label>
+						<ion-badge slot="end" color="primary">{{
+							tramo.total
+						}}</ion-badge>
+					</ion-item>
+					<div class="ion-padding" slot="content">
+						<ion-accordion-group>
+							<ion-accordion
+								[value]="'unidad' + unidad.id"
+								*ngFor="
+									let unidad of _asistencias.metricasByTramoUnidad$
+										| async
+								"
+								(click)="displayAsistenciasByUnidad(unidad.id)"
+							>
+								<ion-item slot="header">
+									<ion-label>{{ unidad.nombre }}</ion-label>
+									<ion-badge slot="end" color="primary">{{
+										unidad.total
+									}}</ion-badge>
+								</ion-item>
+								<div class="ion-padding" slot="content">
+									<ion-item
+										*ngFor="
+											let tipo of _asistencias.metricasByUnidadTipoAsistencia$
+												| async
+										"
+									>
+										<ion-label>{{ tipo.nombre }}</ion-label>
+										<ion-badge slot="end" color="primary">{{
+											tipo.total
+										}}</ion-badge>
+									</ion-item>
+								</div>
+							</ion-accordion>
+						</ion-accordion-group>
+					</div>
+				</ion-accordion>
+			</ion-accordion-group>
 		</ion-card-content>
 	</ion-card>
 </ion-content>

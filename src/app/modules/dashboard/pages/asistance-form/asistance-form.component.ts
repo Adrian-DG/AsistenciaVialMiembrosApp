@@ -1,15 +1,9 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import {
-	FormBuilder,
-	FormControl,
-	FormGroup,
-	Validators,
-} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { CacheService } from 'src/app/modules/cache/services/cache.service';
 import { IAsistanceCreate } from '../../interfaces/iasistance-create';
-import { IMemberUnitInfo } from '../../interfaces/imember-unit-info';
 import { AsistanceService } from '../../services/asistance/asistance.service';
 import { Geolocation } from '@capacitor/geolocation';
 import {
@@ -20,7 +14,6 @@ import {
 	Photo,
 } from '@capacitor/camera';
 import { ComponentCanDeactivate } from 'src/app/guard/leave.guard';
-import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'app-asistance-form',

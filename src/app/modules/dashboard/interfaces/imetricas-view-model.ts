@@ -1,10 +1,5 @@
 export interface IMetricasViewModel {
-	nombre: string;
-	total: number;
-}
-
-export interface IMetricasByTramoViewModel {
 	id: number;
-	unidad: string;
+	nombre: string;
 	total: number;
 }
