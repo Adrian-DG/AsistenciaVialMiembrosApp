@@ -39,21 +39,24 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		);
 	}
 
+	// Cedula: Validators.pattern(/^[0-9]{11,15}$/)
+	// Telefono: [Validators.pattern(/^[0-9]{10,15}$/)]
 	ciudadanoForm: FormGroup = this.$fb.group({
-		identificacion: ['', Validators.pattern(/^[0-9]{11,15}$/)],
+		identificacion: [''],
 		nombre: [''],
 		apellido: [''],
 		genero: [0],
 		esExtranjero: [false],
-		telefono: ['', [Validators.pattern(/^[0-9]{10,15}$/)]],
+		telefono: [''],
 	});
 
+	// Placa: Validators.pattern(/^[A-Za-z0-9]{1,10}$/)
 	vehiculoForm: FormGroup = this.$fb.group({
 		vehiculoTipoId: [0],
 		vehiculoColorId: [0],
 		vehiculoModeloId: [0],
 		vehiculoMarcaId: [0],
-		placa: ['', Validators.pattern(/^[A-Za-z0-9]{1,10}$/)],
+		placa: [''],
 	});
 
 	ubicacionForm: FormGroup = this.$fb.group({
