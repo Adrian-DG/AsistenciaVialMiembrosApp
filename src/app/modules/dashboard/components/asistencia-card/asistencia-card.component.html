@@ -5,14 +5,14 @@
 			<ion-col size="2">
 				<ion-icon
 					class="category-icon"
-					[ngClass]="item.esEmergencia ? 'emergencia' : 'asistencia'"
+					[ngClass]="false ? 'emergencia' : 'asistencia'"
 					name="car-sport"
 				></ion-icon>
 			</ion-col>
 			<!-- card information -->
 			<ion-col size="8">
 				<ion-card-title style="text-align: center">{{
-					item.estatusAsistencia | uppercase
+					item.estatusAsistencia
 				}}</ion-card-title>
 			</ion-col>
 			<!-- card estatus -->
@@ -130,7 +130,7 @@
 		<ion-item
 			*ngIf="
 				item.estatusAsistencia != 'COMPLETADA' &&
-				item.estatusAsistencia == 'EN_CURSO'
+				item.estatusAsistencia == 'EN PROCESO'
 			"
 		>
 			<ion-button

@@ -17,25 +17,10 @@ export interface IAsistenciaViewModel {
 	// Ubicacion
 	provincia: string;
 	municipio: string;
-	tramo: string;
-	coordenadas: string;
-	// unidad
-	fichaUnidad: string;
-	denominacionUnidad: string;
-	tipoUnidad: string;
-	//agente
-	rangoAgente: string;
-	cedulaAgente: string;
-	nombreAgente: string;
 	// metadata
-	reportadaPor: string;
 	fechaCreacion: string;
-	fechaModificacion: string;
 	comentario: string;
+	tipoAsistencias: ITipoAsistencia[];
 	estatusAsistencia: string;
 	estatus: boolean;
-	esEmergencia: boolean;
-	tipoAsistencias: ITipoAsistencia[];
-
-	tieneDatosCompletados: boolean;
 }
