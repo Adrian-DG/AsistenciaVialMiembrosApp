@@ -84,15 +84,6 @@
 									</ion-row>
 								</ion-radio-group>
 							</fieldset>
-							<br />
-							<ion-item>
-								<div class="row">
-									<ion-label>Extranjero</ion-label>
-									<ion-toggle formControlName="esExtranjero"
-										>Extranjero</ion-toggle
-									>
-								</div>
-							</ion-item>
 							<ion-item [counter]="true">
 								<ion-label>Teléfono</ion-label>
 								<ion-input
@@ -100,6 +91,14 @@
 								></ion-input>
 							</ion-item>
 						</form>
+						<ion-item>
+							<div class="row">
+								<ion-label>Extranjero</ion-label>
+								<ion-toggle [(ngModel)]="esExtranjero"
+									>Extranjero</ion-toggle
+								>
+							</div>
+						</ion-item>
 					</div>
 				</ion-accordion>
 				<!-- Datos vehiculo -->

@@ -19,7 +19,7 @@ import { IndexComponent } from '../modules/dashboard/pages/index/index.component
 import { GenericService } from '../modules/generic/services/generic.service';
 
 export interface ComponentCanDeactivate {
-	canDeactivate: () => boolean | Observable<boolean>;
+	canDeactivate: () => boolean | Observable<boolean> | Promise<boolean>;
 }
 
 @Injectable({
@@ -64,8 +64,8 @@ export class LeaveGuard implements CanDeactivate<ComponentCanDeactivate> {
 		currentState: RouterStateSnapshot,
 		nextState?: RouterStateSnapshot
 	): Promise<boolean> {
-		return component.canDeactivate()
-			? await this.getAlertResolver()
-			: new Promise(async (resolve) => resolve(true));
+		return !component.canDeactivate()
+			? new Promise(async (resolve) => resolve(true))
+			: await this.getAlertResolver();
 	}
 }

@@ -14,6 +14,7 @@ import {
 	Photo,
 } from '@capacitor/camera';
 import { ComponentCanDeactivate } from 'src/app/guard/leave.guard';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
 	selector: 'app-asistance-form',
@@ -31,7 +32,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		private _alert: AlertController
 	) {}
 
-	public canDeactivate(): boolean {
+	canDeactivate(): boolean {
 		return (
 			this.ciudadanoForm.dirty ||
 			this.vehiculoForm.dirty ||
@@ -46,9 +47,10 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		nombre: [''],
 		apellido: [''],
 		genero: [0],
-		esExtranjero: [false],
 		telefono: [''],
 	});
+
+	esExtranjero: boolean = false;
 
 	// Placa: Validators.pattern(/^[A-Za-z0-9]{1,10}$/)
 	vehiculoForm: FormGroup = this.$fb.group({
@@ -71,7 +73,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	hasPosition = false;
 
 	coordenadas: string = '';
-	reportadoPor: number = 0;
+	reportadoPor: number = 1;
 	tipoAsistencias: number[] = [];
 	comentario: string = '';
 
@@ -158,11 +160,12 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		];
 
 		forms.forEach((item) => {
+			console.log(item);
 			Object.keys(item).forEach((key) => {
 				if (
-					item[key].invalid ||
 					item[key].value == '' ||
-					item[key].value == 0
+					item[key].value == 0 ||
+					item[key].invalid
 				) {
 					emptyOrInvalidFields.push(key);
 				}
@@ -170,11 +173,11 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		});
 
 		let formatedMessage: string =
-			emptyOrInvalidFields.length == 0
-				? 'Se revisaron todos los campos, y estan completos !!'
-				: `Los siguientes campos estan vacios o no seleccionaste una opcion: ${this.generateAlertMessage(
+			emptyOrInvalidFields.length > 0
+				? `Los siguientes campos estan vacios o no seleccionaste una opcion: ${this.generateAlertMessage(
 						emptyOrInvalidFields
-				  )}`;
+				  )}`
+				: 'Se revisaron todos los campos, y estan completos !!';
 
 		const alert = await this._alert.create({
 			header: 'Confirmar reporte de asistencia',
@@ -198,16 +201,8 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	async createAsistance(): Promise<any> {
 		console.log('start creating asistance...');
 
-		this._asistencia.setCanleaveSource(true);
-
-		const {
-			identificacion,
-			nombre,
-			apellido,
-			genero,
-			esExtranjero,
-			telefono,
-		} = this.ciudadanoForm.value;
+		const { identificacion, nombre, apellido, genero, telefono } =
+			this.ciudadanoForm.value;
 
 		const {
 			vehiculoTipoId,
@@ -226,7 +221,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 			nombre: nombre,
 			apellido: apellido,
 			genero: genero,
-			esExtranjero: esExtranjero,
+			esExtranjero: this.esExtranjero,
 			telefono: telefono,
 			// vehiculo
 			vehiculoColorId: vehiculoColorId,
