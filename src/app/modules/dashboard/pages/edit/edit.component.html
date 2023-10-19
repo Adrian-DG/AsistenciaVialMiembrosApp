@@ -59,7 +59,6 @@
 				<legend>Datos Vehículo</legend>
 				<ion-item>
 					<ion-select
-						(click)="_cache.getResource('VehiculoTipo')"
 						[value]="asistenciaObject.vehiculoTipoId"
 						[(ngModel)]="asistenciaObject.vehiculoTipoId"
 						placeholder="Tipo de Vehiculo"
@@ -67,13 +66,13 @@
 					>
 						<ion-select-option
 							[value]="item.id"
-							*ngFor="let item of _cache.vehiculoTipos$ | async"
+							*ngFor="let item of tipoVehiculosArray"
 							>{{ item.nombre }}</ion-select-option
 						>
 					</ion-select>
 				</ion-item>
 
-				<ion-item (click)="_cache.getResource('VehiculoColores')">
+				<ion-item>
 					<ion-select
 						[value]="asistenciaObject.vehiculoColorId"
 						[(ngModel)]="asistenciaObject.vehiculoColorId"
@@ -81,7 +80,7 @@
 					>
 						<ion-select-option
 							[value]="item.id"
-							*ngFor="let item of _cache.vehiculoColor$ | async"
+							*ngFor="let item of coloresVehiculosArray"
 							>{{ item.nombre }}</ion-select-option
 						>
 					</ion-select>
@@ -127,7 +126,7 @@
 
 			<fieldset>
 				<legend>Datos Ubicación</legend>
-				<ion-item (click)="_cache.getResource('provincias')">
+				<ion-item>
 					<ion-select
 						[value]="asistenciaObject.provinciaId"
 						[(ngModel)]="asistenciaObject.provinciaId"
@@ -136,7 +135,7 @@
 					>
 						<ion-select-option
 							[value]="item.id"
-							*ngFor="let item of _cache.provincias$ | async"
+							*ngFor="let item of provinciasArray"
 							>{{ item.nombre }}</ion-select-option
 						>
 					</ion-select>
