@@ -16,12 +16,22 @@ import {
 import { ComponentCanDeactivate } from 'src/app/guard/leave.guard';
 import { lastValueFrom } from 'rxjs';
 
+import {
+	ProvinciasArray,
+	VehicleTypesArray,
+	VehicleColors,
+} from '../../constants/app.const';
+
 @Component({
 	selector: 'app-asistance-form',
 	templateUrl: './asistance-form.component.html',
 	styleUrls: ['./asistance-form.component.scss'],
 })
 export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
+	tipoVehiculosArray = VehicleTypesArray;
+	coloresVehiculosArray = VehicleColors;
+	provinciasArray = ProvinciasArray;
+
 	wantPictures: boolean = false;
 
 	constructor(

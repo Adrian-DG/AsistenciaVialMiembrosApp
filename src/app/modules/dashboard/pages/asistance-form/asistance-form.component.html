@@ -109,7 +109,7 @@
 					<div class="ion-padding" slot="content">
 						<form [formGroup]="vehiculoForm">
 							<ion-item>
-								<ion-select
+								<!-- <ion-select
 									(click)="_cache.getResource('VehiculoTipo')"
 									formControlName="vehiculoTipoId"
 									placeholder="Tipo de Vehiculo"
@@ -123,12 +123,23 @@
 										"
 										>{{ item.nombre }}</ion-select-option
 									>
+								</ion-select> -->
+
+								<ion-select
+									formControlName="vehiculoTipoId"
+									placeholder="Tipo de Vehiculo"
+									#tipo
+								>
+									<ion-select-option
+										[value]="item.id"
+										*ngFor="let item of tipoVehiculosArray"
+										>{{ item.nombre }}</ion-select-option
+									>
 								</ion-select>
 							</ion-item>
-							<ion-item
+							<ion-item>
+								<!-- <ion-select
 								(click)="_cache.getResource('VehiculoColores')"
-							>
-								<ion-select
 									formControlName="vehiculoColorId"
 									placeholder="Seleccionar Color"
 								>
@@ -137,6 +148,19 @@
 										*ngFor="
 											let item of _cache.vehiculoColor$
 												| async
+										"
+										>{{ item.nombre }}</ion-select-option
+									>
+								</ion-select> -->
+
+								<ion-select
+									formControlName="vehiculoColorId"
+									placeholder="Seleccionar Color"
+								>
+									<ion-select-option
+										[value]="item.id"
+										*ngFor="
+											let item of coloresVehiculosArray
 										"
 										>{{ item.nombre }}</ion-select-option
 									>
@@ -200,10 +224,9 @@
 					</ion-item>
 					<div class="ion-padding" slot="content">
 						<form [formGroup]="ubicacionForm">
-							<ion-item
+							<ion-item>
+								<!-- <ion-select
 								(click)="_cache.getResource('provincias')"
-							>
-								<ion-select
 									formControlName="provinciaId"
 									placeholder="Seleccionar Provincia"
 									#provinciaId
@@ -214,6 +237,18 @@
 											let item of _cache.provincias$
 												| async
 										"
+										>{{ item.nombre }}</ion-select-option
+									>
+								</ion-select> -->
+
+								<ion-select
+									formControlName="provinciaId"
+									placeholder="Seleccionar Provincia"
+									#provinciaId
+								>
+									<ion-select-option
+										[value]="item.id"
+										*ngFor="let item of provinciasArray"
 										>{{ item.nombre }}</ion-select-option
 									>
 								</ion-select>
