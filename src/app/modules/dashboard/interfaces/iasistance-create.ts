@@ -19,5 +19,6 @@ export interface IAsistanceCreate {
 	tipoAsistencias: number[];
 	comentario: string;
 	reportadoPor: number;
+	fueCompletada: boolean;
 	//direccion: string;
 }

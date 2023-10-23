@@ -57,33 +57,15 @@ export class AsistanceService extends GenericService {
 		this.endPoint += '/asistencias';
 	}
 
-	createAsistance(model: IAsistanceCreate): void {
+	createAsistance(model: IAsistanceCreate): Observable<boolean> {
 		console.log('Enter asistance service');
-		this.$http.post<boolean>(`${this.endPoint}/create`, model).subscribe(
-			(response: boolean) => {
-				if (response) {
-					this.generateRequestResultAlert(
-						'Exito',
-						'',
-						'La asistencia se registro de forma correctamente'
-					);
-					this.$router.navigate(['dashboard']);
-				}
-			},
-			(error) =>
-				this.generateRequestResultAlert(
-					'Error',
-					'Algo salió mal',
-					'No se pudo crear la asistencia, es posible que fue algunos campos no esten correctos o fallara el servicio!!'
-				)
-		);
+		return this.$http.post<boolean>(`${this.endPoint}/create`, model);
 	}
 
 	getAsistenciasUnidad(ficha: string, estatus: number): void {
 		const params = new HttpParams()
 			.set('ficha', ficha)
 			.set('estatusAsistencia', estatus);
-
 		this.$http
 			.get<IAsistenciaViewModel[]>(`${this.endPoint}/all/filterBy`, {
 				params: params,

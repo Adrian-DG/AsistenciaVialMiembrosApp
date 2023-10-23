@@ -21,6 +21,7 @@ import {
 	VehicleTypesArray,
 	VehicleColors,
 } from '../../constants/app.const';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-asistance-form',
@@ -39,7 +40,8 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		public _cache: CacheService,
 		private _auth: AuthService,
 		private _asistencia: AsistanceService,
-		private _alert: AlertController
+		private _alert: AlertController,
+		private $router: Router
 	) {}
 
 	canDeactivate(): boolean {
@@ -86,6 +88,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	reportadoPor: number = 1;
 	tipoAsistencias: number[] = [];
 	comentario: string = '';
+	fueCompletada: boolean = true;
 
 	async ngOnInit() {
 		await this.getUnitMemberId();
@@ -249,10 +252,61 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 			tipoAsistencias: this.tipoAsistencias,
 			unidadMiembroId: 0,
 			imagenes: this.imagenes64,
+			fueCompletada: this.fueCompletada,
 		};
 
 		newAsistencia.unidadMiembroId = await this.getUnitMemberId();
 
-		this._asistencia.createAsistance(newAsistencia);
+		this._asistencia
+			.createAsistance(newAsistencia)
+			.subscribe((response: boolean) => {
+				if (response) {
+					this._asistencia.generateRequestResultAlert(
+						'Exito',
+						'',
+						'La asistencia se registro de forma correctamente'
+					);
+					[
+						this.ciudadanoForm,
+						this.vehiculoForm,
+						this.ubicacionForm,
+					].forEach((item) => item.reset());
+					this.$router.navigate(['dashboard']);
+				} else {
+					this._asistencia.generateRequestResultAlert(
+						'Error',
+						'Algo salió mal',
+						'No se pudo crear la asistencia, es posible que fue algunos campos no esten correctos o fallara el servicio!!'
+					);
+				}
+			});
+	}
+
+	async setStatusReportarAsistencia(): Promise<void> {
+		const estatusAlert = await this._alert.create({
+			header: 'Estatus de la asistencia',
+			subHeader: '¿Como desea reportar la asistencia?',
+			message: `1.En curso (sin terminar)
+					  </br>
+					  2.Completada (terminada)`,
+			inputs: [
+				{ label: 'En Curso', type: 'radio', value: false },
+				{
+					label: 'Completadad',
+					type: 'radio',
+					value: true,
+					checked: true,
+				},
+			],
+			animated: true,
+			buttons: ['Ok'],
+		});
+
+		await estatusAlert.present();
+
+		estatusAlert.onDidDismiss().then((obj) => {
+			this.fueCompletada = obj.data.values;
+			this.confirmCreate();
+		});
 	}
 }

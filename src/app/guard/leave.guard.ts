@@ -64,8 +64,8 @@ export class LeaveGuard implements CanDeactivate<ComponentCanDeactivate> {
 		currentState: RouterStateSnapshot,
 		nextState?: RouterStateSnapshot
 	): Promise<boolean> {
-		return !component.canDeactivate()
-			? new Promise(async (resolve) => resolve(true))
-			: await this.getAlertResolver();
+		return component.canDeactivate()
+			? await this.getAlertResolver()
+			: new Promise(async (resolve) => resolve(true));
 	}
 }
