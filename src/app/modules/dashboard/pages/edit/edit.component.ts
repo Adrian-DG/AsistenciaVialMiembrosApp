@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AsistanceService } from '../../services/asistance/asistance.service';
 import { IAsistenciaEditViewModel } from '../../interfaces/iasistencia-edit-view-model';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -30,11 +30,14 @@ export class EditComponent
 	constructor(
 		private $activeRoute: ActivatedRoute,
 		private _asistencias: AsistanceService,
-		public _cache: CacheService
+		public _cache: CacheService,
+		private $router: Router
 	) {}
 
+	changesApplied: boolean = true;
+
 	canDeactivate(): boolean {
-		return false;
+		return !this.changesApplied;
 	}
 
 	ngOnInit() {
@@ -69,7 +72,25 @@ export class EditComponent
 
 	saveChanges(): void {
 		if (this.asistenciaObject) {
-			this._asistencias.guardarCambios(this.asistenciaObject);
+			this._asistencias
+				.guardarCambios(this.asistenciaObject)
+				.subscribe((response: boolean) => {
+					if (response) {
+						this.changesApplied = response;
+						this._asistencias.generateRequestResultAlert(
+							'Exito',
+							'',
+							'Se guardaron los cambios de forma exitosa!!'
+						);
+						this.$router.navigate(['dashboard']);
+					} else {
+						this._asistencias.generateRequestResultAlert(
+							'Error',
+							'',
+							'Algo salió mal, mientras se guardaban los cambios!!'
+						);
+					}
+				});
 		}
 	}
 }

@@ -174,24 +174,7 @@ export class AsistanceService extends GenericService {
 			});
 	}
 
-	guardarCambios(model: IAsistenciaEditViewModel): void {
-		this.$http.put<boolean>(`${this.endPoint}/edit`, model).subscribe(
-			(response: boolean) => {
-				if (response) {
-					this.generateRequestResultAlert(
-						'Ok',
-						'',
-						'Se guardaron los cambios'
-					);
-					this.$router.navigate(['dashboard']);
-				}
-			},
-			(error) =>
-				this.generateRequestResultAlert(
-					'Error',
-					'',
-					'Algo salio mal al guardar los cambios'
-				)
-		);
+	guardarCambios(model: IAsistenciaEditViewModel): Observable<boolean> {
+		return this.$http.put<boolean>(`${this.endPoint}/edit`, model);
 	}
 }
