@@ -261,16 +261,18 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 			.createAsistance(newAsistencia)
 			.subscribe((response: boolean) => {
 				if (response) {
-					this._asistencia.generateRequestResultAlert(
-						'Exito',
-						'',
-						'La asistencia se registro de forma correctamente'
-					);
 					[
 						this.ciudadanoForm,
 						this.vehiculoForm,
 						this.ubicacionForm,
 					].forEach((item) => item.reset());
+
+					this._asistencia.generateRequestResultAlert(
+						'Exito',
+						'',
+						'La asistencia se registro de forma correctamente'
+					);
+
 					this.$router.navigate(['dashboard']);
 				} else {
 					this._asistencia.generateRequestResultAlert(
