@@ -185,7 +185,6 @@ export class AuthService extends GenericService {
 			this._storage?.set('ficha', model.ficha),
 			this._storage?.set('placa', model.placa),
 			this._storage?.set('miembro', model.miembroInfo),
-			this._storage?.set('tramo', model.tramo),
 			this._storage?.set('token', model.token),
 			this._storage?.set('esEncargado', model.esEncargado),
 			this._storage?.set('accesoTotal', model.accesoTotal),

@@ -56,14 +56,22 @@
 								>
 								<ion-input
 									formControlName="identificacion"
+									[autocapitalize]="true"
 								></ion-input>
+								<ion-note slot="helper"
+									>No incluir guiones (-)</ion-note
+								>
 							</ion-item>
 							<ion-item>
-								<ion-label>Nombre</ion-label>
+								<ion-label position="floating"
+									>Nombre</ion-label
+								>
 								<ion-input formControlName="nombre"></ion-input>
 							</ion-item>
 							<ion-item>
-								<ion-label>Apellido</ion-label>
+								<ion-label position="floating"
+									>Apellido</ion-label
+								>
 								<ion-input
 									formControlName="apellido"
 								></ion-input>
@@ -85,10 +93,15 @@
 								</ion-radio-group>
 							</fieldset>
 							<ion-item [counter]="true">
-								<ion-label>Teléfono</ion-label>
+								<ion-label position="floating"
+									>Teléfono</ion-label
+								>
 								<ion-input
 									formControlName="telefono"
 								></ion-input>
+								<ion-note slot="helper"
+									>No incluir guiones (-)</ion-note
+								>
 							</ion-item>
 						</form>
 						<ion-item>
@@ -329,7 +342,7 @@
 				"
 			>
 				<ion-select
-					[multiple]="true"
+					[multiple]="false"
 					[(ngModel)]="tipoAsistencias"
 					placeholder="Seleccionar Tipo Asistencia"
 				>

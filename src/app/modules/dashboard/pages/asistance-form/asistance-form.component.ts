@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+	FormBuilder,
+	FormControl,
+	FormGroup,
+	Validators,
+} from '@angular/forms';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { CacheService } from 'src/app/modules/cache/services/cache.service';
@@ -54,6 +59,47 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 
 	// Cedula: Validators.pattern(/^[0-9]{11,15}$/)
 	// Telefono: [Validators.pattern(/^[0-9]{10,15}$/)]
+
+	private AddCiudadanoIdentificacionValidator(value: boolean): void {
+		if (value) {
+			this.ciudadanoForm.controls['identificacion'].addValidators([
+				Validators.required,
+				Validators.pattern(/^[a-zA-Z0-9]{11,}$/),
+			]);
+			console.log('validar identificacion: Si');
+		} else {
+			this.ciudadanoForm.controls['identificacion'].clearValidators();
+			this.ciudadanoForm.controls['identificacion'].reset();
+			console.log('validar identificacion: No');
+		}
+	}
+
+	private AddCiudadanoTelefonoValidator(value: boolean): void {
+		console.log('validar telefono: ', value);
+		if (value) {
+			this.ciudadanoForm.controls['telefono'].addValidators([
+				Validators.required,
+				Validators.pattern(/^[0-9]{10,}$/),
+			]);
+		} else {
+			this.ciudadanoForm.controls['telefono'].clearValidators();
+			this.ciudadanoForm.controls['telefono'].reset();
+		}
+	}
+
+	private AddVehiculoPlacaValidator(value: boolean): void {
+		console.log('validar placa: ', value);
+		if (value) {
+			this.vehiculoForm.controls['placa'].addValidators([
+				Validators.required,
+				Validators.pattern(/^[A-Za-z0-9]{1,10}$/),
+			]);
+		} else {
+			this.vehiculoForm.controls['placa'].clearValidators();
+			this.vehiculoForm.controls['placa'].reset();
+		}
+	}
+
 	ciudadanoForm: FormGroup = this.$fb.group({
 		identificacion: [''],
 		nombre: [''],
@@ -86,12 +132,23 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 
 	coordenadas: string = '';
 	reportadoPor: number = 1;
-	tipoAsistencias: number[] = [];
+	tipoAsistencias: number[] | number = [];
 	comentario: string = '';
 	fueCompletada: boolean = true;
 
 	async ngOnInit() {
 		await this.getUnitMemberId();
+		this.ciudadanoForm.controls['identificacion'].valueChanges.subscribe(
+			(value: string) =>
+				this.AddCiudadanoIdentificacionValidator(value.length > 0)
+		);
+		this.ciudadanoForm.controls['telefono'].valueChanges.subscribe(
+			(value: string) =>
+				this.AddCiudadanoTelefonoValidator(value.length > 0)
+		);
+		this.vehiculoForm.controls['placa'].valueChanges.subscribe(
+			(value: string) => this.AddVehiculoPlacaValidator(value.length > 0)
+		);
 	}
 
 	async getCurrentPosition(): Promise<void> {
@@ -228,6 +285,10 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		const { provinciaId, municipioId, direccion } =
 			this.ubicacionForm.value;
 
+		if (identificacion === '') {
+			this.comentario += '\nNo portaba un documento de identidad.';
+		}
+
 		const newAsistencia: IAsistanceCreate = {
 			// ciudadano
 			identificacion: identificacion,
@@ -249,11 +310,17 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 			comentario: this.comentario,
 			coordenadas: this.coordenadas,
 			reportadoPor: this.reportadoPor,
-			tipoAsistencias: this.tipoAsistencias,
+			tipoAsistencias: [],
 			unidadMiembroId: 0,
 			imagenes: this.imagenes64,
 			fueCompletada: this.fueCompletada,
 		};
+
+		if (typeof this.tipoAsistencias === 'number') {
+			newAsistencia.tipoAsistencias = [this.tipoAsistencias as number];
+		} else {
+			newAsistencia.tipoAsistencias = this.tipoAsistencias as number[];
+		}
 
 		newAsistencia.unidadMiembroId = await this.getUnitMemberId();
 
