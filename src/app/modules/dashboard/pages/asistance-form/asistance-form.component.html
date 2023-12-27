@@ -29,7 +29,11 @@
 		<ion-card-content>
 			<fieldset>
 				<legend>Quien Reporta</legend>
-				<ion-radio-group [(ngModel)]="reportadoPor">
+				<ion-radio-group
+					[(ngModel)]="reportadoPor"
+					[allowEmptySelection]="false"
+					[required]="true"
+				>
 					<ion-row>
 						<ion-col class="radio-col">
 							<ion-radio [value]="2"></ion-radio>
@@ -57,6 +61,7 @@
 								<ion-input
 									formControlName="identificacion"
 									[autocapitalize]="true"
+									[maxlength]="15"
 								></ion-input>
 								<ion-note slot="helper"
 									>No incluir guiones (-)</ion-note
@@ -98,6 +103,7 @@
 								>
 								<ion-input
 									formControlName="telefono"
+									[maxlength]="20"
 								></ion-input>
 								<ion-note slot="helper"
 									>No incluir guiones (-)</ion-note
@@ -145,7 +151,9 @@
 								>
 									<ion-select-option
 										[value]="item.id"
-										*ngFor="let item of tipoVehiculosArray"
+										*ngFor="
+											let item of tipoVehiculosArray.sort()
+										"
 										>{{ item.nombre }}</ion-select-option
 									>
 								</ion-select>
@@ -173,7 +181,7 @@
 									<ion-select-option
 										[value]="item.id"
 										*ngFor="
-											let item of coloresVehiculosArray
+											let item of coloresVehiculosArray.sort()
 										"
 										>{{ item.nombre }}</ion-select-option
 									>
@@ -190,8 +198,9 @@
 									<ion-select-option
 										[value]="item.id"
 										*ngFor="
-											let item of _cache.vehiculoMarca$
-												| async
+											let item of (
+												_cache.vehiculoMarca$ | async
+											)?.sort()
 										"
 										>{{ item.nombre }}</ion-select-option
 									>
@@ -213,8 +222,9 @@
 									<ion-select-option
 										[value]="item.id"
 										*ngFor="
-											let item of _cache.vehiculoModelo$
-												| async
+											let item of (
+												_cache.vehiculoModelo$ | async
+											)?.sort()
 										"
 										>{{ item.nombre }}</ion-select-option
 									>
@@ -261,7 +271,9 @@
 								>
 									<ion-select-option
 										[value]="item.id"
-										*ngFor="let item of provinciasArray"
+										*ngFor="
+											let item of provinciasArray.sort()
+										"
 										>{{ item.nombre }}</ion-select-option
 									>
 								</ion-select>
@@ -281,8 +293,9 @@
 									<ion-select-option
 										[value]="item.id"
 										*ngFor="
-											let item of _cache.municipios$
-												| async
+											let item of (
+												_cache.municipios$ | async
+											)?.sort()
 										"
 										>{{ item.nombre }}</ion-select-option
 									>
@@ -319,7 +332,11 @@
 			<br /><br />
 			<fieldset>
 				<legend>Categoria de asistencia</legend>
-				<ion-radio-group #categoriaAsistencia>
+				<ion-radio-group
+					[(ngModel)]="categoriaAsistencia"
+					[allowEmptySelection]="false"
+					[required]="true"
+				>
 					<ion-row>
 						<ion-col class="radio-col">
 							<ion-radio [value]="1"></ion-radio>
@@ -337,7 +354,7 @@
 				(click)="
 					_cache.getResourceById(
 						'TipoAsistencia',
-						categoriaAsistencia.value
+						categoriaAsistencia
 					)
 				"
 			>

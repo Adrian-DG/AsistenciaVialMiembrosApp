@@ -64,6 +64,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		if (value) {
 			this.ciudadanoForm.controls['identificacion'].addValidators([
 				Validators.required,
+				Validators.maxLength(15),
 				Validators.pattern(/^[a-zA-Z0-9]{11,}$/),
 			]);
 			console.log('validar identificacion: Si');
@@ -79,6 +80,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		if (value) {
 			this.ciudadanoForm.controls['telefono'].addValidators([
 				Validators.required,
+				Validators.minLength(10),
 				Validators.pattern(/^[0-9]{10,}$/),
 			]);
 		} else {
@@ -104,7 +106,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		identificacion: [''],
 		nombre: [''],
 		apellido: [''],
-		genero: [0],
+		genero: [1],
 		telefono: [''],
 	});
 
@@ -131,7 +133,8 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	hasPosition = false;
 
 	coordenadas: string = '';
-	reportadoPor: number = 1;
+	reportadoPor: number = 2;
+	categoriaAsistencia: number = 2;
 	tipoAsistencias: number[] | number = [];
 	comentario: string = '';
 	fueCompletada: boolean = true;
