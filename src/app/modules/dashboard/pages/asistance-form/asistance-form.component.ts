@@ -60,54 +60,72 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	// Cedula: Validators.pattern(/^[0-9]{11,15}$/)
 	// Telefono: [Validators.pattern(/^[0-9]{10,15}$/)]
 
-	private AddCiudadanoIdentificacionValidator(value: boolean): void {
-		if (value) {
-			this.ciudadanoForm.controls['identificacion'].addValidators([
-				Validators.required,
-				Validators.maxLength(15),
-				Validators.pattern(/^[a-zA-Z0-9]{11,}$/),
-			]);
-			console.log('validar identificacion: Si');
-		} else {
-			this.ciudadanoForm.controls['identificacion'].clearValidators();
-			this.ciudadanoForm.controls['identificacion'].reset();
-			console.log('validar identificacion: No');
-		}
-	}
+	// private AddCiudadanoIdentificacionValidator(value: boolean): void {
+	// 	if (value) {
+	// 		this.ciudadanoForm.controls['identificacion'].addValidators([
+	// 			Validators.required,
+	// 			Validators.minLength(11),
+	// 			Validators.maxLength(20),
+	// 			Validators.pattern(/^[a-zA-Z0-9]{11,}$/),
+	// 		]);
+	// 		console.log('validar identificacion: Si');
+	// 	} else {
+	// 		this.ciudadanoForm.controls['identificacion'].clearValidators();
+	// 		this.ciudadanoForm.controls['identificacion'].reset();
+	// 		console.log('validar identificacion: No');
+	// 	}
+	// }
 
-	private AddCiudadanoTelefonoValidator(value: boolean): void {
-		console.log('validar telefono: ', value);
-		if (value) {
-			this.ciudadanoForm.controls['telefono'].addValidators([
-				Validators.required,
-				Validators.minLength(10),
-				Validators.pattern(/^[0-9]{10,}$/),
-			]);
-		} else {
-			this.ciudadanoForm.controls['telefono'].clearValidators();
-			this.ciudadanoForm.controls['telefono'].reset();
-		}
-	}
+	// private AddCiudadanoTelefonoValidator(value: boolean): void {
+	// 	console.log('validar telefono: ', value);
+	// 	if (value) {
+	// 		this.ciudadanoForm.controls['telefono'].addValidators([
+	// 			Validators.required,
+	// 			Validators.minLength(10),
+	// 			Validators.pattern(/^[0-9]{10,}$/),
+	// 		]);
+	// 	} else {
+	// 		this.ciudadanoForm.controls['telefono'].clearValidators();
+	// 		this.ciudadanoForm.controls['telefono'].reset();
+	// 	}
+	// }
 
-	private AddVehiculoPlacaValidator(value: boolean): void {
-		console.log('validar placa: ', value);
-		if (value) {
-			this.vehiculoForm.controls['placa'].addValidators([
-				Validators.required,
-				Validators.pattern(/^[A-Za-z0-9]{1,10}$/),
-			]);
-		} else {
-			this.vehiculoForm.controls['placa'].clearValidators();
-			this.vehiculoForm.controls['placa'].reset();
-		}
-	}
+	// private AddVehiculoPlacaValidator(value: boolean): void {
+	// 	console.log('validar placa: ', value);
+	// 	if (value) {
+	// 		this.vehiculoForm.controls['placa'].addValidators([
+	// 			Validators.required,
+	// 			Validators.minLength(7),
+	// 			Validators.pattern(/^[A-Za-z0-9]{1,10}$/),
+	// 		]);
+	// 	} else {
+	// 		this.vehiculoForm.controls['placa'].clearValidators();
+	// 		this.vehiculoForm.controls['placa'].reset();
+	// 	}
+	// }
 
 	ciudadanoForm: FormGroup = this.$fb.group({
-		identificacion: [''],
+		identificacion: [
+			'',
+			[
+				Validators.required,
+				Validators.minLength(11),
+				Validators.maxLength(20),
+				Validators.pattern(/^[a-zA-Z0-9]{11,}$/),
+			],
+		],
 		nombre: [''],
 		apellido: [''],
 		genero: [1],
-		telefono: [''],
+		telefono: [
+			'',
+			[
+				Validators.required,
+				Validators.minLength(10),
+				Validators.maxLength(20),
+				Validators.pattern(/^[0-9]{10,}$/),
+			],
+		],
 	});
 
 	esExtranjero: boolean = false;
@@ -118,7 +136,15 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		vehiculoColorId: [0],
 		vehiculoModeloId: [0],
 		vehiculoMarcaId: [0],
-		placa: [''],
+		placa: [
+			'',
+			[
+				Validators.required,
+				Validators.minLength(6),
+				Validators.maxLength(10),
+				Validators.pattern(/^[A-Za-z0-9]{1,10}$/),
+			],
+		],
 	});
 
 	ubicacionForm: FormGroup = this.$fb.group({
@@ -141,17 +167,19 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 
 	async ngOnInit() {
 		await this.getUnitMemberId();
-		this.ciudadanoForm.controls['identificacion'].valueChanges.subscribe(
-			(value: string) =>
-				this.AddCiudadanoIdentificacionValidator(value.length > 0)
-		);
-		this.ciudadanoForm.controls['telefono'].valueChanges.subscribe(
-			(value: string) =>
-				this.AddCiudadanoTelefonoValidator(value.length > 0)
-		);
-		this.vehiculoForm.controls['placa'].valueChanges.subscribe(
-			(value: string) => this.AddVehiculoPlacaValidator(value.length > 0)
-		);
+
+		// this.ciudadanoForm.controls['identificacion'].valueChanges.subscribe(
+		// 	(value: string) =>
+		// 		this.AddCiudadanoIdentificacionValidator(value.length === 1)
+		// );
+		// this.ciudadanoForm.controls['telefono'].valueChanges.subscribe(
+		// 	(value: string) =>
+		// 		this.AddCiudadanoTelefonoValidator(value.length === 1)
+		// );
+		// this.vehiculoForm.controls['placa'].valueChanges.subscribe(
+		// 	(value: string) =>
+		// 		this.AddVehiculoPlacaValidator(value.length === 1)
+		// );
 	}
 
 	async getCurrentPosition(): Promise<void> {
@@ -217,7 +245,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	generateAlertMessage(fields: string[]) {
 		let finalString = '<ul>';
 		fields.forEach((item) => {
-			finalString += `<li>${item}</li>`;
+			finalString += `<li><b>${item}</b></li>`;
 		});
 
 		return `${finalString}</ul>`;
@@ -240,6 +268,13 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 					item[key].value == 0 ||
 					item[key].invalid
 				) {
+					key = key === 'vehiculoTipoId' ? 'Vehiculo Tipo' : key;
+					key = key === 'vehiculoColorId' ? 'Color' : key;
+					key = key === 'vehiculoMarcaId' ? 'Marca' : key;
+					key = key === 'vehiculoModeloId' ? 'Modelo' : key;
+					key = key === 'provinciaId' ? 'Provincia' : key;
+					key = key === 'municipioId' ? 'Municipio' : key;
+
 					emptyOrInvalidFields.push(key);
 				}
 			});

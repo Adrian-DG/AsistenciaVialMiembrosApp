@@ -54,14 +54,14 @@
 					</ion-item>
 					<div class="ion-padding" slot="content">
 						<form [formGroup]="ciudadanoForm">
-							<ion-item counter="true">
+							<ion-item counter="true" fill="outline">
 								<ion-label position="floating"
-									>Identificación Ciudadano</ion-label
+									>Cédula o Pasaporte</ion-label
 								>
 								<ion-input
 									formControlName="identificacion"
 									[autocapitalize]="true"
-									[maxlength]="15"
+									[maxlength]="20"
 								></ion-input>
 								<ion-note slot="helper"
 									>No incluir guiones (-)</ion-note
@@ -97,7 +97,8 @@
 									</ion-row>
 								</ion-radio-group>
 							</fieldset>
-							<ion-item [counter]="true">
+							<br />
+							<ion-item [counter]="true" fill="outline">
 								<ion-label position="floating"
 									>Teléfono</ion-label
 								>
@@ -230,7 +231,7 @@
 									>
 								</ion-select>
 							</ion-item>
-							<ion-item [counter]="true">
+							<ion-item [counter]="true" fill="outline">
 								<ion-label>Placa</ion-label>
 								<ion-input
 									formControlName="placa"
