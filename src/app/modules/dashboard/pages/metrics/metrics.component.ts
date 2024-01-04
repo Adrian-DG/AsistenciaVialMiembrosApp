@@ -34,7 +34,10 @@ export class MetricsComponent implements OnInit, AfterViewInit {
 	}
 
 	displayUnidadesByTramo(tramoId: number): void {
-		this._asistencias.getMetricasAsistenciasUnidadByTramo(tramoId);
+		this._asistencias.getMetricasAsistenciasUnidadByTramo(
+			tramoId,
+			this.ficha
+		);
 	}
 
 	displayAsistenciasByUnidad(unidadId: number): void {

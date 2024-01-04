@@ -104,8 +104,10 @@ export class AsistanceService extends GenericService {
 			});
 	}
 
-	getMetricasAsistenciasUnidadByTramo(tramoId: number): void {
-		const param = new HttpParams().set('tramoId', tramoId);
+	getMetricasAsistenciasUnidadByTramo(tramoId: number, ficha: string): void {
+		const param = new HttpParams()
+			.append('TramoId', tramoId)
+			.append('Ficha', ficha);
 		this.$http
 			.get<IMetricasViewModel[]>(
 				`${this.endPoint}/metricas/unidadByTramo`,
