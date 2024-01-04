@@ -148,8 +148,8 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	});
 
 	ubicacionForm: FormGroup = this.$fb.group({
-		municipioId: [0],
-		provinciaId: [0],
+		municipioId: ['', Validators.required],
+		provinciaId: ['', Validators.required],
 		direccion: [''],
 	});
 
