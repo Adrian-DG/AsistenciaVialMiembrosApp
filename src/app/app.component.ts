@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this._newVersionService.checkForUpdate();
+		this._newVersionService.checkForUpdateAutomatically();
 		this.$router.navigate(['dashboard']);
 	}
 }
