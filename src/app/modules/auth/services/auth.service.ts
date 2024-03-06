@@ -223,12 +223,14 @@ export class AuthService extends GenericService {
 						await this.clearSession();
 						this.$http
 							.put<boolean>(
-								`${this.endPoint}/unidades/changeStatus`,
+								`${this.endPoint}/unidades/close-session`,
 								ficha
 							)
-							.subscribe((response: boolean) =>
-								this.$router.navigateByUrl('auth/signin')
-							);
+							.subscribe((response: boolean) => {
+								if (response) {
+									this.$router.navigateByUrl('auth/signin');
+								}
+							});
 					},
 				},
 			],
