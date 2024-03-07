@@ -1,3 +1,42 @@
-<p>
-  index works!
-</p>
+<ion-header [translucent]="true">
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-back-button icon="caret-back"></ion-back-button>
+		</ion-buttons>
+		<ion-title>Invitado</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+	<div class="container">
+		<ion-card>
+			<ion-card-header>
+				<ion-card-title>Acceso Invitado</ion-card-title>
+				<ion-card-subtitle
+					>Esta modalidad permite a la persona ver las estadisticas a
+					nivel nacional, reservada solo para personal
+					autorizado.</ion-card-subtitle
+				>
+			</ion-card-header>
+			<ion-card-content>
+				<ion-item [counter]="true">
+					<ion-label>Cedula</ion-label>
+					<ion-input
+						inputmode="number"
+						[maxlength]="11"
+						[clearInput]="true"
+						[formControl]="cedula"
+					></ion-input>
+				</ion-item>
+			</ion-card-content>
+			<ion-button
+				color="primary"
+				fill="outline"
+				style="width: 100%"
+				(click)="validate()"
+				[disabled]="!cedula.valid"
+				>Validar</ion-button
+			>
+		</ion-card>
+	</div>
+</ion-content>

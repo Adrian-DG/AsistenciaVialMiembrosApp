@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ILoginUnitMember } from '../../interfaces/ilogin-unit-member';
 import { AuthService } from '../../services/auth.service';
 import { NewVersionService } from 'src/app/modules/generic/services/NewVersion/new-version.service';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-signin',
@@ -14,7 +15,8 @@ export class SigninComponent implements OnInit {
 	isWriting!: boolean;
 	constructor(
 		public _auth: AuthService,
-		private _newVersionService: NewVersionService
+		private _newVersionService: NewVersionService,
+		private $router: Router
 	) {}
 
 	ngOnInit() {
@@ -44,5 +46,9 @@ export class SigninComponent implements OnInit {
 
 	checkUpdate(): void {
 		this._newVersionService.checkForUpdateManually();
+	}
+
+	loginAsGuest(): void {
+		this.$router.navigate(['guest']);
 	}
 }

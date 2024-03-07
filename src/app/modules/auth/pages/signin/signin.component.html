@@ -2,7 +2,14 @@
 	<ion-toolbar color="primary">
 		<ion-title>Inicio</ion-title>
 		<ion-buttons slot="end" (click)="checkUpdate()">
-			<ion-icon slot="start" name="reload-outline"></ion-icon>
+			<ion-icon name="reload-circle" style="font-size: 1.5rem"></ion-icon>
+		</ion-buttons>
+		<ion-buttons
+			slot="end"
+			(click)="loginAsGuest()"
+			style="margin-left: 0.5em"
+		>
+			<ion-icon name="log-in" style="font-size: 1.5rem"></ion-icon>
 		</ion-buttons>
 	</ion-toolbar>
 </ion-header>
