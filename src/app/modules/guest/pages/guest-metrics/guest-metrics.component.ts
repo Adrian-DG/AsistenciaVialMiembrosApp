@@ -4,6 +4,7 @@ import { IDataModel } from '../../models/idata-model';
 import { IStatsFilter } from '../../dto/istats-filter';
 import { GuestService } from '../../services/guest.service';
 import { AsistanceService } from 'src/app/modules/dashboard/services/asistance/asistance.service';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'ReportarAsistencia-guest-metrics',
@@ -54,7 +55,8 @@ export class GuestMetricsComponent implements OnInit, AfterViewInit {
 
 	constructor(
 		public _guest: GuestService,
-		public _asistencias: AsistanceService
+		public _asistencias: AsistanceService,
+		private $router: Router
 	) {}
 
 	ngOnInit() {
@@ -98,5 +100,9 @@ export class GuestMetricsComponent implements OnInit, AfterViewInit {
 
 	displayAsistenciasByUnidad(unidadId: number): void {
 		this._asistencias.getMetricasAsistenciasUnidadByTipo(unidadId);
+	}
+
+	goToCreatePage(): void {
+		this.$router.navigate(['guest/create']);
 	}
 }

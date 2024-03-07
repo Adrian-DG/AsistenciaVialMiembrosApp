@@ -8,9 +8,10 @@ import { IonicModule } from '@ionic/angular';
 import { GuestMetricsComponent } from './pages/guest-metrics/guest-metrics.component';
 import { NgChartsModule } from 'ng2-charts';
 import { DashboardModule } from '../dashboard/dashboard.module';
+import { CreateComponent } from './pages/create/create.component';
 
 @NgModule({
-	declarations: [IndexComponent, GuestMetricsComponent],
+	declarations: [IndexComponent, GuestMetricsComponent, CreateComponent],
 	imports: [
 		CommonModule,
 		GuestRoutingModule,
