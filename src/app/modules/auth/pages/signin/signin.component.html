@@ -4,13 +4,13 @@
 		<ion-buttons slot="end" (click)="checkUpdate()">
 			<ion-icon name="reload-circle" style="font-size: 1.5rem"></ion-icon>
 		</ion-buttons>
-		<ion-buttons
+		<!-- <ion-buttons
 			slot="end"
 			(click)="loginAsGuest()"
 			style="margin-left: 0.5em"
 		>
 			<ion-icon name="log-in" style="font-size: 1.5rem"></ion-icon>
-		</ion-buttons>
+		</ion-buttons> -->
 	</ion-toolbar>
 </ion-header>
 
@@ -86,6 +86,15 @@
 				<ion-icon name="log-in-outline"></ion-icon>
 				Ingresar
 			</ion-button>
+
+			<ion-button
+				color="medium"
+				expand="block"
+				fill="clear"
+				class="btn"
+				(click)="loginAsGuest()"
+				>Invitado</ion-button
+			>
 		</ion-card>
 	</div>
 </ion-content>
