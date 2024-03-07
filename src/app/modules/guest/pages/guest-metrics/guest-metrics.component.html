@@ -1,5 +1,89 @@
 <ion-header>
 	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-back-button icon="caret-back"></ion-back-button>
+		</ion-buttons>
 		<ion-title>Metricas</ion-title>
 	</ion-toolbar>
 </ion-header>
+
+<ion-content>
+	<div class="container">
+		<ion-card>
+			<ion-card-header>
+				<ion-card-title>Estatus Asistencia</ion-card-title>
+			</ion-card-header>
+			<ion-card-content>
+				<canvas
+					baseChart
+					[type]="'pie'"
+					[legend]="true"
+					[options]="chartOptions"
+					[data]="chartData"
+				>
+				</canvas>
+			</ion-card-content>
+		</ion-card>
+
+		<ion-card>
+			<ion-card-content>
+				<ion-accordion-group>
+					<ion-accordion
+						[value]="'tramo' + tramo.id"
+						*ngFor="
+							let tramo of _asistencias.tramosSupervisor$ | async
+						"
+						(click)="getStatsUnidadByTramo(tramo.id)"
+					>
+						<ion-item slot="header">
+							<ion-label>{{ tramo.nombre }}</ion-label>
+							<ion-badge slot="end" color="primary">{{
+								tramo.total
+							}}</ion-badge>
+						</ion-item>
+						<div class="ion-padding" slot="content">
+							<ion-accordion-group>
+								<ion-accordion
+									[value]="'unidad' + unidad.id"
+									*ngFor="
+										let unidad of _asistencias.metricasByTramoUnidad$
+											| async
+									"
+									(click)="
+										displayAsistenciasByUnidad(unidad.id)
+									"
+								>
+									<ion-item slot="header">
+										<ion-label>{{
+											unidad.nombre
+										}}</ion-label>
+										<ion-badge slot="end" color="primary">{{
+											unidad.total
+										}}</ion-badge>
+									</ion-item>
+									<div class="ion-padding" slot="content">
+										<ion-item
+											*ngFor="
+												let tipo of _asistencias.metricasByUnidadTipoAsistencia$
+													| async
+											"
+										>
+											<ion-label>{{
+												tipo.nombre
+											}}</ion-label>
+											<ion-badge
+												slot="end"
+												color="primary"
+												>{{ tipo.total }}</ion-badge
+											>
+										</ion-item>
+									</div>
+								</ion-accordion>
+							</ion-accordion-group>
+						</div>
+					</ion-accordion>
+				</ion-accordion-group>
+			</ion-card-content>
+		</ion-card>
+	</div>
+</ion-content>

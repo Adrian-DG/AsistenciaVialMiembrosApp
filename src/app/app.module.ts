@@ -16,6 +16,8 @@ import { GenericModule } from './modules/generic/generic.module';
 import { JwtModule } from '@auth0/angular-jwt';
 import { LeaveGuard } from './guard/leave.guard';
 
+import { NgChartsModule } from 'ng2-charts';
+
 export function tokenGetter() {
 	return localStorage.getItem('access_token');
 }
@@ -35,6 +37,7 @@ export function tokenGetter() {
 				tokenGetter: tokenGetter,
 			},
 		}),
+		NgChartsModule,
 		ServiceWorkerModule.register('ngsw-worker.js', {
 			enabled: !isDevMode(),
 			// Register the ServiceWorker as soon as the application is stable

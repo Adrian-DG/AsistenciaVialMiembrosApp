@@ -6,6 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IndexComponent } from './pages/index/index.component';
 import { IonicModule } from '@ionic/angular';
 import { GuestMetricsComponent } from './pages/guest-metrics/guest-metrics.component';
+import { NgChartsModule } from 'ng2-charts';
+import { DashboardModule } from '../dashboard/dashboard.module';
 
 @NgModule({
 	declarations: [IndexComponent, GuestMetricsComponent],
@@ -16,6 +18,8 @@ import { GuestMetricsComponent } from './pages/guest-metrics/guest-metrics.compo
 		HttpClientModule,
 		FormsModule,
 		ReactiveFormsModule,
+		NgChartsModule,
+		DashboardModule,
 	],
 })
 export class GuestModule {}
