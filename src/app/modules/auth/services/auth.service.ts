@@ -226,7 +226,7 @@ export class AuthService extends GenericService {
 						this.$http
 							.put<boolean>(
 								`${this.endPoint}/unidades/close-session`,
-								ficha
+								{ Ficha: ficha }
 							)
 							.subscribe((response: boolean) => {
 								if (response) {
