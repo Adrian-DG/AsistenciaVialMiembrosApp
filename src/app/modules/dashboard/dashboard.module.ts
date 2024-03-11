@@ -13,6 +13,7 @@ import { AsistenciaCardComponent } from './components/asistencia-card/asistencia
 import { MetricsComponent } from './pages/metrics/metrics.component';
 import { EditComponent } from './pages/edit/edit.component';
 import { FilterPipe } from './pipes/filter.pipe';
+import { PreHospitalariaformComponent } from './pages/pre-hospitalariaform/pre-hospitalariaform.component';
 
 @NgModule({
 	declarations: [
@@ -23,7 +24,8 @@ import { FilterPipe } from './pipes/filter.pipe';
 		AsistenciaCardComponent,
 		MetricsComponent,
 		EditComponent,
-  FilterPipe,
+		PreHospitalariaformComponent,
+		FilterPipe,
 	],
 	imports: [
 		CommonModule,

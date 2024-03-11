@@ -4,6 +4,7 @@ import { IMemberUnitInfo } from '../../interfaces/imember-unit-info';
 import { AsistanceService } from '../../services/asistance/asistance.service';
 import { AlertController } from '@ionic/angular';
 import { IUpdateStatusUnit } from '../../interfaces/iupdate-status-unit';
+import { PerteneceA } from '../../constants/app.const';
 
 @Component({
 	selector: 'app-index',

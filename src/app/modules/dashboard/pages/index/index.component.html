@@ -77,8 +77,17 @@
 	</div>
 
 	<ion-fab slot="fixed" vertical="bottom" horizontal="end">
-		<ion-fab-button [routerLink]="['create']" color="primary">
+		<ion-fab-button
+			[routerLink]="['pre-hospitalaria-form']"
+			color="success"
+			*ngIf="infoUser?.perteneceA == 6; else formularioVial"
+		>
 			<ion-icon name="add"></ion-icon>
 		</ion-fab-button>
+		<ng-template #formularioVial>
+			<ion-fab-button [routerLink]="['create']" color="primary">
+				<ion-icon name="add"></ion-icon>
+			</ion-fab-button>
+		</ng-template>
 	</ion-fab>
 </ion-content>

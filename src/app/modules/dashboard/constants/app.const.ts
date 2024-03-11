@@ -1,5 +1,14 @@
 import { IGenericEnum } from '../../cache/interfaces/igeneric-enum';
 
+export const enum PerteneceA {
+	Asistencia_Vial = 1,
+	Gestion_Operativa,
+	Seguridad_Ciudadana,
+	Taller,
+	Gruas,
+	Ambulancia,
+}
+
 export const VehicleTypesArray: IGenericEnum[] = [
 	{ id: 1, nombre: 'Desconocido' },
 	{ id: 2, nombre: 'Autobus' },

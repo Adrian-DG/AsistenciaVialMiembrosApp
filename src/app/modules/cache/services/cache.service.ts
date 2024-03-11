@@ -33,6 +33,12 @@ export class CacheService extends GenericService {
 	private rangosSource = new BehaviorSubject<IGenericEnum[]>([]);
 	public rangos$ = this.rangosSource.asObservable();
 
+	private hospitalesSource = new BehaviorSubject<IGenericEnum[]>([]);
+	public hospitales$ = this.hospitalesSource.asObservable();
+
+	private nacionalidadesSource = new BehaviorSubject<IGenericEnum[]>([]);
+	public nacionalidades$ = this.nacionalidadesSource.asObservable();
+
 	private readonly sources = {
 		VehiculoTipo: (value: IGenericEnum[]) =>
 			this.vehiculoTiposSource.next(value),
@@ -48,6 +54,10 @@ export class CacheService extends GenericService {
 		TipoAsistencia: (value: IGenericEnum[]) =>
 			this.tipoAsistenciaSource.next(value),
 		rangos: (value: IGenericEnum[]) => this.rangosSource.next(value),
+		hospitales: (value: IGenericEnum[]) =>
+			this.hospitalesSource.next(value),
+		nacionalidades: (value: IGenericEnum[]) =>
+			this.nacionalidadesSource.next(value),
 	};
 
 	constructor(
