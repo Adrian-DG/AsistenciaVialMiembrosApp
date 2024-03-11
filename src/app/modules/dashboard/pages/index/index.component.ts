@@ -33,6 +33,7 @@ export class IndexComponent implements OnInit, AfterViewInit {
 				tramo: response[5],
 				esEncargado: response[6],
 				accesoTotal: response[7],
+				perteneceA: response[8],
 			};
 		});
 	}

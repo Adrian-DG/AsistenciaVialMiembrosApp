@@ -175,6 +175,7 @@ export class AuthService extends GenericService {
 			this._storage.get('tramo'),
 			this._storage.get('esEncargado'),
 			this._storage.get('accesoTotal'),
+			this._storage.get('perteneceA'),
 		]);
 	}
 
@@ -188,6 +189,7 @@ export class AuthService extends GenericService {
 			this._storage?.set('token', model.token),
 			this._storage?.set('esEncargado', model.esEncargado),
 			this._storage?.set('accesoTotal', model.accesoTotal),
+			this._storage?.set('perteneceA', model.perteneceA),
 		]);
 	}
 

@@ -7,4 +7,5 @@ export interface IMemberUnitInfo {
 	tramo: string;
 	esEncargado: boolean;
 	accesoTotal: boolean;
+	perteneceA: number;
 }

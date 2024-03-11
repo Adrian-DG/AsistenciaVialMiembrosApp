@@ -9,4 +9,5 @@ export interface ILoginUnitResponse {
 	esEncargado: boolean;
 	estatus: boolean;
 	accesoTotal: boolean;
+	perteneceA: number;
 }
