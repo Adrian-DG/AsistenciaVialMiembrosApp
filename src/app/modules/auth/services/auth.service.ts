@@ -223,16 +223,7 @@ export class AuthService extends GenericService {
 					role: 'confirm',
 					handler: async () => {
 						await this.clearSession();
-						this.$http
-							.put<boolean>(
-								`${this.endPoint}/unidades/close-session`,
-								{ Ficha: ficha }
-							)
-							.subscribe((response: boolean) => {
-								if (response) {
-									this.$router.navigateByUrl('auth/signin');
-								}
-							});
+						this.$router.navigateByUrl('auth/signin');
 					},
 				},
 			],

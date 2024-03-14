@@ -1,6 +1,6 @@
 import { IGenericEnum } from '../../cache/interfaces/igeneric-enum';
 
-export const enum PerteneceA {
+export enum PerteneceA {
 	Asistencia_Vial = 1,
 	Gestion_Operativa,
 	Seguridad_Ciudadana,

@@ -58,6 +58,8 @@ export class CacheService extends GenericService {
 			this.hospitalesSource.next(value),
 		nacionalidades: (value: IGenericEnum[]) =>
 			this.nacionalidadesSource.next(value),
+		filter_provincias: (value: IGenericEnum[]) =>
+			this.provinciaSource.next(value),
 	};
 
 	constructor(
