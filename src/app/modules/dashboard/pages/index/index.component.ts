@@ -54,7 +54,8 @@ export class IndexComponent implements OnInit, AfterViewInit {
 
 	refresh(): void {
 		if (this.infoUser?.ficha) {
-			this._asistencias.confirmUnidadEstatus(this.infoUser?.ficha);
+			
+			// this._asistencias.confirmUnidadEstatus(this.infoUser?.ficha);
 
 			this._asistencias.getTotalAsistenciasUnidad(
 				this.infoUser?.unidadMiembroId
