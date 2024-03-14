@@ -7,14 +7,18 @@ export interface IAsistenciaPreHospitalaria {
 	telefono: string;
 	personaDesconocidad: boolean;
 	nacionalidadId: number;
-	TipoCausa: number;
+	tipoAsistencia: number;
+	tipoCausa: number;
 	esTraslado: boolean;
-	tipoTraslado: number;
+	causaTraslado: number;
 	despachadaPor: number;
 	apoyoBrindado: number;
-	fueEventoCampo: boolean;
-	detalleEvento: string;
+	esEventoCampo: boolean;
+	esEventoEspecial: boolean;
+	detalleEventoEspecial: string;
 	zona: number;
+	provinciaId: number;
+	municipioId: number;
 	unidadId: number;
 	denominacionId: number;
 	hospitalId: number;
@@ -38,8 +42,8 @@ export interface IAsistenciaPreHospitalaria {
 	procedimientosRealizados: string;
 	insumosUtilizados: string;
 
-	miembroCedula: string;
-	componente1Cedula: string;
-	componente2Cedula: string;
-	reguladorEmergenciaCedula: string;
+	medicoId: number;
+	componente1Id: number;
+	componente2Id: number;
+	reguladorEmergenciaId: number;
 }

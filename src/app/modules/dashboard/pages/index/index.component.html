@@ -80,7 +80,10 @@
 		<ion-fab-button
 			[routerLink]="['pre-hospitalaria-form']"
 			color="success"
-			*ngIf="infoUser?.perteneceA == 6; else formularioVial"
+			*ngIf="
+				infoUser?.perteneceA == departamento.Ambulancia;
+				else formularioVial
+			"
 		>
 			<ion-icon name="add"></ion-icon>
 		</ion-fab-button>

@@ -2,3 +2,16 @@
 	height: 100%;
 	width: 100%;
 }
+
+ion-item {
+	width: 100%;
+	ion-col {
+		ion-label {
+			margin-right: 0.2em;
+		}
+	}
+}
+
+fieldset {
+	width: 100%;
+}

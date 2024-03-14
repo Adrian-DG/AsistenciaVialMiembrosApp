@@ -16,6 +16,8 @@ export class IndexComponent implements OnInit, AfterViewInit {
 
 	estatusAsistenciaSelected: number = 1;
 
+	public departamento = PerteneceA;
+
 	constructor(
 		private _auth: AuthService,
 		public _asistencias: AsistanceService,
