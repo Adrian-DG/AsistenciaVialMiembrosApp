@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-	<ion-toolbar>
+	<ion-toolbar color="primary">
 		<ion-buttons slot="start">
 			<ion-back-button icon="caret-back"></ion-back-button>
 		</ion-buttons>
@@ -18,32 +18,217 @@
 		<ion-card-content>
 			<!-- Informacion General de la asistencia -->
 
-			<fieldset>
-				<legend>Despachado Por</legend>
-				<ion-radio-group value="end">
-					<ion-row>
-						<ion-col class="radio-col">
-							<ion-label>911</ion-label>
-							<ion-radio
-								[value]="1"
-								labelPlacement="end"
-							></ion-radio>
-						</ion-col>
-						<ion-col class="radio-col">
-							<ion-label>MOPC</ion-label>
-							<ion-radio
-								[value]="2"
-								labelPlacement="end"
-							></ion-radio>
-						</ion-col>
-					</ion-row>
-				</ion-radio-group>
-			</fieldset>
+			<ion-item>
+				<fieldset>
+					<legend>Despachado Por</legend>
+					<ion-radio-group value="end">
+						<ion-row>
+							<ion-col class="radio-col">
+								<ion-label
+									style="
+										margin-top: -0.5em;
+										margin-right: 0.5em;
+									"
+									>911</ion-label
+								>
+								<ion-radio
+									[value]="1"
+									labelPlacement="end"
+								></ion-radio>
+							</ion-col>
+							<ion-col class="radio-col">
+								<ion-label
+									style="
+										margin-top: -0.5em;
+										margin-right: 0.5em;
+									"
+									>MOPC</ion-label
+								>
+								<ion-radio
+									[value]="2"
+									labelPlacement="end"
+								></ion-radio>
+							</ion-col>
+						</ion-row>
+					</ion-radio-group>
+				</fieldset>
+			</ion-item>
+
+			<ion-item>
+				<fieldset>
+					<legend>Zona</legend>
+					<ion-radio-group [(ngModel)]="asistencia.zona">
+						<ion-row>
+							<ion-col>
+								<ion-label>Norte</ion-label>
+								<ion-radio [value]="1" labelPlacement="end"
+									>Norte</ion-radio
+								>
+							</ion-col>
+							<ion-col>
+								<ion-label>Sur</ion-label>
+								<ion-radio [value]="2" labelPlacement="end"
+									>Sur</ion-radio
+								>
+							</ion-col>
+							<ion-col>
+								<ion-label>Este</ion-label>
+								<ion-radio [value]="3" labelPlacement="end"
+									>Este</ion-radio
+								>
+							</ion-col>
+						</ion-row>
+					</ion-radio-group>
+				</fieldset>
+			</ion-item>
 
 			<ion-accordion-group style="margin-top: 1em">
-				<!-- Informacion de ciudadano -->
+				<!-- Informacion  general asistencia -->
 
-				<ion-accordion value="first">
+				<ion-accordion value="general">
+					<ion-item slot="header" color="light"
+						>Datos Generales</ion-item
+					>
+					<div class="ion-padding" slot="content">
+						<ion-item>
+							<ion-label>Es Evento de campo ?</ion-label>
+							<ion-toggle
+								[(ngModel)]="asistencia.esEventoCampo"
+								>{{
+									asistencia.esEventoCampo ? 'Si' : 'No'
+								}}</ion-toggle
+							>
+						</ion-item>
+						<ion-item>
+							<ion-label position="floating"
+								>Detalle Lugar</ion-label
+							>
+							<ion-textarea
+								placeholder="detalles del lugar..."
+							></ion-textarea>
+						</ion-item>
+						<ion-item>
+							<ion-label position="floating"
+								>Apoyo recibido</ion-label
+							>
+							<ion-select
+								[(ngModel)]="asistencia.apoyoBrindado"
+								interface="action-sheet"
+							>
+								<ion-select-option [value]="1"
+									>Ninguno</ion-select-option
+								>
+								<ion-select-option [value]="2"
+									>Ambulancia MOPC</ion-select-option
+								>
+								<ion-select-option [value]="3"
+									>Rescate MOPC</ion-select-option
+								>
+							</ion-select>
+						</ion-item>
+						<ion-item
+							(click)="
+								_cache.getResourceById(
+									'filter_provinvias',
+									asistencia.zona
+								)
+							"
+						>
+							<ion-label position="floating">Provicia</ion-label>
+							<ion-select
+								[(ngModel)]="asistencia.provinciaId"
+								interface="action-sheet"
+							>
+								<ion-select-option
+									[value]="item.id"
+									*ngFor="
+										let item of _cache.provincias$ | async
+									"
+									>{{ item.nombre }}</ion-select-option
+								>
+							</ion-select>
+						</ion-item>
+						<ion-item
+							(click)="
+								_cache.getResourceById(
+									'municipios',
+									asistencia.provinciaId
+								)
+							"
+						>
+							<ion-label position="floating">Municipio</ion-label>
+							<ion-select
+								[(ngModel)]="asistencia.municipioId"
+								interface="action-sheet"
+							>
+								<ion-select-option
+									[value]="item.id"
+									*ngFor="
+										let item of _cache.municipios$ | async
+									"
+									>{{ item.nombre }}</ion-select-option
+								>
+							</ion-select>
+						</ion-item>
+					</div>
+				</ion-accordion>
+
+				<!-- Detalles de la situacion -->
+
+				<ion-accordion value="situacion">
+					<ion-item slot="header" color="light"
+						>Datos Situación</ion-item
+					>
+					<div class="ion-padding" slot="content">
+						<ion-item>
+							<ion-label position="floating"
+								>Tipo Asistencia</ion-label
+							>
+							<ion-select
+								[(ngModel)]="asistencia.tipoAsistencia"
+								interface="action-sheet"
+							>
+								<ion-select-option [value]="1"
+									>Medica</ion-select-option
+								>
+								<ion-select-option [value]="2"
+									>Movimiento</ion-select-option
+								>
+								<ion-select-option [value]="3"
+									>Evento Especial</ion-select-option
+								>
+							</ion-select>
+						</ion-item>
+						<ion-item>
+							<ion-label position="floating"
+								>Detalle Situación</ion-label
+							>
+							<ion-textarea
+								[(ngModel)]="asistencia.detalleAsistencia"
+							></ion-textarea>
+						</ion-item>
+
+						<ion-item>
+							<ion-label>Es Evento Especial ?</ion-label>
+							<ion-toggle
+								[(ngModel)]="asistencia.esEventoEspecial"
+							></ion-toggle>
+						</ion-item>
+						<ion-item>
+							<ion-label position="floating"
+								>Nombre Evento Especial</ion-label
+							>
+							<ion-input
+								type="text"
+								[(ngModel)]="asistencia.detalleEventoEspecial"
+							></ion-input>
+						</ion-item>
+					</div>
+				</ion-accordion>
+
+				<!-- Informacion de paciente -->
+
+				<ion-accordion value="paciente">
 					<ion-item slot="header" color="light">
 						<ion-label>Datos Ciudadano</ion-label>
 					</ion-item>
@@ -58,12 +243,14 @@
 								}}</ion-toggle
 							>
 						</ion-item>
-						<ion-item counter="true" fill="outline">
+						<ion-item counter="true">
 							<ion-label position="floating"
 								>Identificacion</ion-label
 							>
 							<ion-input
 								[(ngModel)]="asistencia.identificacion"
+								[minlength]="11"
+								[maxlength]="15"
 							></ion-input>
 							<ion-note>No incluir guiones (-)</ion-note>
 						</ion-item>
@@ -122,12 +309,15 @@
 							<ion-label position="floating"
 								>Nacionalidad</ion-label
 							>
-							<ion-select>
+							<ion-select
+								interface="action-sheet"
+								[(ngModel)]="asistencia.nacionalidadId"
+							>
 								<ion-select-option
 									[value]="item.id"
 									*ngFor="
-										let item;
-										in: _cache.nacionalidades$ | async
+										let item of _cache.nacionalidades$
+											| async
 									"
 									>{{ item.nombre }}</ion-select-option
 								>
@@ -135,49 +325,63 @@
 						</ion-item>
 
 						<ion-item>
-							<ion-radio-group [(ngModel)]="asistencia.tipoCausa">
-								<ion-row>
-									<ion-col>
-										<ion-label>Traumatica</ion-label>
-										<ion-radio [value]="1"></ion-radio>
-									</ion-col>
-									<ion-col>
-										<ion-label>Clinica</ion-label>
-										<ion-radio [value]="2"></ion-radio>
-									</ion-col>
-								</ion-row>
-							</ion-radio-group>
+							<fieldset>
+								<legend>Tipo Causa</legend>
+								<ion-radio-group
+									[(ngModel)]="asistencia.tipoCausa"
+								>
+									<ion-row>
+										<ion-col>
+											<ion-label>Traumatica</ion-label>
+											<ion-radio
+												[value]="1"
+												labelPlacement="end"
+											></ion-radio>
+										</ion-col>
+										<ion-col>
+											<ion-label>Clinica</ion-label>
+											<ion-radio
+												[value]="2"
+												labelPlacement="end"
+											></ion-radio>
+										</ion-col>
+									</ion-row>
+								</ion-radio-group>
+							</fieldset>
 						</ion-item>
 
 						<ion-item>
 							<ion-label>Es Traslado ?</ion-label>
-							<ion-toggle
-								[(ngModel)]="asistencia.esTraslado"
-							></ion-toggle>
+							<ion-toggle [(ngModel)]="asistencia.esTraslado">{{
+								asistencia.esTraslado ? 'Si' : 'No'
+							}}</ion-toggle>
 						</ion-item>
 
 						<ion-item>
 							<ion-label position="floating"
 								>Causa Traslado</ion-label
 							>
-							<ion-select [(ngModel)]="asistencia.causaTraslado">
-								<ion-select-option [value]="0"
+							<ion-select
+								[(ngModel)]="asistencia.causaTraslado"
+								interface="action-sheet"
+							>
+								<ion-select-option [value]="1"
 									>No amerita traslado</ion-select-option
 								>
-								<ion-select-option [value]="1"
+								<ion-select-option [value]="2"
 									>Victima en 1-29</ion-select-option
 								>
-								<ion-select-option [value]="2"
+								<ion-select-option [value]="3"
 									>Rechazo de asistencia</ion-select-option
 								>
-								<ion-select-option [value]="3"
+								<ion-select-option [value]="4"
 									>Rechazo de traslado</ion-select-option
 								>
-								<ion-select-option [value]="4"
+								<ion-select-option [value]="5"
 									>Apoyo otra Unidad Alfa
 									MOPC</ion-select-option
 								>
-								<ion-select-option [value]="5"
+								<ion-select-option [value]="6"
 									>Apoyo al 911</ion-select-option
 								>
 							</ion-select>
@@ -185,7 +389,9 @@
 					</div>
 				</ion-accordion>
 
-				<ion-accordion value="second">
+				<!-- Datos Hospital -->
+
+				<ion-accordion value="Hospital">
 					<ion-item slot="header" color="light"
 						>Datos Hospital</ion-item
 					>
@@ -199,12 +405,14 @@
 							"
 						>
 							<ion-label position="floating">Hospital</ion-label>
-							<ion-select [(ngModel)]="asistencia.hospitalId">
+							<ion-select
+								[(ngModel)]="asistencia.hospitalId"
+								interface="action-sheet"
+							>
 								<ion-select-option
 									[value]="item.id"
 									*ngFor="
-										let item;
-										in: _cache.hospitales$ | async
+										let item of _cache.hospitales$ | async
 									"
 									>{{ item.nombre }}</ion-select-option
 								>
@@ -223,7 +431,9 @@
 					</div>
 				</ion-accordion>
 
-				<ion-accordion value="third">
+				<!-- Datos antecedentes morbidos -->
+
+				<ion-accordion value="antecedentes">
 					<ion-item slot="header" color="light"
 						>Datos Antecedentes</ion-item
 					>
@@ -241,7 +451,7 @@
 
 				<!-- Signos Vitales -->
 
-				<ion-accordion value="fouth">
+				<ion-accordion value="Vitales">
 					<ion-item slot="header" color="light"
 						>Datos Signos Vitales</ion-item
 					>
@@ -318,12 +528,17 @@
 						</ion-item>
 
 						<ion-item>
-							<ion-label>Llenado Capilar</ion-label>
-							<ion-select [(ngModel)]="asistencia.LlenadoCapilar">
-								<ion-select-option [value]="0"
+							<ion-label position="floating"
+								>Llenado Capilar</ion-label
+							>
+							<ion-select
+								[(ngModel)]="asistencia.LlenadoCapilar"
+								interface="action-sheet"
+							>
+								<ion-select-option [value]="1"
 									>NORMAL - MENOR A 2SEG</ion-select-option
 								>
-								<ion-select-option [value]="1"
+								<ion-select-option [value]="2"
 									>RETRASADO - MAYOR A 2SEG</ion-select-option
 								>
 							</ion-select>
@@ -430,170 +645,9 @@
 					</div>
 				</ion-accordion>
 
-				<!-- Informacion  general asistencia -->
+				<!-- Examen Fisico -->
 
-				<ion-accordion value="fifth">
-					<ion-item slot="header" color="light"
-						>Datos Generales</ion-item
-					>
-					<div class="ion-padding" slot="content">
-						<ion-item>
-							<ion-label>Es Evento de campo ?</ion-label>
-							<ion-toggle
-								[(ngModel)]="asistencia.esEventoCampo"
-							></ion-toggle>
-						</ion-item>
-						<ion-item>
-							<ion-label position="floating"
-								>Detalle Evento</ion-label
-							>
-							<ion-textarea
-								placeholder="detalles del lugar..."
-							></ion-textarea>
-						</ion-item>
-						<ion-item>
-							<ion-label position="floating"
-								>Apoyo recibido</ion-label
-							>
-							<ion-select [(ngModel)]="asistencia.apoyoBrindado">
-								<ion-select-option [value]="1"
-									>Ninguno</ion-select-option
-								>
-								<ion-select-option [value]="2"
-									>Ambulancia MOPC</ion-select-option
-								>
-								<ion-select-option [value]="2"
-									>Rescate MOPC</ion-select-option
-								>
-							</ion-select>
-						</ion-item>
-						<ion-item>
-							<fieldset>
-								<legend>Zona</legend>
-								<ion-radio-group [(ngModel)]="asistencia.zona">
-									<ion-row>
-										<ion-col>
-											<ion-label>Norte</ion-label>
-											<ion-radio
-												[value]="1"
-												labelPlacement="end"
-												>Norte</ion-radio
-											>
-										</ion-col>
-										<ion-col>
-											<ion-label>Sur</ion-label>
-											<ion-radio
-												[value]="2"
-												labelPlacement="end"
-												>Sur</ion-radio
-											>
-										</ion-col>
-										<ion-col>
-											<ion-label>Este</ion-label>
-											<ion-radio
-												[value]="3"
-												labelPlacement="end"
-												>Este</ion-radio
-											>
-										</ion-col>
-									</ion-row>
-								</ion-radio-group>
-							</fieldset>
-						</ion-item>
-						<ion-item
-							(click)="
-								_cache.getResourceById(
-									'filter_provinvias',
-									asistencia.zona
-								)
-							"
-						>
-							<ion-label position="floating">Provicia</ion-label>
-							<ion-select [(ngModel)]="asistencia.provinciaId">
-								<ion-select-option
-									[value]="item.Id"
-									*ngFor="
-										let item;
-										in: _cache.provincias$ | async
-									"
-									>{{ item.nombre }}</ion-select-option
-								>
-							</ion-select>
-						</ion-item>
-						<ion-item
-							(click)="
-								_cache.getResourceById(
-									'municipios',
-									asistencia.provinciaId
-								)
-							"
-						>
-							<ion-label position="floating">Municipio</ion-label>
-							<ion-select [(ngModel)]="asistencia.provinciaId">
-								<ion-select-option
-									[value]="item.Id"
-									*ngFor="
-										let item;
-										in: _cache.municipios$ | async
-									"
-									>{{ item.nombre }}</ion-select-option
-								>
-							</ion-select>
-						</ion-item>
-					</div>
-				</ion-accordion>
-
-				<!-- Detalles de la situacion -->
-
-				<ion-accordion value="sixth">
-					<ion-item slot="header" color="light"
-						>Datos Situación</ion-item
-					>
-					<div class="ion-padding" slot="content">
-						<ion-item>
-							<ion-label position="floating"
-								>Tipo Asistencia</ion-label
-							>
-							<ion-select [(ngModel)]="asistencia.tipoAsistencia">
-								<ion-select-option [value]="1"
-									>Medica</ion-select-option
-								>
-								<ion-select-option [value]="2"
-									>Movimiento</ion-select-option
-								>
-								<ion-select-option [value]="3"
-									>Evento Especial</ion-select-option
-								>
-							</ion-select>
-						</ion-item>
-						<ion-item>
-							<ion-label position="floating"
-								>Detalle Situación</ion-label
-							>
-							<ion-textarea
-								[(ngModel)]="asistencia.detalleAsistencia"
-							></ion-textarea>
-						</ion-item>
-
-						<ion-item>
-							<ion-label>Es Evento Especial ?</ion-label>
-							<ion-toggle
-								[(ngModel)]="asistencia.esEventoEspecial"
-							></ion-toggle>
-						</ion-item>
-						<ion-item>
-							<ion-label position="floating"
-								>Nombre Evento Especial</ion-label
-							>
-							<ion-input
-								type="text"
-								[(ngModel)]="asistencia.detalleEventoEspecial"
-							></ion-input>
-						</ion-item>
-					</div>
-				</ion-accordion>
-
-				<ion-accordion value="seventh">
+				<ion-accordion value="Fisico">
 					<ion-item slot="header" color="light"
 						>Examen Fisico</ion-item
 					>
@@ -610,7 +664,9 @@
 					</div>
 				</ion-accordion>
 
-				<ion-accordion value="eith">
+				<!-- Diagnosticos Presuntivos -->
+
+				<ion-accordion value="Presuntivos">
 					<ion-item slot="header" color="light"
 						>Diagnosticos Presuntivos</ion-item
 					>
@@ -627,7 +683,9 @@
 					</div>
 				</ion-accordion>
 
-				<ion-accordion value="nine">
+				<!-- Procedimientos Realizados -->
+
+				<ion-accordion value="Realizados">
 					<ion-item slot="header" color="light"
 						>Procedimientos Realizados</ion-item
 					>
@@ -644,14 +702,16 @@
 					</div>
 				</ion-accordion>
 
-				<ion-accordion value="ten">
+				<!-- Insumos Utlizados -->
+
+				<ion-accordion value="Utlizados">
 					<ion-item slot="header" color="light"
 						>Insumos Utlizados</ion-item
 					>
 					<div class="ion-padding" slot="content">
 						<ion-item>
 							<ion-label position="floating"
-								>Procedimientos Realizados</ion-label
+								>Insumos/Medicamentos</ion-label
 							>
 							<ion-textarea
 								[(ngModel)]="asistencia.insumosUtilizados"
@@ -660,7 +720,96 @@
 						</ion-item>
 					</div>
 				</ion-accordion>
+
+				<!-- Datos personal que asiste -->
+
+				<ion-accordion value="asiste">
+					<ion-item slot="header" color="light"
+						>Personal Asiste</ion-item
+					>
+					<div class="ion-padding" slot="content">
+						<ion-item>
+							<ion-label>Medico/Lic. Enfermeria</ion-label>
+							<ion-select
+								interface="action-sheet"
+								placeholder="Seleccionar"
+								[(ngModel)]="asistencia.medicoId"
+								interface="action-sheet"
+							>
+								<ion-select-option
+									[value]="item.id"
+									*ngFor="
+										let item of _cache.miembrosPreHospitalaria$
+											| async
+									"
+									>{{ item.nombre }}</ion-select-option
+								>
+							</ion-select>
+						</ion-item>
+
+						<ion-item>
+							<ion-label>Componente No.1</ion-label>
+							<ion-select
+								interface="action-sheet"
+								placeholder="Seleccionar"
+								[(ngModel)]="asistencia.componente1Id"
+								[required]="true"
+								interface="action-sheet"
+							>
+								<ion-select-option
+									[value]="item.id"
+									*ngFor="
+										let item of _cache.miembrosPreHospitalaria$
+											| async
+									"
+									>{{ item.nombre }}</ion-select-option
+								>
+							</ion-select>
+						</ion-item>
+
+						<ion-item>
+							<ion-label>Componente No.2</ion-label>
+							<ion-select
+								interface="action-sheet"
+								placeholder="Seleccionar"
+								[(ngModel)]="asistencia.componente2Id"
+								interface="action-sheet"
+							>
+								<ion-select-option
+									[value]="item.id"
+									*ngFor="
+										let item of _cache.miembrosPreHospitalaria$
+											| async
+									"
+									>{{ item.nombre }}</ion-select-option
+								>
+							</ion-select>
+						</ion-item>
+
+						<ion-item>
+							<ion-label>Regulador Emergencia</ion-label>
+							<ion-select
+								interface="action-sheet"
+								placeholder="Seleccionar"
+								[(ngModel)]="asistencia.reguladorEmergenciaId"
+								[required]="true"
+								interface="action-sheet"
+							>
+								<ion-select-option
+									[value]="item.id"
+									*ngFor="
+										let item of _cache.miembrosPreHospitalaria$
+											| async
+									"
+									>{{ item.nombre }}</ion-select-option
+								>
+							</ion-select>
+						</ion-item>
+					</div>
+				</ion-accordion>
 			</ion-accordion-group>
+
+			<ion-button color="success" expand="block">Enviar</ion-button>
 		</ion-card-content>
 	</ion-card>
 </ion-content>

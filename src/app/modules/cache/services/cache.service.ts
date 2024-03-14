@@ -39,6 +39,12 @@ export class CacheService extends GenericService {
 	private nacionalidadesSource = new BehaviorSubject<IGenericEnum[]>([]);
 	public nacionalidades$ = this.nacionalidadesSource.asObservable();
 
+	private miembrosPreHospitalariaSource = new BehaviorSubject<IGenericEnum[]>(
+		[]
+	);
+	public miembrosPreHospitalaria$ =
+		this.miembrosPreHospitalariaSource.asObservable();
+
 	private readonly sources = {
 		VehiculoTipo: (value: IGenericEnum[]) =>
 			this.vehiculoTiposSource.next(value),
@@ -116,5 +122,15 @@ export class CacheService extends GenericService {
 				console.log(sourcesKeys[key]);
 				sourcesKeys[key][1](data);
 			});
+	}
+
+	GetMiembrosPreHospitalaria(): void {
+		this.$http
+			.get<IGenericEnum[]>(
+				`${this.env}/miembros/miembros-pre-hospitalaria`
+			)
+			.subscribe((data: IGenericEnum[]) =>
+				this.miembrosPreHospitalariaSource.next(data)
+			);
 	}
 }
