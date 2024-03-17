@@ -5,7 +5,7 @@
 			<ion-col size="2">
 				<ion-icon
 					class="category-icon"
-					[ngClass]="false ? 'emergencia' : 'asistencia'"
+					[ngClass]="departamento == 6 ? 'emergencia' : 'asistencia'"
 					name="car-sport"
 				></ion-icon>
 			</ion-col>
@@ -67,7 +67,7 @@
 					>
 				</div>
 			</ion-accordion>
-			<ion-accordion value="second">
+			<ion-accordion value="second" *ngIf="departamento != 6">
 				<ion-item slot="header">
 					<ion-label>Datos Vehiculo</ion-label></ion-item
 				>

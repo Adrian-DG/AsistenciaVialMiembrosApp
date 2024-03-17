@@ -64,7 +64,7 @@ export class CacheService extends GenericService {
 			this.hospitalesSource.next(value),
 		nacionalidades: (value: IGenericEnum[]) =>
 			this.nacionalidadesSource.next(value),
-		filter_provincias: (value: IGenericEnum[]) =>
+		filter_provicias: (value: IGenericEnum[]) =>
 			this.provinciaSource.next(value),
 	};
 
@@ -125,12 +125,14 @@ export class CacheService extends GenericService {
 	}
 
 	GetMiembrosPreHospitalaria(): void {
-		this.$http
-			.get<IGenericEnum[]>(
-				`${this.env}/miembros/miembros-pre-hospitalaria`
-			)
-			.subscribe((data: IGenericEnum[]) =>
-				this.miembrosPreHospitalariaSource.next(data)
-			);
+		if (!(this.miembrosPreHospitalariaSource.value.length > 0)) {
+			this.$http
+				.get<IGenericEnum[]>(
+					`${this.env}/miembros/miembros-pre-hospitalaria`
+				)
+				.subscribe((data: IGenericEnum[]) =>
+					this.miembrosPreHospitalariaSource.next(data)
+				);
+		}
 	}
 }

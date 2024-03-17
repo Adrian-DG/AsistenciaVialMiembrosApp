@@ -21,7 +21,11 @@
 			<ion-item>
 				<fieldset>
 					<legend>Despachado Por</legend>
-					<ion-radio-group value="end">
+					<ion-radio-group
+						value="end"
+						[(ngModel)]="asistencia.despachadaPor"
+						[required]="true"
+					>
 						<ion-row>
 							<ion-col class="radio-col">
 								<ion-label
@@ -57,7 +61,10 @@
 			<ion-item>
 				<fieldset>
 					<legend>Zona</legend>
-					<ion-radio-group [(ngModel)]="asistencia.zona">
+					<ion-radio-group
+						[(ngModel)]="asistencia.zona"
+						[required]="true"
+					>
 						<ion-row>
 							<ion-col>
 								<ion-label>Norte</ion-label>
@@ -66,15 +73,15 @@
 								>
 							</ion-col>
 							<ion-col>
-								<ion-label>Sur</ion-label>
+								<ion-label>Este</ion-label>
 								<ion-radio [value]="2" labelPlacement="end"
-									>Sur</ion-radio
+									>Este</ion-radio
 								>
 							</ion-col>
 							<ion-col>
-								<ion-label>Este</ion-label>
+								<ion-label>Sur</ion-label>
 								<ion-radio [value]="3" labelPlacement="end"
-									>Este</ion-radio
+									>Sur</ion-radio
 								>
 							</ion-col>
 						</ion-row>
@@ -129,12 +136,12 @@
 						<ion-item
 							(click)="
 								_cache.getResourceById(
-									'filter_provinvias',
+									'filter_provicias',
 									asistencia.zona
 								)
 							"
 						>
-							<ion-label position="floating">Provicia</ion-label>
+							<ion-label position="floating">Provincia</ion-label>
 							<ion-select
 								[(ngModel)]="asistencia.provinciaId"
 								interface="action-sheet"
@@ -220,7 +227,7 @@
 							>
 							<ion-input
 								type="text"
-								[(ngModel)]="asistencia.detalleEventoEspecial"
+								[(ngModel)]="asistencia.nombreEventoEspecial"
 							></ion-input>
 						</ion-item>
 					</div>
@@ -365,23 +372,23 @@
 								[(ngModel)]="asistencia.causaTraslado"
 								interface="action-sheet"
 							>
-								<ion-select-option [value]="1"
+								<ion-select-option [value]="0"
 									>No amerita traslado</ion-select-option
 								>
-								<ion-select-option [value]="2"
+								<ion-select-option [value]="1"
 									>Victima en 1-29</ion-select-option
 								>
-								<ion-select-option [value]="3"
+								<ion-select-option [value]="2"
 									>Rechazo de asistencia</ion-select-option
 								>
-								<ion-select-option [value]="4"
+								<ion-select-option [value]="3"
 									>Rechazo de traslado</ion-select-option
 								>
-								<ion-select-option [value]="5"
+								<ion-select-option [value]="4"
 									>Apoyo otra Unidad Alfa
 									MOPC</ion-select-option
 								>
-								<ion-select-option [value]="6"
+								<ion-select-option [value]="5"
 									>Apoyo al 911</ion-select-option
 								>
 							</ion-select>
@@ -676,7 +683,7 @@
 								>Hallazgos Presuntivos</ion-label
 							>
 							<ion-input
-								[(ngModel)]="asistencia.hallazgoPositivo"
+								[(ngModel)]="asistencia.diagnosticoPresuntivo"
 								[required]="true"
 							></ion-input>
 						</ion-item>
@@ -695,7 +702,7 @@
 								>Procedimientos Realizados</ion-label
 							>
 							<ion-input
-								[(ngModel)]="asistencia.hallazgoPositivo"
+								[(ngModel)]="asistencia.procedimientosRealizados"
 								[required]="true"
 							></ion-input>
 						</ion-item>
@@ -728,7 +735,7 @@
 						>Personal Asiste</ion-item
 					>
 					<div class="ion-padding" slot="content">
-						<ion-item>
+						<ion-item (click)="_cache.GetMiembrosPreHospitalaria()">
 							<ion-label>Medico/Lic. Enfermeria</ion-label>
 							<ion-select
 								interface="action-sheet"
@@ -747,7 +754,7 @@
 							</ion-select>
 						</ion-item>
 
-						<ion-item>
+						<ion-item (click)="_cache.GetMiembrosPreHospitalaria()">
 							<ion-label>Componente No.1</ion-label>
 							<ion-select
 								interface="action-sheet"
@@ -767,7 +774,7 @@
 							</ion-select>
 						</ion-item>
 
-						<ion-item>
+						<ion-item (click)="_cache.GetMiembrosPreHospitalaria()">
 							<ion-label>Componente No.2</ion-label>
 							<ion-select
 								interface="action-sheet"
@@ -786,7 +793,7 @@
 							</ion-select>
 						</ion-item>
 
-						<ion-item>
+						<ion-item (click)="_cache.GetMiembrosPreHospitalaria()">
 							<ion-label>Regulador Emergencia</ion-label>
 							<ion-select
 								interface="action-sheet"
@@ -809,7 +816,12 @@
 				</ion-accordion>
 			</ion-accordion-group>
 
-			<ion-button color="success" expand="block">Enviar</ion-button>
+			<ion-button
+				color="success"
+				expand="block"
+				(click)="createAsistencia()"
+				>Enviar</ion-button
+			>
 		</ion-card-content>
 	</ion-card>
 </ion-content>

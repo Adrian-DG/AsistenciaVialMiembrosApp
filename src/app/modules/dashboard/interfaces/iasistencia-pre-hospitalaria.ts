@@ -15,12 +15,11 @@ export interface IAsistenciaPreHospitalaria {
 	apoyoBrindado: number;
 	esEventoCampo: boolean;
 	esEventoEspecial: boolean;
-	detalleEventoEspecial: string;
+	nombreEventoEspecial: string;
 	zona: number;
 	provinciaId: number;
 	municipioId: number;
-	unidadId: number;
-	denominacionId: number;
+	unidadMiembroId: number;
 	hospitalId: number;
 	personaRecibioEnHospital: string;
 	AntecedentesMorbidos: string;

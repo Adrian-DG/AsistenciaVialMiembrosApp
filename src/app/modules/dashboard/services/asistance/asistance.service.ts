@@ -12,6 +12,7 @@ import { AlertController } from '@ionic/angular';
 import { SpinnerService } from 'src/app/modules/generic/services/spinner/spinner.service';
 import { IUpdateStatusUnit } from '../../interfaces/iupdate-status-unit';
 import { IGenericEnum } from 'src/app/modules/cache/interfaces/igeneric-enum';
+import { IAsistenciaPreHospitalaria } from '../../interfaces/iasistencia-pre-hospitalaria';
 
 @Injectable({
 	providedIn: 'root',
@@ -179,5 +180,27 @@ export class AsistanceService extends GenericService {
 
 	guardarCambios(model: IAsistenciaEditViewModel): Observable<boolean> {
 		return this.$http.put<boolean>(`${this.endPoint}/edit`, model);
+	}
+
+	CreateAsistenciaPreHospitalariaAgente(
+		model: IAsistenciaPreHospitalaria
+	): void {
+		this.$http
+			.post<boolean>(
+				`${this.env}/pre-hospitalaria/create-asistencia-agente`,
+				model
+			)
+			.subscribe(async (response: boolean) => {
+				await this.generateRequestResultAlert(
+					response ? 'Ok' : 'Error',
+					'',
+					response
+						? 'Se ha creado la asistencia'
+						: 'Ocurrio un error creando la asistencia'
+				);
+				if (response) {
+					this.$router.navigate(['']);
+				}
+			});
 	}
 }
