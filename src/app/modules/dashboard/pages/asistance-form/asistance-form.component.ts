@@ -211,13 +211,15 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 
 	async takePicture() {
 		const image = await Camera.getPhoto({
-			quality: 100,
+			quality: 50,
 			allowEditing: true,
 			direction: CameraDirection.Rear,
 			resultType: CameraResultType.Uri,
 			correctOrientation: true,
 			saveToGallery: true,
 			source: CameraSource.Camera,
+			width: 500,
+			height: 500,
 		});
 
 		// image.webPath will contain a path that can be set as an image src.
