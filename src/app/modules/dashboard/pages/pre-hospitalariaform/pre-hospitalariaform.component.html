@@ -702,7 +702,9 @@
 								>Procedimientos Realizados</ion-label
 							>
 							<ion-input
-								[(ngModel)]="asistencia.procedimientosRealizados"
+								[(ngModel)]="
+									asistencia.procedimientosRealizados
+								"
 								[required]="true"
 							></ion-input>
 						</ion-item>
@@ -735,7 +737,7 @@
 						>Personal Asiste</ion-item
 					>
 					<div class="ion-padding" slot="content">
-						<ion-item (click)="_cache.GetMiembrosPreHospitalaria()">
+						<!-- <ion-item (click)="_cache.GetMiembrosPreHospitalaria()">
 							<ion-label>Medico/Lic. Enfermeria</ion-label>
 							<ion-select
 								interface="action-sheet"
@@ -752,7 +754,7 @@
 									>{{ item.nombre }}</ion-select-option
 								>
 							</ion-select>
-						</ion-item>
+						</ion-item> -->
 
 						<ion-item (click)="_cache.GetMiembrosPreHospitalaria()">
 							<ion-label>Componente No.1</ion-label>
@@ -774,7 +776,7 @@
 							</ion-select>
 						</ion-item>
 
-						<ion-item (click)="_cache.GetMiembrosPreHospitalaria()">
+						<!-- <ion-item (click)="_cache.GetMiembrosPreHospitalaria()">
 							<ion-label>Componente No.2</ion-label>
 							<ion-select
 								interface="action-sheet"
@@ -791,7 +793,7 @@
 									>{{ item.nombre }}</ion-select-option
 								>
 							</ion-select>
-						</ion-item>
+						</ion-item> -->
 
 						<ion-item (click)="_cache.GetMiembrosPreHospitalaria()">
 							<ion-label>Regulador Emergencia</ion-label>
