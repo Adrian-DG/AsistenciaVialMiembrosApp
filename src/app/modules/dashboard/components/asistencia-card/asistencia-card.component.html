@@ -130,7 +130,8 @@
 		<ion-item
 			*ngIf="
 				item.estatusAsistencia != 'COMPLETADA' &&
-				item.estatusAsistencia == 'EN PROCESO'
+				item.estatusAsistencia == 'EN PROCESO' &&
+				departamento !== 6
 			"
 		>
 			<ion-button
@@ -142,7 +143,9 @@
 			>
 		</ion-item>
 
-		<ion-item *ngIf="item.estatusAsistencia == 'PENDIENTE'">
+		<ion-item
+			*ngIf="item.estatusAsistencia == 'PENDIENTE' && departamento !== 6"
+		>
 			<ion-button
 				style="width: 100%"
 				color="success"
