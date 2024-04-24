@@ -21,4 +21,7 @@ export interface IAsistanceCreate {
 	reportadoPor: number;
 	fueCompletada: boolean;
 	//direccion: string;
+	colorTxt: string;
+	marcaTxt: string;
+	modeloTxt: string;
 }

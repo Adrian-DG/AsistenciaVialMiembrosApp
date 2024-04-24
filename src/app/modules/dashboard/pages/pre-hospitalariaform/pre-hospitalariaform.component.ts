@@ -68,6 +68,7 @@ export class PreHospitalariaformComponent implements OnInit, AfterViewInit {
 
 	ngOnInit() {
 		this._auth.getStorageData().then((data: any[]) => {
+			console.log(data);
 			this.asistencia.unidadMiembroId = data[1];
 		});
 	}

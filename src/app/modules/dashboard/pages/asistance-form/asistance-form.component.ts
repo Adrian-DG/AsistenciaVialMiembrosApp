@@ -145,6 +145,9 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 				Validators.pattern(/^[A-Za-z0-9]{1,10}$/),
 			],
 		],
+		colorTxt: [''],
+		marcaTxt: [''],
+		modeloTxt: [''],
 	});
 
 	ubicacionForm: FormGroup = this.$fb.group({
@@ -320,6 +323,9 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 			vehiculoMarcaId,
 			vehiculoModeloId,
 			placa,
+			colorTxt,
+			marcaTxt,
+			modeloTxt,
 		} = this.vehiculoForm.value;
 
 		const { provinciaId, municipioId, direccion } =
@@ -354,6 +360,10 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 			unidadMiembroId: 0,
 			imagenes: this.imagenes64,
 			fueCompletada: this.fueCompletada,
+
+			colorTxt: colorTxt,
+			marcaTxt: marcaTxt,
+			modeloTxt: modeloTxt,
 		};
 
 		if (typeof this.tipoAsistencias === 'number') {

@@ -178,6 +178,7 @@
 								<ion-select
 									formControlName="vehiculoColorId"
 									placeholder="Seleccionar Color"
+									#color
 								>
 									<ion-select-option
 										[value]="item.id"
@@ -188,6 +189,14 @@
 									>
 								</ion-select>
 							</ion-item>
+
+							<ion-item *ngIf="color.value == 1" fill="outline">
+								<ion-label>Color</ion-label>
+								<ion-input
+									formControlName="colorTxt"
+								></ion-input>
+							</ion-item>
+
 							<ion-item
 								(click)="_cache.getResource('VehiculoMarca')"
 							>
@@ -207,6 +216,14 @@
 									>
 								</ion-select>
 							</ion-item>
+
+							<ion-item *ngIf="marca.value == 1" fill="outline">
+								<ion-label>Marca</ion-label>
+								<ion-input
+									formControlName="marcaTxt"
+								></ion-input>
+							</ion-item>
+
 							<ion-item
 								(click)="
 									_cache.getDataOnIdFilters(
@@ -217,6 +234,7 @@
 								"
 							>
 								<ion-select
+									#modelo
 									formControlName="vehiculoModeloId"
 									placeholder="Seleccionar Modelo"
 								>
@@ -231,6 +249,17 @@
 									>
 								</ion-select>
 							</ion-item>
+
+							<ion-item
+								*ngIf="marca.value == 1 && modelo.value > 0"
+								fill="outline"
+							>
+								<ion-label>Modelo</ion-label>
+								<ion-input
+									formControlName="modeloTxt"
+								></ion-input>
+							</ion-item>
+
 							<ion-item [counter]="true" fill="outline">
 								<ion-label>Placa</ion-label>
 								<ion-input
