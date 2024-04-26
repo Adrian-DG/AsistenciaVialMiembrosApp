@@ -39,6 +39,8 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	provinciasArray = ProvinciasArray;
 
 	wantPictures: boolean = false;
+	hasPersonalInformation = true;
+	hasVehicleInformation = true;
 
 	constructor(
 		private $fb: FormBuilder,
@@ -373,6 +375,18 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		}
 
 		newAsistencia.unidadMiembroId = await this.getUnitMemberId();
+
+		if (!this.hasPersonalInformation) {
+			newAsistencia.comentario +=
+				' \n-No se tienen los datos personales del ciudadano.\n';
+		}
+
+		if (!this.hasVehicleInformation) {
+			newAsistencia.comentario += ` \n-No se tienen los datos del vehículo.\n
+				   Marca: ${this.vehiculoForm.controls['marcaTxt'].value}\n
+				   Modelo: ${this.vehiculoForm.controls['modeloTxt'].value}\n
+				`;
+		}
 
 		this._asistencia
 			.createAsistance(newAsistencia)

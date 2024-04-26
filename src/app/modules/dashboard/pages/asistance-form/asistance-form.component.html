@@ -53,6 +53,13 @@
 						<ion-label>Datos ciudadano</ion-label>
 					</ion-item>
 					<div class="ion-padding" slot="content">
+						<ion-item>
+							<ion-label>Tiene datos personales ?</ion-label>
+							<ion-toggle
+								[(ngModel)]="hasPersonalInformation"
+								slot="end"
+							></ion-toggle>
+						</ion-item>
 						<form [formGroup]="ciudadanoForm">
 							<ion-item counter="true" fill="outline">
 								<ion-label position="floating"
@@ -62,23 +69,28 @@
 									formControlName="identificacion"
 									[autocapitalize]="true"
 									[maxlength]="20"
+									[required]="hasPersonalInformation"
 								></ion-input>
 								<ion-note slot="helper"
 									>No incluir guiones (-)</ion-note
 								>
 							</ion-item>
-							<ion-item>
+							<ion-item fill="outline">
 								<ion-label position="floating"
 									>Nombre</ion-label
 								>
-								<ion-input formControlName="nombre"></ion-input>
+								<ion-input
+									formControlName="nombre"
+									[required]="hasPersonalInformation"
+								></ion-input>
 							</ion-item>
-							<ion-item>
+							<ion-item fill="outline">
 								<ion-label position="floating"
 									>Apellido</ion-label
 								>
 								<ion-input
 									formControlName="apellido"
+									[required]="hasPersonalInformation"
 								></ion-input>
 							</ion-item>
 							<br />
@@ -105,6 +117,7 @@
 								<ion-input
 									formControlName="telefono"
 									[maxlength]="20"
+									[required]="hasPersonalInformation"
 								></ion-input>
 								<ion-note slot="helper"
 									>No incluir guiones (-)</ion-note
@@ -127,8 +140,16 @@
 						<ion-label>Datos vehículo </ion-label>
 					</ion-item>
 					<div class="ion-padding" slot="content">
+						<ion-item>
+							<ion-label>Escribir Marca y Modelo</ion-label>
+							<ion-toggle
+								[(ngModel)]="hasVehicleInformation"
+								slot="end"
+							></ion-toggle>
+						</ion-item>
+
 						<form [formGroup]="vehiculoForm">
-							<ion-item>
+							<ion-item fill="outline">
 								<!-- <ion-select
 									(click)="_cache.getResource('VehiculoTipo')"
 									formControlName="vehiculoTipoId"
@@ -159,7 +180,7 @@
 									>
 								</ion-select>
 							</ion-item>
-							<ion-item>
+							<ion-item fill="outline">
 								<!-- <ion-select
 								(click)="_cache.getResource('VehiculoColores')"
 									formControlName="vehiculoColorId"
@@ -199,6 +220,7 @@
 
 							<ion-item
 								(click)="_cache.getResource('VehiculoMarca')"
+								fill="outline"
 							>
 								<ion-select
 									formControlName="vehiculoMarcaId"
@@ -217,8 +239,11 @@
 								</ion-select>
 							</ion-item>
 
-							<ion-item *ngIf="marca.value == 1" fill="outline">
-								<ion-label>Marca</ion-label>
+							<ion-item
+								fill="outline"
+								*ngIf="!hasVehicleInformation"
+							>
+								<ion-label>Marca (Escribir)</ion-label>
 								<ion-input
 									formControlName="marcaTxt"
 								></ion-input>
@@ -232,6 +257,7 @@
 										marca.value
 									)
 								"
+								fill="outline"
 							>
 								<ion-select
 									#modelo
@@ -251,10 +277,10 @@
 							</ion-item>
 
 							<ion-item
-								*ngIf="marca.value == 1 && modelo.value > 0"
+								*ngIf="!hasVehicleInformation"
 								fill="outline"
 							>
-								<ion-label>Modelo</ion-label>
+								<ion-label>Modelo (Escribir)</ion-label>
 								<ion-input
 									formControlName="modeloTxt"
 								></ion-input>
@@ -265,6 +291,7 @@
 								<ion-input
 									formControlName="placa"
 									[maxlength]="10"
+									[required]="hasVehicleInformation"
 								></ion-input>
 							</ion-item>
 						</form>
@@ -277,7 +304,7 @@
 					</ion-item>
 					<div class="ion-padding" slot="content">
 						<form [formGroup]="ubicacionForm">
-							<ion-item>
+							<ion-item fill="outline">
 								<!-- <ion-select
 								(click)="_cache.getResource('provincias')"
 									formControlName="provinciaId"
@@ -309,6 +336,7 @@
 								</ion-select>
 							</ion-item>
 							<ion-item
+								fill="outline"
 								(click)="
 									_cache.getResourceById(
 										'municipios',
@@ -331,7 +359,7 @@
 									>
 								</ion-select>
 							</ion-item>
-							<ion-item>
+							<ion-item fill="outline">
 								<ion-label>Dirección (opcional)</ion-label>
 								<ion-input
 									formControlName="direccion"
@@ -380,6 +408,7 @@
 			</fieldset>
 			<br />
 			<ion-item
+				fill="outline"
 				(click)="
 					_cache.getResourceById(
 						'TipoAsistencia',
@@ -399,7 +428,7 @@
 					>
 				</ion-select>
 			</ion-item>
-			<ion-item>
+			<ion-item fill="outline">
 				<ion-textarea
 					[(ngModel)]="comentario"
 					placeholder="Escribe cualquier otro detalle"
