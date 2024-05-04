@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { GenericService } from '../../generic/services/generic.service';
 import { ILoginUnitMember } from '../interfaces/ilogin-unit-member';
 import { ILoginUnitResponse } from '../interfaces/ilogin-unit-response';
@@ -179,7 +179,7 @@ export class AuthService extends GenericService {
 		]);
 	}
 
-	private async saveToStorage(model: ILoginUnitResponse): Promise<void> {
+	public async saveToStorage(model: ILoginUnitResponse): Promise<void> {
 		await Promise.all([
 			this._storage?.set('denominacion', model.denominacion),
 			this._storage?.set('unidadMiembroId', model.unidadMiembroId),
@@ -191,6 +191,15 @@ export class AuthService extends GenericService {
 			this._storage?.set('accesoTotal', model.accesoTotal),
 			this._storage?.set('perteneceA', model.perteneceA),
 		]);
+	}
+
+	refreshUnidadMiembroInfo(id: number): Observable<ILoginUnitResponse> {
+		return this.$http.get<ILoginUnitResponse>(
+			`${this.endPoint}/unidadmiembro/refresh`,
+			{
+				params: new HttpParams().set('id', id),
+			}
+		);
 	}
 
 	loginUnitMember(model: ILoginUnitMember): void {

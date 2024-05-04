@@ -5,6 +5,7 @@ import { AsistanceService } from '../../services/asistance/asistance.service';
 import { AlertController } from '@ionic/angular';
 import { IUpdateStatusUnit } from '../../interfaces/iupdate-status-unit';
 import { PerteneceA } from '../../constants/app.const';
+import { ILoginUnitResponse } from 'src/app/modules/auth/interfaces/ilogin-unit-response';
 
 @Component({
 	selector: 'app-index',
@@ -25,8 +26,11 @@ export class IndexComponent implements OnInit, AfterViewInit {
 	) {}
 
 	ngOnInit() {
+		this.initUserData();
+	}
+
+	initUserData(): void {
 		this._auth.getStorageData().then((response) => {
-			console.log(response);
 			this.infoUser = {
 				denominacion: response[0],
 				unidadMiembroId: response[1],
@@ -52,11 +56,17 @@ export class IndexComponent implements OnInit, AfterViewInit {
 		}, 2000);
 	}
 
-	refresh(): void {
-		if (this.infoUser?.ficha) {
-			
-			// this._asistencias.confirmUnidadEstatus(this.infoUser?.ficha);
+	refreshUserData(): void {
+		this._auth
+			.refreshUnidadMiembroInfo(this.infoUser?.unidadMiembroId as number)
+			.subscribe((data: ILoginUnitResponse) => {
+				this._auth.saveToStorage(data).then(() => this.initUserData());
+			});
+	}
 
+	refresh(): void {
+		if (this.infoUser?.ficha && this.infoUser.unidadMiembroId) {
+			// this._asistencias.confirmUnidadEstatus(this.infoUser?.ficha)
 			this._asistencias.getTotalAsistenciasUnidad(
 				this.infoUser?.unidadMiembroId
 			);
