@@ -388,31 +388,43 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 				`;
 		}
 
-		this._asistencia
-			.createAsistance(newAsistencia)
-			.subscribe((response: boolean) => {
-				if (response) {
-					[
-						this.ciudadanoForm,
-						this.vehiculoForm,
-						this.ubicacionForm,
-					].forEach((item) => item.reset());
+		if (newAsistencia.imagenes.length > 0) {
+			this._asistencia
+				.createAsistance(newAsistencia)
+				.subscribe((response: boolean) => {
+					if (response) {
+						[
+							this.ciudadanoForm,
+							this.vehiculoForm,
+							this.ubicacionForm,
+						].forEach((item) => item.reset());
 
-					this._asistencia.generateRequestResultAlert(
-						'Exito',
-						'',
-						'La asistencia se registro de forma correctamente'
-					);
+						this._asistencia.generateRequestResultAlert(
+							'Exito',
+							'',
+							'La asistencia se registro de forma correctamente'
+						);
 
-					this.$router.navigate(['dashboard']);
-				} else {
-					this._asistencia.generateRequestResultAlert(
-						'Error',
-						'Algo salió mal',
-						'No se pudo crear la asistencia, es posible que fue algunos campos no esten correctos o fallara el servicio!!'
-					);
-				}
+						this.$router.navigate(['dashboard']);
+					} else {
+						this._asistencia.generateRequestResultAlert(
+							'Error',
+							'Algo salió mal',
+							'No se pudo crear la asistencia, es posible que fue algunos campos no esten correctos o fallara el servicio!!'
+						);
+					}
+				});
+		} else {
+			const alert = await this._alert.create({
+				header: 'Importante',
+				subHeader: 'Se requiere tomar la foto',
+				message:
+					'La imagen es necesaria para la creación de la asistencia, esta es OBLIGATORIA.',
+				buttons: ['Aceptar'],
 			});
+
+			await alert.present();
+		}
 	}
 
 	async setStatusReportarAsistencia(): Promise<void> {
