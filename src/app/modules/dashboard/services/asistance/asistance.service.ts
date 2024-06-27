@@ -199,7 +199,7 @@ export class AsistanceService extends GenericService {
 						: 'Ocurrio un error creando la asistencia'
 				);
 				if (response) {
-					this.$router.navigate(['']);
+					this.$router.navigate(['dashboard']);
 				}
 			});
 	}
