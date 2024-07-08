@@ -83,21 +83,49 @@
 		</ng-template>
 	</div>
 
-	<ion-fab slot="fixed" vertical="bottom" horizontal="end">
-		<ion-fab-button
-			[routerLink]="['pre-hospitalaria-form']"
-			color="success"
-			*ngIf="
-				infoUser?.perteneceA == departamento.Ambulancia;
-				else formularioVial
-			"
-		>
+	<ion-fab
+		slot="fixed"
+		vertical="bottom"
+		horizontal="end"
+		*ngIf="infoUser?.accesoTotal; else normalAccess"
+	>
+		<ion-fab-button>
 			<ion-icon name="add"></ion-icon>
 		</ion-fab-button>
-		<ng-template #formularioVial>
-			<ion-fab-button [routerLink]="['create']" color="primary">
+		<ion-fab-list side="top">
+			<ion-fab-button
+				color="warning"
+				[routerLink]="['create']"
+				style="font-weight: bold"
+			>
+				<ion-icon name="car-outline"></ion-icon>
+			</ion-fab-button>
+			<ion-fab-button
+				style="font-weight: bold"
+				color="danger"
+				[routerLink]="['pre-hospitalaria-form']"
+			>
+				<ion-icon name="medkit-outline"></ion-icon>
+			</ion-fab-button>
+		</ion-fab-list>
+	</ion-fab>
+	<ng-template #normalAccess>
+		<ion-fab slot="fixed" vertical="bottom" horizontal="end">
+			<ion-fab-button
+				[routerLink]="['pre-hospitalaria-form']"
+				color="success"
+				*ngIf="
+					infoUser?.perteneceA == departamento.Ambulancia;
+					else formularioVial
+				"
+			>
 				<ion-icon name="add"></ion-icon>
 			</ion-fab-button>
-		</ng-template>
-	</ion-fab>
+			<ng-template #formularioVial>
+				<ion-fab-button [routerLink]="['create']" color="primary">
+					<ion-icon name="add"></ion-icon>
+				</ion-fab-button>
+			</ng-template>
+		</ion-fab>
+	</ng-template>
 </ion-content>

@@ -31,8 +31,6 @@
 				</ion-item>
 			</fieldset>
 
-			<br />
-
 			<fieldset>
 				<legend>Apoyo Brindado</legend>
 				<ion-item>
@@ -51,8 +49,6 @@
 				</ion-item>
 			</fieldset>
 
-			<br />
-
 			<fieldset>
 				<legend>Zona</legend>
 				<ion-item>
@@ -64,8 +60,6 @@
 					</ion-select>
 				</ion-item>
 			</fieldset>
-
-			<br />
 
 			<fieldset>
 				<legend>Informaciónes Asistencia</legend>
@@ -151,8 +145,6 @@
 				</ion-item>
 			</fieldset>
 
-			<br />
-
 			<fieldset>
 				<legend>Datos del paciente</legend>
 				<ion-item>
@@ -236,11 +228,12 @@
 				</ion-item>
 			</fieldset>
 
-			<br />
-
-			<fieldset>
+			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
 				<legend>Tipo Causa</legend>
-				<ion-radio-group [(ngModel)]="asistencia.tipoCausa">
+				<ion-radio-group
+					[(ngModel)]="asistencia.tipoCausa"
+					[disabled]="asistencia.tipoAsistencia == 2"
+				>
 					<ion-item>
 						<ion-label>Traumatica</ion-label>
 						<ion-radio slot="end" [value]="1"></ion-radio>
@@ -252,9 +245,7 @@
 				</ion-radio-group>
 			</fieldset>
 
-			<br />
-
-			<fieldset>
+			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
 				<legend>Información de Traslado</legend>
 				<ion-item>
 					<ion-label>Es Traslado ?</ion-label>
@@ -270,12 +261,13 @@
 						interface="action-sheet"
 						[(ngModel)]="asistencia.causaTraslado"
 						placeholder="Causa de Traslado"
+						[disabled]="!asistencia.esTraslado"
 					>
 						<ion-select-option [value]="0"
 							>NO AMERITA TRASLADO</ion-select-option
 						>
 						<ion-select-option [value]="1"
-							>VICTIMA EN 911</ion-select-option
+							>VICTIMA EN 1-29</ion-select-option
 						>
 						<ion-select-option [value]="2"
 							>RECHAZO DE ASISTENCIA</ion-select-option
@@ -293,9 +285,12 @@
 				</ion-item>
 			</fieldset>
 
-			<br />
-
-			<fieldset>
+			<fieldset
+				*ngIf="
+					asistencia.tipoAsistencia !== 2 &&
+					asistencia.causaTraslado !== 0
+				"
+			>
 				<legend>Información Hospital</legend>
 				<ion-item
 					(click)="
@@ -316,9 +311,7 @@
 				</ion-item>
 			</fieldset>
 
-			<br />
-
-			<fieldset>
+			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
 				<legend>Datos quien recibee en el centro</legend>
 				<ion-item>
 					<ion-label position="floating">Nombre y apellido</ion-label>
@@ -329,9 +322,7 @@
 				</ion-item>
 			</fieldset>
 
-			<br />
-
-			<fieldset>
+			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
 				<legend>Antecedentes</legend>
 				<ion-radio-group [(ngModel)]="asistencia.AntecedentesMorbidos">
 					<ion-item>
@@ -354,9 +345,7 @@
 				</ion-item>
 			</fieldset>
 
-			<br />
-
-			<fieldset>
+			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
 				<legend>Signos Vitales</legend>
 				<ion-item>
 					<ion-label position="floating"
@@ -412,9 +401,7 @@
 				</ion-item>
 			</fieldset>
 
-			<br />
-
-			<fieldset>
+			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
 				<legend>Llenado Capilar</legend>
 				<ion-item>
 					<ion-select
@@ -431,9 +418,7 @@
 				</ion-item>
 			</fieldset>
 
-			<br />
-
-			<fieldset>
+			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
 				<legend>ECG - APERTURA OCULAR</legend>
 				<ion-radio-group
 					[(ngModel)]="asistencia.aperturaOcular"
@@ -441,35 +426,33 @@
 				>
 					<ion-item style="display: flex; flex-direction: column">
 						<ion-label>1</ion-label>
-						<br />
+
 						<ion-radio [value]="1"></ion-radio>
 					</ion-item>
 					<ion-item style="display: flex; flex-direction: column">
 						<ion-label>2</ion-label>
-						<br />
+
 						<ion-radio [value]="2"></ion-radio>
 					</ion-item>
 					<ion-item style="display: flex; flex-direction: column">
 						<ion-label>3</ion-label>
-						<br />
+
 						<ion-radio [value]="3"></ion-radio>
 					</ion-item>
 					<ion-item style="display: flex; flex-direction: column">
 						<ion-label>4</ion-label>
-						<br />
+
 						<ion-radio [value]="4"></ion-radio>
 					</ion-item>
 					<ion-item style="display: flex; flex-direction: column">
 						<ion-label>5</ion-label>
-						<br />
+
 						<ion-radio [value]="5"></ion-radio>
 					</ion-item>
 				</ion-radio-group>
 			</fieldset>
 
-			<br />
-
-			<fieldset>
+			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
 				<legend>ECG - RESPUESTA VERBAL</legend>
 				<ion-radio-group
 					[(ngModel)]="asistencia.respuestaVerbal"
@@ -477,30 +460,28 @@
 				>
 					<ion-item style="display: flex; flex-direction: column">
 						<ion-label>1</ion-label>
-						<br />
+
 						<ion-radio [value]="1"></ion-radio>
 					</ion-item>
 					<ion-item style="display: flex; flex-direction: column">
 						<ion-label>2</ion-label>
-						<br />
+
 						<ion-radio [value]="2"></ion-radio>
 					</ion-item>
 					<ion-item style="display: flex; flex-direction: column">
 						<ion-label>3</ion-label>
-						<br />
+
 						<ion-radio [value]="3"></ion-radio>
 					</ion-item>
 					<ion-item style="display: flex; flex-direction: column">
 						<ion-label>4</ion-label>
-						<br />
+
 						<ion-radio [value]="4"></ion-radio>
 					</ion-item>
 				</ion-radio-group>
 			</fieldset>
 
-			<br />
-
-			<fieldset>
+			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
 				<legend>ECG - RESPUESTA MOTORA</legend>
 				<ion-radio-group
 					[(ngModel)]="asistencia.respuestaMotora"
@@ -508,40 +489,38 @@
 				>
 					<ion-item style="display: flex; flex-direction: column">
 						<ion-label>1</ion-label>
-						<br />
+
 						<ion-radio [value]="1"></ion-radio>
 					</ion-item>
 					<ion-item style="display: flex; flex-direction: column">
 						<ion-label>2</ion-label>
-						<br />
+
 						<ion-radio [value]="2"></ion-radio>
 					</ion-item>
 					<ion-item style="display: flex; flex-direction: column">
 						<ion-label>3</ion-label>
-						<br />
+
 						<ion-radio [value]="3"></ion-radio>
 					</ion-item>
 					<ion-item style="display: flex; flex-direction: column">
 						<ion-label>4</ion-label>
-						<br />
+
 						<ion-radio [value]="4"></ion-radio>
 					</ion-item>
 					<ion-item style="display: flex; flex-direction: column">
 						<ion-label>5</ion-label>
-						<br />
+
 						<ion-radio [value]="5"></ion-radio>
 					</ion-item>
 					<ion-item style="display: flex; flex-direction: column">
 						<ion-label>6</ion-label>
-						<br />
+
 						<ion-radio [value]="6"></ion-radio>
 					</ion-item>
 				</ion-radio-group>
 			</fieldset>
 
-			<br />
-
-			<fieldset>
+			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
 				<legend>Examen Fisico</legend>
 				<ion-item>
 					<ion-label>Hallazgos Positivos</ion-label>
@@ -551,9 +530,7 @@
 				</ion-item>
 			</fieldset>
 
-			<br />
-
-			<fieldset>
+			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
 				<legend>Diagnosticos Presuntivos</legend>
 				<ion-item>
 					<ion-label>Diagnosticos Presuntivos</ion-label>
@@ -563,9 +540,7 @@
 				</ion-item>
 			</fieldset>
 
-			<br />
-
-			<fieldset>
+			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
 				<legend>Procedimientos Realizados</legend>
 				<ion-item>
 					<ion-label>Procedimientos Realizados</ion-label>
@@ -575,9 +550,7 @@
 				</ion-item>
 			</fieldset>
 
-			<br />
-
-			<fieldset>
+			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
 				<legend>Insumos Utilizados</legend>
 				<ion-item>
 					<ion-label>Insumos Utilizados</ion-label>
@@ -586,8 +559,6 @@
 					></ion-textarea>
 				</ion-item>
 			</fieldset>
-
-			<br />
 
 			<fieldset>
 				<legend>Regulador de turno</legend>
@@ -605,8 +576,6 @@
 					</ion-select>
 				</ion-item>
 			</fieldset>
-
-			<br />
 
 			<ion-button
 				expand="block"
