@@ -91,11 +91,13 @@ export class AsistanceService extends GenericService {
 
 	getTramosEncargadoSupervisor(
 		ficha: string,
-		hasSpecialAccess: boolean
+		hasSpecialAccess: boolean,
+		unidadId: number
 	): void {
 		const param = new HttpParams()
 			.set('Ficha', ficha)
-			.set('AccesoTotal', hasSpecialAccess);
+			.set('AccesoTotal', hasSpecialAccess)
+			.set('unidadId', unidadId);
 		this.$http
 			.get<IMetricasViewModel[]>(`${this.env}/tramos/supervisar`, {
 				params: param,

@@ -4,7 +4,7 @@ import { IDataModel } from '../../models/idata-model';
 import { IStatsFilter } from '../../dto/istats-filter';
 import { GuestService } from '../../services/guest.service';
 import { AsistanceService } from 'src/app/modules/dashboard/services/asistance/asistance.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
 	selector: 'ReportarAsistencia-guest-metrics',
@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 })
 export class GuestMetricsComponent implements OnInit, AfterViewInit {
 	filter!: IStatsFilter;
+	cedula: string = '';
 
 	chartOptions: ChartOptions = {
 		responsive: true,
@@ -56,10 +57,14 @@ export class GuestMetricsComponent implements OnInit, AfterViewInit {
 	constructor(
 		public _guest: GuestService,
 		public _asistencias: AsistanceService,
-		private $router: Router
+		private $router: Router,
+		private $activatedRoute: ActivatedRoute
 	) {}
 
 	ngOnInit() {
+		this.$activatedRoute.queryParamMap.subscribe((param) => {
+			this.cedula = (param.get('cedula') ?? '') as string;
+		});
 		this.initChart();
 	}
 
@@ -88,7 +93,7 @@ export class GuestMetricsComponent implements OnInit, AfterViewInit {
 	}
 
 	getStatsTramos(): void {
-		this._asistencias.getTramosEncargadoSupervisor('Prueba1', true);
+		this._asistencias.getTramosEncargadoSupervisor('Prueba1', true, 12);
 	}
 
 	getStatsUnidadByTramo(tramoId: number): void {

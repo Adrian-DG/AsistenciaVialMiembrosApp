@@ -40,6 +40,6 @@ export class SignupComponent implements OnInit {
 	}
 
 	registerMember(): void {
-		this._auth.registerMember(this.registerForm.value);
+		//this._auth.registerMember(this.registerForm.value);
 	}
 }

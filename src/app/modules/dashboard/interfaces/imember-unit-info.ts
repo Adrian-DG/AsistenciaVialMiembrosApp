@@ -1,6 +1,7 @@
 export interface IMemberUnitInfo {
 	denominacion: string;
 	unidadMiembroId: number;
+	unidadId: number;
 	ficha: string;
 	miembro: string;
 	placa: string;

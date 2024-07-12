@@ -104,7 +104,7 @@ export class AuthService extends GenericService {
 			)
 			.subscribe((response: ICreatedAuthorizedMember) => {
 				if (!response.created) {
-					this.$router.navigate(['auth/signup']);
+					this.showToast('El usuario no existe en el sistema');
 				}
 
 				if (!response.isAuthorized && response.created) {
@@ -136,34 +136,34 @@ export class AuthService extends GenericService {
 			});
 	}
 
-	registerMember(model: IMemberCreate): void {
-		this.$http
-			.post<boolean>(`${this.endPoint}/miembros/createApp`, model)
-			.subscribe(
-				(response: boolean) => {
-					if (response) {
-						this.$router.navigate(['auth/signin']);
-						this._spinner.showLoading(false);
-					}
+	// registerMember(model: IMemberCreate): void {
+	// 	this.$http
+	// 		.post<boolean>(`${this.endPoint}/miembros/createApp`, model)
+	// 		.subscribe(
+	// 			(response: boolean) => {
+	// 				if (response) {
+	// 					this.$router.navigate(['auth/signin']);
+	// 					this._spinner.showLoading(false);
+	// 				}
 
-					this.generateRequestResultAlert(
-						`${response ? 'Exito' : 'Error'}`,
-						'',
-						`${
-							response
-								? 'El soldado se registro con exito!!'
-								: 'Es probable que esta cédula ya este registrada!!'
-						}`
-					);
-				},
-				(error) =>
-					this.generateRequestResultAlert(
-						'Error',
-						'',
-						'Algo salio mal, no se pudo registrar al soldado!!'
-					)
-			);
-	}
+	// 				this.generateRequestResultAlert(
+	// 					`${response ? 'Exito' : 'Error'}`,
+	// 					'',
+	// 					`${
+	// 						response
+	// 							? 'El soldado se registro con exito!!'
+	// 							: 'Es probable que esta cédula ya este registrada!!'
+	// 					}`
+	// 				);
+	// 			},
+	// 			(error) =>
+	// 				this.generateRequestResultAlert(
+	// 					'Error',
+	// 					'',
+	// 					'Algo salio mal, no se pudo registrar al soldado!!'
+	// 				)
+	// 		);
+	// }
 
 	getStorageData(): Promise<any[]> {
 		return Promise.all([
@@ -176,6 +176,7 @@ export class AuthService extends GenericService {
 			this._storage.get('esEncargado'),
 			this._storage.get('accesoTotal'),
 			this._storage.get('perteneceA'),
+			this._storage.get('unidadId'),
 		]);
 	}
 
@@ -190,6 +191,7 @@ export class AuthService extends GenericService {
 			this._storage?.set('esEncargado', model.esEncargado),
 			this._storage?.set('accesoTotal', model.accesoTotal),
 			this._storage?.set('perteneceA', model.perteneceA),
+			this._storage?.set('unidadId', model.unidadId),
 		]);
 	}
 

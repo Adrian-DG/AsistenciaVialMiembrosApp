@@ -41,6 +41,7 @@ export class IndexComponent implements OnInit, AfterViewInit {
 				esEncargado: response[6],
 				accesoTotal: response[7],
 				perteneceA: response[8],
+				unidadId: response[9],
 			};
 		});
 	}

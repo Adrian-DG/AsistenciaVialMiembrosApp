@@ -251,8 +251,8 @@
 					<ion-label>Es Traslado ?</ion-label>
 					<ion-checkbox
 						slot="end"
+						[checked]="asistencia.esTraslado"
 						[(ngModel)]="asistencia.esTraslado"
-						[value]="asistencia.esTraslado"
 					></ion-checkbox>
 				</ion-item>
 
@@ -286,10 +286,7 @@
 			</fieldset>
 
 			<fieldset
-				*ngIf="
-					asistencia.tipoAsistencia !== 2 &&
-					asistencia.causaTraslado !== 0
-				"
+				*ngIf="asistencia.tipoAsistencia !== 2 && asistencia.esTraslado"
 			>
 				<legend>Información Hospital</legend>
 				<ion-item

@@ -14,9 +14,12 @@
 			expand="block"
 			style="width: 100%"
 			color="primary"
-			*ngIf="memberInfo?.esEncargado"
+			*ngIf="memberInfo?.esEncargado || memberInfo?.accesoTotal"
 			[routerLink]="['metrics', memberInfo?.ficha]"
-			[queryParams]="{ accesoTotal: memberInfo?.accesoTotal }"
+			[queryParams]="{
+				accesoTotal: memberInfo?.accesoTotal,
+				unidadId: memberInfo?.unidadId
+			}"
 		>
 			<ion-icon slot="start" name="stats-chart"></ion-icon>
 			Estadísticas

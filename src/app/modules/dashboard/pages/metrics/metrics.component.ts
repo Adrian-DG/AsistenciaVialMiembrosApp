@@ -11,6 +11,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
 	private ficha!: string;
 	private hasSpecialAccess!: boolean;
 	public search: string = '';
+	private unidadId: number = 0;
 
 	tramosDetailsElm!: HTMLDetailsElement;
 	unidadDetailElm!: HTMLDetailsElement;
@@ -26,6 +27,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
 		this.$activeRoute.queryParamMap.subscribe((param) => {
 			this.hasSpecialAccess = (param.get('accesoTotal') ||
 				false) as boolean;
+			this.unidadId = (param.get('unidadId') ?? 0) as number;
 		});
 	}
 
@@ -47,7 +49,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
 	loadData(): void {
 		this._asistencias.getTramosEncargadoSupervisor(
 			this.ficha,
-			this.hasSpecialAccess
+			this.hasSpecialAccess,
+			this.unidadId
 		);
 	}
 
