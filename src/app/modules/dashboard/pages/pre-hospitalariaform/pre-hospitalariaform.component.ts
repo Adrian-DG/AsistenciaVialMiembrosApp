@@ -4,6 +4,7 @@ import { CacheService } from 'src/app/modules/cache/services/cache.service';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { ILoginUnitResponse } from 'src/app/modules/auth/interfaces/ilogin-unit-response';
 import { AsistanceService } from '../../services/asistance/asistance.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
 	selector: 'ReportarAsistencia-pre-hospitalariaform',
@@ -63,7 +64,8 @@ export class PreHospitalariaformComponent implements OnInit, AfterViewInit {
 	constructor(
 		public _cache: CacheService,
 		private _auth: AuthService,
-		private _asistencias: AsistanceService
+		private _asistencias: AsistanceService,
+		private _alert: AlertController
 	) {}
 
 	ngOnInit() {
@@ -77,10 +79,45 @@ export class PreHospitalariaformComponent implements OnInit, AfterViewInit {
 		this._cache.getResource('nacionalidades');
 	}
 
-	createAsistencia(): void {
-		console.log(this.asistencia);
-		this._asistencias.CreateAsistenciaPreHospitalariaAgente(
-			this.asistencia
-		);
+	async createAsistencia(): Promise<void> {
+		const {
+			despachadaPor,
+			zona,
+			provinciaId,
+			municipioId,
+			tipoAsistencia,
+			reguladorEmergenciaId,
+		} = this.asistencia;
+		if (
+			[
+				despachadaPor,
+				zona,
+				provinciaId,
+				municipioId,
+				tipoAsistencia,
+				reguladorEmergenciaId,
+			].every((value) => value > 0)
+		) {
+			this._asistencias.CreateAsistenciaPreHospitalariaAgente(
+				this.asistencia
+			);
+		} else {
+			const alert = await this._alert.create({
+				header: 'Error',
+				subHeader:
+					'Falta información, favor validar los siguientes campos:',
+				message: `
+				- Tipo de despacho</br>
+				- Zona o región</br>
+				- Provincia</br>
+				- Municipio</br>
+				- Tipo asistencia</br>
+				- Regulador de la emergencia</br>
+				`,
+				buttons: ['Aceptar'],
+			});
+
+			await alert.present();
+		}
 	}
 }
