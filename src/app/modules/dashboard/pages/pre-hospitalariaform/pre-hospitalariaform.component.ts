@@ -23,7 +23,7 @@ export class PreHospitalariaformComponent implements OnInit, AfterViewInit {
 		nacionalidadId: 0,
 		tipoAsistencia: 0,
 		tipoCausa: 0,
-		esTraslado: false,
+		esTraslado: true,
 		causaTraslado: 0,
 		despachadaPor: 0,
 		apoyoBrindado: 0,
@@ -87,7 +87,9 @@ export class PreHospitalariaformComponent implements OnInit, AfterViewInit {
 			municipioId,
 			tipoAsistencia,
 			reguladorEmergenciaId,
+			hospitalId,
 		} = this.asistencia;
+
 		if (
 			[
 				despachadaPor,

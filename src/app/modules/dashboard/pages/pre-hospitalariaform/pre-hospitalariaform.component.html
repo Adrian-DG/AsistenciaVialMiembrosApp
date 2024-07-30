@@ -228,7 +228,7 @@
 				</ion-item>
 			</fieldset>
 
-			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
+			<fieldset>
 				<legend>Tipo Causa</legend>
 				<ion-radio-group
 					[(ngModel)]="asistencia.tipoCausa"
@@ -245,7 +245,7 @@
 				</ion-radio-group>
 			</fieldset>
 
-			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
+			<fieldset>
 				<legend>Información de Traslado</legend>
 				<ion-item>
 					<ion-label>Es Traslado ?</ion-label>
@@ -256,12 +256,12 @@
 					></ion-checkbox>
 				</ion-item>
 
-				<ion-item>
+				<ion-item *ngIf="!asistencia.esTraslado">
 					<ion-select
 						interface="action-sheet"
 						[(ngModel)]="asistencia.causaTraslado"
 						placeholder="Causa de Traslado"
-						[disabled]="!asistencia.esTraslado"
+						[disabled]="asistencia.esTraslado"
 					>
 						<ion-select-option [value]="0"
 							>NO AMERITA TRASLADO</ion-select-option
@@ -285,9 +285,7 @@
 				</ion-item>
 			</fieldset>
 
-			<fieldset
-				*ngIf="asistencia.tipoAsistencia !== 2 && asistencia.esTraslado"
-			>
+			<fieldset *ngIf="asistencia.esTraslado">
 				<legend>Información Hospital</legend>
 				<ion-item
 					(click)="
@@ -308,7 +306,7 @@
 				</ion-item>
 			</fieldset>
 
-			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
+			<fieldset *ngIf="asistencia.esTraslado">
 				<legend>Datos quien recibee en el centro</legend>
 				<ion-item>
 					<ion-label position="floating">Nombre y apellido</ion-label>
@@ -319,7 +317,7 @@
 				</ion-item>
 			</fieldset>
 
-			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
+			<fieldset>
 				<legend>Antecedentes</legend>
 				<ion-radio-group [(ngModel)]="asistencia.AntecedentesMorbidos">
 					<ion-item>
@@ -332,7 +330,9 @@
 					</ion-item>
 				</ion-radio-group>
 				<ion-item>
-					<ion-label>Detalles Antecedentes Morbidos</ion-label>
+					<ion-label position="floating"
+						>Antecedentes Morbidos</ion-label
+					>
 					<ion-input
 						[(ngModel)]="asistencia.AntecedentesMorbidos"
 						[disabled]="
@@ -342,7 +342,7 @@
 				</ion-item>
 			</fieldset>
 
-			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
+			<fieldset>
 				<legend>Signos Vitales</legend>
 				<ion-item>
 					<ion-label position="floating"
@@ -398,7 +398,7 @@
 				</ion-item>
 			</fieldset>
 
-			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
+			<fieldset>
 				<legend>Llenado Capilar</legend>
 				<ion-item>
 					<ion-select
@@ -415,7 +415,7 @@
 				</ion-item>
 			</fieldset>
 
-			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
+			<fieldset>
 				<legend>ECG - APERTURA OCULAR</legend>
 				<ion-radio-group
 					[(ngModel)]="asistencia.aperturaOcular"
@@ -444,7 +444,7 @@
 				</ion-radio-group>
 			</fieldset>
 
-			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
+			<fieldset>
 				<legend>ECG - RESPUESTA VERBAL</legend>
 				<ion-radio-group
 					[(ngModel)]="asistencia.respuestaVerbal"
@@ -469,7 +469,7 @@
 				</ion-radio-group>
 			</fieldset>
 
-			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
+			<fieldset>
 				<legend>ECG - RESPUESTA MOTORA</legend>
 				<ion-radio-group
 					[(ngModel)]="asistencia.respuestaMotora"
@@ -502,7 +502,7 @@
 				</ion-radio-group>
 			</fieldset>
 
-			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
+			<fieldset>
 				<legend>Examen Fisico</legend>
 				<ion-item>
 					<ion-label>Hallazgos Positivos</ion-label>
@@ -512,7 +512,7 @@
 				</ion-item>
 			</fieldset>
 
-			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
+			<fieldset>
 				<legend>Diagnosticos Presuntivos</legend>
 				<ion-item>
 					<ion-label>Diagnosticos Presuntivos</ion-label>
@@ -522,7 +522,7 @@
 				</ion-item>
 			</fieldset>
 
-			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
+			<fieldset>
 				<legend>Procedimientos Realizados</legend>
 				<ion-item>
 					<ion-label>Procedimientos Realizados</ion-label>
@@ -532,7 +532,7 @@
 				</ion-item>
 			</fieldset>
 
-			<fieldset *ngIf="asistencia.tipoAsistencia !== 2">
+			<fieldset>
 				<legend>Insumos Utilizados</legend>
 				<ion-item>
 					<ion-label>Insumos Utilizados</ion-label>
