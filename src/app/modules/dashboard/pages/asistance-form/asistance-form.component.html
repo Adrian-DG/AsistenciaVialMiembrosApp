@@ -428,6 +428,41 @@
 					>
 				</ion-select>
 			</ion-item>
+
+			<fieldset style="margin: 0.5em auto">
+				<legend>Unidad Alfa (Pre-Hospitalaria)</legend>
+				<ion-item>
+					<ion-checkbox
+						slot="start"
+						[checked]="solicitoApoyo"
+						[(ngModel)]="solicitoApoyo"
+						(ngModelChange)="getUnidadesAlfaByTramo()"
+					></ion-checkbox>
+					<ion-label
+						>Solicitó Apoyo Ambulancia?
+						<b>{{ solicitoApoyo ? 'Si' : 'No' }}</b></ion-label
+					>
+				</ion-item>
+				<ion-item fill="outline">
+					<ion-label position="floating"
+						>Seleccionar Unidad</ion-label
+					>
+					<ion-select
+						[disabled]="!solicitoApoyo"
+						[(ngModel)]="unidadAlfaId"
+					>
+						<ion-select-option [value]="0"
+							>seleccione</ion-select-option
+						>
+						<ion-select-option
+							*ngFor="let item of _cache.unidades$ | async"
+							[value]="item.id"
+							>{{ item.nombre }}</ion-select-option
+						>
+					</ion-select>
+				</ion-item>
+			</fieldset>
+
 			<ion-item fill="outline">
 				<ion-textarea
 					[(ngModel)]="comentario"

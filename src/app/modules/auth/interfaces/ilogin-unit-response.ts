@@ -4,6 +4,7 @@ export interface ILoginUnitResponse {
 	unidadId: number;
 	ficha: string;
 	placa: string;
+	tramoId: number;
 	tramo: string;
 	miembroInfo: string;
 	token: string;

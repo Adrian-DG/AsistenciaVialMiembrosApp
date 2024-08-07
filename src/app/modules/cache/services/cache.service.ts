@@ -45,6 +45,9 @@ export class CacheService extends GenericService {
 	public miembrosPreHospitalaria$ =
 		this.miembrosPreHospitalariaSource.asObservable();
 
+	private unidadesSource = new BehaviorSubject<IGenericEnum[]>([]);
+	public unidades$ = this.unidadesSource.asObservable();
+
 	private readonly sources = {
 		VehiculoTipo: (value: IGenericEnum[]) =>
 			this.vehiculoTiposSource.next(value),
@@ -134,5 +137,17 @@ export class CacheService extends GenericService {
 					this.miembrosPreHospitalariaSource.next(data)
 				);
 		}
+	}
+
+	GetUnidadesAlfaByTramo(tramoId: number): void {
+		const params = new HttpParams().set('tramoId', tramoId);
+		this.$http
+			.get<IGenericEnum[]>(
+				`${this.endPoint}/filter-unidades-alfa-by-tramo`,
+				{ params: params }
+			)
+			.subscribe((response: IGenericEnum[]) =>
+				this.unidadesSource.next(response)
+			);
 	}
 }

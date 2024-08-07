@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import {
 	FormBuilder,
 	FormControl,
@@ -41,6 +41,9 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	wantPictures: boolean = false;
 	hasPersonalInformation = true;
 	hasVehicleInformation = true;
+
+	solicitoApoyo = false;
+	unidadAlfaId!: number | null;
 
 	constructor(
 		private $fb: FormBuilder,
@@ -170,9 +173,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	comentario: string = '';
 	fueCompletada: boolean = true;
 
-	async ngOnInit() {
-		await this.getUnitMemberId();
-
+	async ngOnInit(): Promise<void> {
 		// this.ciudadanoForm.controls['identificacion'].valueChanges.subscribe(
 		// 	(value: string) =>
 		// 		this.AddCiudadanoIdentificacionValidator(value.length === 1)
@@ -247,6 +248,11 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	async getUnitMemberId(): Promise<number> {
 		const info = await this._auth.getStorageData();
 		return info[1];
+	}
+
+	async getTramoId(): Promise<number> {
+		const info = await this._auth.getStorageData();
+		return info[10];
 	}
 
 	generateAlertMessage(fields: string[]) {
@@ -453,5 +459,12 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 			this.fueCompletada = obj.data.values;
 			this.confirmCreate();
 		});
+	}
+
+	async getUnidadesAlfaByTramo(): Promise<void> {
+		if (this.solicitoApoyo) {
+			const tramoId = await this.getTramoId();
+			this._cache.GetUnidadesAlfaByTramo(tramoId);
+		}
 	}
 }
