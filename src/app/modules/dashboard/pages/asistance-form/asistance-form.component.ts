@@ -372,6 +372,9 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 			colorTxt: colorTxt,
 			marcaTxt: marcaTxt,
 			modeloTxt: modeloTxt,
+
+			solicitoApoyo: this.solicitoApoyo,
+			unidadAlfaId: this.unidadAlfaId,
 		};
 
 		if (typeof this.tipoAsistencias === 'number') {

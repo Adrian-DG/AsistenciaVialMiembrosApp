@@ -24,4 +24,6 @@ export interface IAsistanceCreate {
 	colorTxt: string;
 	marcaTxt: string;
 	modeloTxt: string;
+	solicitoApoyo: boolean;
+	unidadAlfaId: number | null;
 }
