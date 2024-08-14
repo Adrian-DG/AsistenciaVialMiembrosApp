@@ -398,38 +398,31 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		}
 
 		if (newAsistencia.imagenes.length > 0) {
-			if (
-				newAsistencia.solicitoApoyo &&
-				newAsistencia.unidadAlfaId == null
-			) {
-				this.showUnidadAlfaAlert();
-			} else {
-				this._asistencia
-					.createAsistance(newAsistencia)
-					.subscribe((response: boolean) => {
-						if (response) {
-							[
-								this.ciudadanoForm,
-								this.vehiculoForm,
-								this.ubicacionForm,
-							].forEach((item) => item.reset());
+			this._asistencia
+				.createAsistance(newAsistencia)
+				.subscribe((response: boolean) => {
+					if (response) {
+						[
+							this.ciudadanoForm,
+							this.vehiculoForm,
+							this.ubicacionForm,
+						].forEach((item) => item.reset());
 
-							this._asistencia.generateRequestResultAlert(
-								'Exito',
-								'',
-								'La asistencia se registro de forma correctamente'
-							);
+						this._asistencia.generateRequestResultAlert(
+							'Exito',
+							'',
+							'La asistencia se registro correctamente'
+						);
 
-							this.$router.navigate(['dashboard']);
-						} else {
-							this._asistencia.generateRequestResultAlert(
-								'Error',
-								'Algo salió mal',
-								'No se pudo crear la asistencia, es posible que fue algunos campos no esten correctos o fallara el servicio!!'
-							);
-						}
-					});
-			}
+						this.$router.navigate(['dashboard']);
+					} else {
+						this._asistencia.generateRequestResultAlert(
+							'Error',
+							'Algo salió mal',
+							'No se pudo crear la asistencia, es posible que algunos campos no esten correctos o un fallo en el servicio!!'
+						);
+					}
+				});
 		} else {
 			const alert = await this._alert.create({
 				header: 'Importante',
