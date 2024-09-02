@@ -13,6 +13,7 @@ import { SpinnerService } from 'src/app/modules/generic/services/spinner/spinner
 import { IUpdateStatusUnit } from '../../interfaces/iupdate-status-unit';
 import { IGenericEnum } from 'src/app/modules/cache/interfaces/igeneric-enum';
 import { IAsistenciaPreHospitalaria } from '../../interfaces/iasistencia-pre-hospitalaria';
+import { Storage } from '@ionic/storage-angular';
 
 @Injectable({
 	providedIn: 'root',
@@ -59,8 +60,12 @@ export class AsistanceService extends GenericService {
 		this.endPoint += '/asistencias';
 	}
 
+	saveAsistanceToStorage(asistance: IAsistanceCreate) {
+		const rows_number = localStorage.length;
+		localStorage.setItem(rows_number.toString(), JSON.stringify(asistance));
+	}
+
 	createAsistance(model: IAsistanceCreate): Observable<boolean> {
-		console.log('Enter asistance service');
 		return this.$http.post<boolean>(`${this.endPoint}/create`, model);
 	}
 
