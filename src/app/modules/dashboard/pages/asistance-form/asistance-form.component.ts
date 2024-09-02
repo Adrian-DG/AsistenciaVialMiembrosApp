@@ -472,4 +472,10 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 			await this.showUnidadAlfaAlert();
 		}
 	}
+
+	captureSignature(data: any) {
+		console.log(data as string);
+	}
+
+	onSignatureModalWillDismiss(event: any) {}
 }

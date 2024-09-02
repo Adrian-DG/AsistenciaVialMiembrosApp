@@ -14,6 +14,7 @@ import { MetricsComponent } from './pages/metrics/metrics.component';
 import { EditComponent } from './pages/edit/edit.component';
 import { FilterPipe } from './pipes/filter.pipe';
 import { PreHospitalariaformComponent } from './pages/pre-hospitalariaform/pre-hospitalariaform.component';
+import { SignaturePadComponent } from './components/signature-pad/signature-pad.component';
 
 @NgModule({
 	declarations: [
@@ -26,6 +27,7 @@ import { PreHospitalariaformComponent } from './pages/pre-hospitalariaform/pre-h
 		EditComponent,
 		PreHospitalariaformComponent,
 		FilterPipe,
+		SignaturePadComponent,
 	],
 	imports: [
 		CommonModule,
