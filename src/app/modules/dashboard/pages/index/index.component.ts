@@ -6,6 +6,9 @@ import { AlertController } from '@ionic/angular';
 import { IUpdateStatusUnit } from '../../interfaces/iupdate-status-unit';
 import { PerteneceA } from '../../constants/app.const';
 import { ILoginUnitResponse } from 'src/app/modules/auth/interfaces/ilogin-unit-response';
+import { userInfo } from 'os';
+import { BehaviorSubject } from 'rxjs';
+import { IAsistanceCreate } from '../../interfaces/iasistance-create';
 
 @Component({
 	selector: 'app-index',
@@ -18,6 +21,9 @@ export class IndexComponent implements OnInit, AfterViewInit {
 	estatusAsistenciaSelected: number = 1;
 
 	public departamento = PerteneceA;
+
+	private unSentAsistancesSource = new BehaviorSubject<number>(0);
+	public unSentAsistances$ = this.unSentAsistancesSource.asObservable();
 
 	constructor(
 		private _auth: AuthService,
@@ -76,6 +82,8 @@ export class IndexComponent implements OnInit, AfterViewInit {
 				this.infoUser?.ficha.toString(),
 				this.estatusAsistenciaSelected
 			);
+
+			this.checkLocalStorage();
 		}
 	}
 
@@ -91,5 +99,52 @@ export class IndexComponent implements OnInit, AfterViewInit {
 			const model: IUpdateStatusUnit = { ficha: this.infoUser?.ficha };
 			await this._auth.logout(model);
 		}
+	}
+
+	private checkLocalStorage() {
+		this.unSentAsistancesSource.next(localStorage.length);
+	}
+
+	sendSavedAsistances() {
+		let localStorageCount = localStorage.length;
+		if (localStorageCount > 0) {
+			const lastIndex = (localStorageCount - 1).toString();
+			const asistanceJson = localStorage.getItem(lastIndex);
+
+			const isType1 =
+				asistanceJson &&
+				this.infoUser?.perteneceA == this.departamento.Asistencia_Vial;
+
+			if (isType1) {
+				const newAsistance = JSON.parse(
+					asistanceJson
+				) as IAsistanceCreate;
+				this._asistencias.createAsistance(newAsistance).subscribe(
+					async (response: boolean) => {
+						if (response) {
+							localStorage.removeItem(lastIndex);
+							await this.showAlert(response);
+						}
+					},
+					async () => await this.showAlert(false)
+				);
+			} else {
+				// TODO: add pre-hospitalaria
+			}
+		}
+	}
+
+	private async showAlert(condition: boolean) {
+		const title = condition ? 'Exito' : 'Error';
+		const body = condition
+			? 'La asistencia se ha enviado correctamente'
+			: 'Hubo fallo en el servicio';
+		const alert = await this._alert.create({
+			header: title,
+			message: body,
+			backdropDismiss: true,
+			animated: true,
+		});
+		await alert.present();
 	}
 }

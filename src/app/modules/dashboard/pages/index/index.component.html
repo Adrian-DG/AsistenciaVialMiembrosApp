@@ -8,6 +8,7 @@
 			</ion-button>
 
 			<div
+				style="margin: auto 0.3em"
 				class="status"
 				[ngClass]="
 					(_asistencias.isConnected$ | async)
@@ -20,6 +21,12 @@
 				[checked]="_asistencias.unidadStatus$ | async"
 				(ionChange)="changeStatus()"
 			></ion-toggle> -->
+
+			<ion-button>
+				<ion-badge slot="start" color="warning">{{
+					unSentAsistances$ | async
+				}}</ion-badge>
+			</ion-button>
 
 			<ion-button (click)="logout()">
 				<ion-icon name="log-out"></ion-icon>
@@ -47,6 +54,28 @@
 				<ion-select-option [value]="3">Completadas</ion-select-option>
 			</ion-select>
 		</ion-item>
+
+		<ion-row *ngIf="(unSentAsistances$ | async) ?? 0 > 0">
+			<ion-col>
+				<ion-button
+					color="warning"
+					expand="block"
+					(click)="sendSavedAsistances()"
+				>
+					<ion-badge
+						slot="start"
+						style="
+							color: white;
+							background-color: rgb(41, 40, 40);
+							margin-right: 0.2em;
+						"
+						>{{ unSentAsistances$ | async }}</ion-badge
+					>
+					Sin Enviar
+				</ion-button>
+			</ion-col>
+		</ion-row>
+
 		<ion-row>
 			<ion-col>
 				<ion-button color="primary" expand="block" (click)="refresh()"
@@ -54,6 +83,7 @@
 				>
 			</ion-col>
 		</ion-row>
+
 		<ion-list *ngIf="asistencias.length > 0; else emptyList">
 			<ion-list-header>
 				<ion-label class="list-title">{{
