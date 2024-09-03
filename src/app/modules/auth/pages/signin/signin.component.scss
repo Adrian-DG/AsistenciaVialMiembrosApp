@@ -5,6 +5,7 @@
 	justify-content: flex-end;
 	align-items: center;
 	gap: 1em;
+	background-color: whitesmoke;
 	.big-logo {
 		min-width: 40%;
 		max-width: 50%;
@@ -12,19 +13,20 @@
 	}
 
 	.small-logo {
-		min-width: 15%;
+		min-width: 20%;
 		max-width: 30%;
 		height: auto;
 	}
 	.formulary {
-		width: 90%;
+		width: 100%;
 		height: auto;
 		padding: 1em auto;
-		margin-bottom: 4em;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		border-top-left-radius: 2em;
+		border-top-right-radius: 2em;
 		.card-header {
 			text-align: center;
 			.header-text {
@@ -34,7 +36,7 @@
 		}
 		.btn {
 			margin: 1em 0.5em;
-			width: 90%;
+			width: 80%;
 		}
 	}
 }
