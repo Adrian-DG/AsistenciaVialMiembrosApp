@@ -45,7 +45,10 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	solicitoApoyo = false;
 	unidadAlfaId!: number | null;
 
-	@ViewChild(IonModal) modal!: IonModal;
+	@ViewChild('citizenSignatureModal', { static: false })
+	citizenModal!: IonModal;
+	@ViewChild('soldierSignatureModal', { static: false })
+	soldierModal!: IonModal;
 
 	constructor(
 		private $fb: FormBuilder,
@@ -174,6 +177,9 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	tipoAsistencias: number[] | number = [];
 	comentario: string = '';
 	fueCompletada: boolean = true;
+
+	isCitizenSignatureCapture = false;
+	isSoldierSignatureCapture = false;
 
 	async ngOnInit(): Promise<void> {
 		// this.ciudadanoForm.controls['identificacion'].valueChanges.subscribe(
@@ -475,8 +481,21 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		}
 	}
 
-	captureSignature(data: any) {
+	disableCitizenSignModal() {
+		this.isCitizenSignatureCapture = !this.isCitizenSignatureCapture;
+	}
+
+	disableSoldierSignModal() {
+		this.isSoldierSignatureCapture = !this.isSoldierSignatureCapture;
+	}
+
+	captureCitizenSignature(data: any) {
 		this.imagenes64.push(data as string);
-		this.modal.dismiss('', 'confirm');
+		this.citizenModal.dismiss('', 'confirm');
+	}
+
+	captureSoldierSignature(data: any) {
+		this.imagenes64.push(data as string);
+		this.soldierModal.dismiss('', 'confirm');
 	}
 }

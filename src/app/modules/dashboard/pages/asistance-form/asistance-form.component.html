@@ -469,6 +469,7 @@
 					placeholder="Escribe cualquier otro detalle"
 				></ion-textarea>
 			</ion-item>
+			<br />
 			<ion-button
 				expand="block"
 				color="light"
@@ -478,9 +479,24 @@
 				Agregar Fotos
 			</ion-button>
 			<br />
-			<ion-button id="open-signature-modal" expand="block" color="light">
-				<ion-icon name="pencil-outline"></ion-icon>
-				Agregar Firma
+			<ion-button
+				id="open-signature-citizen-modal"
+				expand="block"
+				color="light"
+				[disabled]="isCitizenSignatureCapture"
+			>
+				<ion-icon class="form-icons" name="pencil-outline"></ion-icon>
+				Firma ciudadano
+			</ion-button>
+			<br />
+			<ion-button
+				id="open-signature-soldier-modal"
+				expand="block"
+				color="light"
+				[disabled]="isSoldierSignatureCapture"
+			>
+				<ion-icon class="form-icons" name="pencil-outline"></ion-icon>
+				Firma soldado
 			</ion-button>
 			<br />
 			<ion-button
@@ -500,19 +516,46 @@
 	</ion-card>
 
 	<ion-modal
-		trigger="open-signature-modal"
+		#citizenSignatureModal
+		trigger="open-signature-citizen-modal"
 		[initialBreakpoint]="0.5"
 		[breakpoints]="[0, 0.6, 1]"
+		[backdropDismiss]="false"
+		[animated]="true"
+		(didDismiss)="disableCitizenSignModal()"
 	>
 		<ng-template>
 			<ion-header>
 				<ion-toolbar>
-					<ion-title>Firma del ciudadano</ion-title>
+					<ion-title>Firma del Ciudadano</ion-title>
 				</ion-toolbar>
 			</ion-header>
 			<ion-content>
 				<app-signature-pad
-					(captureSignatureEvent)="captureSignature($event)"
+					(captureSignatureEvent)="captureCitizenSignature($event)"
+				></app-signature-pad>
+			</ion-content>
+		</ng-template>
+	</ion-modal>
+
+	<ion-modal
+		#soldierSignatureModal
+		trigger="open-signature-soldier-modal"
+		[initialBreakpoint]="0.5"
+		[breakpoints]="[0, 0.6, 1]"
+		[backdropDismiss]="false"
+		[animated]="true"
+		(didDismiss)="disableSoldierSignModal()"
+	>
+		<ng-template>
+			<ion-header>
+				<ion-toolbar>
+					<ion-title>Firma del Soldado</ion-title>
+				</ion-toolbar>
+			</ion-header>
+			<ion-content>
+				<app-signature-pad
+					(captureSignatureEvent)="captureSoldierSignature($event)"
 				></app-signature-pad>
 			</ion-content>
 		</ng-template>
