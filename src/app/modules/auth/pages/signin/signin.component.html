@@ -1,16 +1,23 @@
 <ion-header>
 	<ion-toolbar color="primary">
 		<ion-title>Inicio</ion-title>
-		<ion-buttons slot="end" (click)="checkUpdate()">
+		<ion-buttons
+			slot="end"
+			(click)="checkUpdate()"
+			style="margin-right: 1em"
+		>
 			<ion-icon name="reload-circle" style="font-size: 1.5rem"></ion-icon>
 		</ion-buttons>
-		<!-- <ion-buttons
+		<ion-buttons
 			slot="end"
-			(click)="loginAsGuest()"
-			style="margin-left: 0.5em"
+			id="signin-btn"
+			style="margin-right: 1em; margin-top: 0.2em"
 		>
-			<ion-icon name="log-in" style="font-size: 1.5rem"></ion-icon>
-		</ion-buttons> -->
+			<ion-icon
+				name="cloud-download"
+				style="font-size: 1.5rem"
+			></ion-icon>
+		</ion-buttons>
 	</ion-toolbar>
 </ion-header>
 

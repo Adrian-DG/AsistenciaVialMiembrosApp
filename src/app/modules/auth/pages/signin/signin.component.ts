@@ -23,6 +23,28 @@ export class SigninComponent implements OnInit {
 		this.cedulaInput = '';
 		this.fichaInput = '';
 		this.isWriting = false;
+
+		let defferedPrompt: any;
+		const addbtn = document.getElementById(
+			'signin-btn'
+		) as HTMLButtonElement;
+
+		window.addEventListener('beforeinstallprompt', (event) => {
+			event.preventDefault();
+			defferedPrompt = event;
+			addbtn.style.display = 'block';
+		});
+
+		addbtn.addEventListener('click', (event) => {
+			defferedPrompt.prompt();
+
+			defferedPrompt.userChoice.then((choice: any) => {
+				if (choice.outcome === 'accepted') {
+					console.log('user accepted the prompt');
+				}
+				defferedPrompt = null;
+			});
+		});
 	}
 
 	hideImage = () => (this.isWriting = true);
