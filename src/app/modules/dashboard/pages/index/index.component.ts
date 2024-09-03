@@ -131,6 +131,8 @@ export class IndexComponent implements OnInit, AfterViewInit {
 			} else {
 				// TODO: add pre-hospitalaria
 			}
+
+			this.checkLocalStorage();
 		}
 	}
 
