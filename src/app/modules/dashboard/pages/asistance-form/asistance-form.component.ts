@@ -1,11 +1,11 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import {
 	FormBuilder,
 	FormControl,
 	FormGroup,
 	Validators,
 } from '@angular/forms';
-import { AlertController } from '@ionic/angular';
+import { AlertController, IonModal } from '@ionic/angular';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { CacheService } from 'src/app/modules/cache/services/cache.service';
 import { IAsistanceCreate } from '../../interfaces/iasistance-create';
@@ -44,6 +44,8 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 
 	solicitoApoyo = false;
 	unidadAlfaId!: number | null;
+
+	@ViewChild(IonModal) modal!: IonModal;
 
 	constructor(
 		private $fb: FormBuilder,
@@ -474,8 +476,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	}
 
 	captureSignature(data: any) {
-		console.log(data as string);
+		this.imagenes64.push(data as string);
+		this.modal.dismiss('', 'confirm');
 	}
-
-	onSignatureModalWillDismiss(event: any) {}
 }
