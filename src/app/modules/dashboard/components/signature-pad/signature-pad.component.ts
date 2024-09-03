@@ -29,7 +29,7 @@ export class SignaturePadComponent implements OnInit {
 		) as HTMLCanvasElement;
 		const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 		ctx.strokeStyle = '#222222';
-		ctx.lineWidth = 4;
+		ctx.lineWidth = 2;
 
 		canvas.addEventListener('mousedown', this.onMouseDown, false);
 		canvas.addEventListener('mouseup', this.onMouseUp, false);
