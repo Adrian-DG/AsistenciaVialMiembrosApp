@@ -33,6 +33,7 @@ export class IndexComponent implements OnInit, AfterViewInit {
 
 	ngOnInit() {
 		this.initUserData();
+		this.checkLocalStorage();
 	}
 
 	initUserData(): void {
