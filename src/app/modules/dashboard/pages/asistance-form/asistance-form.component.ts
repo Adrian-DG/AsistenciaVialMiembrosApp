@@ -490,11 +490,13 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	}
 
 	captureCitizenSignature(data: any) {
+		console.log('recieved: ', data);
 		this.imagenes64.push(data as string);
 		this.citizenModal.dismiss('', 'confirm');
 	}
 
 	captureSoldierSignature(data: any) {
+		console.log('recieved: ', data);
 		this.imagenes64.push(data as string);
 		this.soldierModal.dismiss('', 'confirm');
 	}

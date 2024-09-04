@@ -1,168 +1,90 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	Output,
+	EventEmitter,
+	ViewChild,
+	ElementRef,
+	HostListener,
+	AfterViewInit,
+} from '@angular/core';
+import SignaturePad from 'signature_pad';
 
 @Component({
 	selector: 'app-signature-pad',
 	templateUrl: './signature-pad.component.html',
 	styleUrls: ['./signature-pad.component.scss'],
 })
-export class SignaturePadComponent implements OnInit {
-	title = 'signature';
-	drawing = false;
-	mousePos = { x: 0, y: 0 };
-	lastPos = this.mousePos;
+export class SignaturePadComponent implements OnInit, AfterViewInit {
+	@ViewChild('canvas', { static: false })
+	signaturePadElement!: ElementRef<HTMLCanvasElement>;
+	signaturePad!: SignaturePad;
+	@Output() captureSignatureEvent = new EventEmitter<any>();
 
-	@Output() captureSignatureEvent = new EventEmitter<string>();
+	constructor(private elementRef: ElementRef) {}
 
-	ngOnInit() {
-		this.DrawSignatureLogic();
+	ngOnInit(): void {
+		this.init();
 	}
 
-	DrawSignatureLogic = () => {
-		window.requestAnimationFrame =
-			window.requestAnimationFrame ||
-			function (callback) {
-				window.setTimeout(callback, 1000 / 60);
-			};
+	@HostListener('window:resize', ['$event'])
+	onResize(event: any) {
+		this.init();
+	}
 
-		const canvas = document.getElementById(
-			'sig-canvas'
-		) as HTMLCanvasElement;
+	init() {
+		this.signaturePadElement.nativeElement =
+			this.elementRef.nativeElement.querySelector('canvas');
+		this.signaturePadElement.nativeElement.width = 500;
+		this.signaturePadElement.nativeElement.height = 200;
+		this.signaturePad.clear(); // Clear the pad on init
+	}
 
-		if (canvas) {
-			const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-			ctx.strokeStyle = '#222222';
-			ctx.lineWidth = 2;
-		}
-
-		canvas.addEventListener('mousedown', this.onMouseDown, false);
-		canvas.addEventListener('mouseup', this.onMouseUp, false);
-		canvas.addEventListener('mousemove', this.onMouseMove, false);
-
-		canvas.addEventListener('touchmove', this.onTouchMove, false);
-		canvas.addEventListener('touchend', this.onTouchEnd, false);
-
-		document.body.addEventListener(
-			'touchstart',
-			this.onTouchStartBody,
-			false
-		);
-		document.body.addEventListener('touchend', this.onTouchEndBody, false);
-		document.body.addEventListener(
-			'touchmove',
-			this.onTouchMoveBody,
-			false
-		);
-
-		this.drawLoop();
-	};
-
-	getMousePos = (canvasDom: HTMLCanvasElement, mouseEvent: MouseEvent) => {
-		const rect = canvasDom.getBoundingClientRect();
-		return {
-			x: mouseEvent.clientX - rect.left,
-			y: mouseEvent.clientY - rect.top,
-		};
-	};
-
-	getTouchPos = (canvasDom: HTMLCanvasElement, touchEvent: TouchEvent) => {
-		const rect = canvasDom.getBoundingClientRect();
-		return {
-			x: touchEvent.touches[0].clientX - rect.left,
-			y: touchEvent.touches[0].clientY - rect.top,
-		};
-	};
-
-	renderCanvas = () => {
-		const canvas = document.getElementById(
-			'sig-canvas'
-		) as HTMLCanvasElement;
-
-		if (canvas) {
-			const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-
-			if (this.drawing) {
-				ctx.moveTo(this.lastPos.x, this.lastPos.y);
-				ctx.lineTo(this.mousePos.x, this.mousePos.y);
-				ctx.stroke();
-				this.lastPos = this.mousePos;
+	ngAfterViewInit(): void {
+		this.signaturePad = new SignaturePad(
+			this.signaturePadElement.nativeElement,
+			{
+				penColor: 'rgb(56,128,255)',
+				dotSize: 2,
+				throttle: 16,
+				velocityFilterWeight: 0.8,
+				canvasContextOptions: { willReadFrequently: true },
 			}
+		);
+		window.addEventListener('resize', () => this.resizeCanvas());
+		window.addEventListener('orientationchange', () => this.resizeCanvas());
+	}
+
+	resizeCanvas() {
+		const ratio = Math.max(window.devicePixelRatio || 1, 1);
+		this.signaturePadElement.nativeElement.width =
+			this.signaturePadElement.nativeElement.offsetWidth * ratio;
+		this.signaturePadElement.nativeElement.height =
+			this.signaturePadElement.nativeElement.offsetHeight * ratio;
+		this.signaturePadElement.nativeElement
+			.getContext('2d')
+			?.scale(ratio, ratio);
+		this.signaturePad.clear(); // otherwise isEmpty() might return incorrect value
+	}
+
+	save(): void {
+		const img_64 = this.signaturePad.toDataURL();
+		this.captureSignatureEvent.emit(img_64);
+	}
+
+	isCanvasBlank(): boolean {
+		return this.signaturePad && this.signaturePad.isEmpty() ? true : false;
+	}
+
+	clear() {
+		this.signaturePad.clear();
+	}
+
+	undo() {
+		const data = this.signaturePad.toData();
+		if (data) {
+			data.pop(); // remove the last dot or line
+			this.signaturePad.fromData(data);
 		}
-	};
-
-	clearCanvas = () => {
-		const canvas = document.getElementById(
-			'sig-canvas'
-		) as HTMLCanvasElement;
-		canvas.width = canvas.width;
-	};
-
-	drawLoop = () => {
-		requestAnimationFrame(this.drawLoop);
-		this.renderCanvas();
-	};
-
-	onMouseDown = (e: MouseEvent) => {
-		this.drawing = true;
-		this.lastPos = this.getMousePos(e.target as HTMLCanvasElement, e);
-	};
-
-	onMouseUp = () => {
-		this.drawing = false;
-	};
-
-	onMouseMove = (e: MouseEvent) => {
-		this.mousePos = this.getMousePos(e.target as HTMLCanvasElement, e);
-	};
-
-	onTouchMove = (e: TouchEvent) => {
-		const touch = e.touches[0];
-		const me = new MouseEvent('mousemove', {
-			clientX: touch.clientX,
-			clientY: touch.clientY,
-		});
-		e.target!.dispatchEvent(me);
-	};
-
-	onTouchEnd = () => {
-		const me = new MouseEvent('mouseup', {});
-		const canvas = document.getElementById(
-			'sig-canvas'
-		) as HTMLCanvasElement;
-		canvas.dispatchEvent(me);
-	};
-
-	onTouchStartBody = (e: TouchEvent) => {
-		const canvas = document.getElementById(
-			'sig-canvas'
-		) as HTMLCanvasElement;
-		if (e.target == canvas) {
-			e.preventDefault();
-		}
-	};
-
-	onTouchEndBody = (e: TouchEvent) => {
-		const canvas = document.getElementById(
-			'sig-canvas'
-		) as HTMLCanvasElement;
-		if (e.target == canvas) {
-			e.preventDefault();
-		}
-	};
-
-	onTouchMoveBody = (e: TouchEvent) => {
-		const canvas = document.getElementById(
-			'sig-canvas'
-		) as HTMLCanvasElement;
-		if (e.target == canvas) {
-			e.preventDefault();
-		}
-	};
-
-	onSubmitButtonClick = () => {
-		const canvas = document.getElementById(
-			'sig-canvas'
-		) as HTMLCanvasElement;
-		const dataUrl = canvas.toDataURL();
-		this.captureSignatureEvent.emit(dataUrl);
-	};
+	}
 }
