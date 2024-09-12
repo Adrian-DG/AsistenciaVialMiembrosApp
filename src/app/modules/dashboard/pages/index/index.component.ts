@@ -6,7 +6,6 @@ import { AlertController } from '@ionic/angular';
 import { IUpdateStatusUnit } from '../../interfaces/iupdate-status-unit';
 import { PerteneceA } from '../../constants/app.const';
 import { ILoginUnitResponse } from 'src/app/modules/auth/interfaces/ilogin-unit-response';
-import { userInfo } from 'os';
 import { BehaviorSubject } from 'rxjs';
 import { IAsistanceCreate } from '../../interfaces/iasistance-create';
 

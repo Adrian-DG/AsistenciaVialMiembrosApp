@@ -15,6 +15,7 @@ import { EditComponent } from './pages/edit/edit.component';
 import { FilterPipe } from './pipes/filter.pipe';
 import { PreHospitalariaformComponent } from './pages/pre-hospitalariaform/pre-hospitalariaform.component';
 import { SignaturePadComponent } from './components/signature-pad/signature-pad.component';
+import { RescateFormComponent } from './pages/rescate-form/rescate-form.component';
 
 @NgModule({
 	declarations: [
@@ -28,6 +29,7 @@ import { SignaturePadComponent } from './components/signature-pad/signature-pad.
 		PreHospitalariaformComponent,
 		FilterPipe,
 		SignaturePadComponent,
+		RescateFormComponent,
 	],
 	imports: [
 		CommonModule,

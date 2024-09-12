@@ -16,17 +16,6 @@
 						: 'noDisponible'
 				"
 			></div>
-			<!-- <ion-toggle
-				color="warning"
-				[checked]="_asistencias.unidadStatus$ | async"
-				(ionChange)="changeStatus()"
-			></ion-toggle> -->
-
-			<ion-button>
-				<ion-badge slot="start" color="warning">{{
-					unSentAsistances$ | async
-				}}</ion-badge>
-			</ion-button>
 
 			<ion-button (click)="logout()">
 				<ion-icon name="log-out"></ion-icon>
@@ -113,49 +102,44 @@
 		</ng-template>
 	</div>
 
-	<ion-fab
-		slot="fixed"
-		vertical="bottom"
-		horizontal="end"
-		*ngIf="infoUser?.accesoTotal; else normalAccess"
-	>
+	<ion-fab slot="fixed" vertical="bottom" horizontal="end">
 		<ion-fab-button>
 			<ion-icon name="add"></ion-icon>
 		</ion-fab-button>
 		<ion-fab-list side="top">
 			<ion-fab-button
+				*ngIf="
+					infoUser?.accesoTotal ||
+					infoUser?.perteneceA == departamento.Asistencia_Vial
+				"
 				color="warning"
 				[routerLink]="['create']"
-				style="font-weight: bold"
+				style="font-weight: bold; font-size: 2rem"
 			>
-				<ion-icon name="car-outline"></ion-icon>
+				<ion-icon name="car-sport-outline"></ion-icon>
 			</ion-fab-button>
 			<ion-fab-button
-				style="font-weight: bold"
+				*ngIf="
+					infoUser?.accesoTotal ||
+					infoUser?.perteneceA == departamento.Ambulancia
+				"
+				style="font-weight: bold; font-size: 2rem"
 				color="danger"
 				[routerLink]="['pre-hospitalaria-form']"
 			>
 				<ion-icon name="medkit-outline"></ion-icon>
 			</ion-fab-button>
+			<ion-fab-button
+				*ngIf="
+					infoUser?.accesoTotal ||
+					infoUser?.perteneceA == departamento.Rescate
+				"
+				style="font-weight: bold; font-size: 2rem"
+				color="tertiary"
+				[routerLink]="['rescate-form']"
+			>
+				<ion-icon name="car-outline"></ion-icon>
+			</ion-fab-button>
 		</ion-fab-list>
 	</ion-fab>
-	<ng-template #normalAccess>
-		<ion-fab slot="fixed" vertical="bottom" horizontal="end">
-			<ion-fab-button
-				[routerLink]="['pre-hospitalaria-form']"
-				color="success"
-				*ngIf="
-					infoUser?.perteneceA == departamento.Ambulancia;
-					else formularioVial
-				"
-			>
-				<ion-icon name="add"></ion-icon>
-			</ion-fab-button>
-			<ng-template #formularioVial>
-				<ion-fab-button [routerLink]="['create']" color="primary">
-					<ion-icon name="add"></ion-icon>
-				</ion-fab-button>
-			</ng-template>
-		</ion-fab>
-	</ng-template>
 </ion-content>

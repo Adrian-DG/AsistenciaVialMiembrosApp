@@ -7,6 +7,7 @@ export enum PerteneceA {
 	Taller,
 	Gruas,
 	Ambulancia,
+	Rescate,
 }
 
 export const VehicleTypesArray: IGenericEnum[] = [

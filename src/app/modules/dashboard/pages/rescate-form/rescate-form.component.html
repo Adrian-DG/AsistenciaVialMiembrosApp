@@ -1,0 +1,193 @@
+<ion-header [translucent]="true">
+	<ion-toolbar color="primary">
+		<ion-buttons slot="start">
+			<ion-back-button icon="caret-back"></ion-back-button>
+		</ion-buttons>
+		<ion-title>Formulario Rescate</ion-title>
+	</ion-toolbar>
+</ion-header>
+<ion-content>
+	<ion-card>
+		<ion-card-header>
+			<ion-card-title>Formulario de Rescate</ion-card-title>
+			<ion-card-subtitle
+				>Este formulario es uso exclusivo para el personal de
+				rescate.</ion-card-subtitle
+			>
+		</ion-card-header>
+		<ion-card-content>
+			<ion-item>
+				<ion-select placeholder="seleccionar tipo documento">
+					<ion-select-option [value]="1">Cédula</ion-select-option>
+					<ion-select-option [value]="2">Licencia</ion-select-option>
+					<ion-select-option [value]="3">Pasaporte</ion-select-option>
+				</ion-select>
+			</ion-item>
+			<ion-item>
+				<ion-label position="floating">Identificación</ion-label>
+				<ion-input></ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label position="floating">Nombre</ion-label>
+				<ion-input></ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label position="floating">Apellido</ion-label>
+				<ion-input></ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label position="floating">Edad</ion-label>
+				<ion-input type="number"></ion-input>
+			</ion-item>
+			<ion-item>
+				<fieldset style="width: 100%">
+					<legend>Sexo</legend>
+					<ion-radio-group
+						style="
+							display: flex;
+							flex-direction: row;
+							justify-content: flex-start;
+							align-items: center;
+							gap: 1em;
+						"
+					>
+						<ion-item>
+							<ion-label>Masculino</ion-label>
+							<ion-radio [value]="1" slot="start"></ion-radio>
+						</ion-item>
+
+						<ion-item>
+							<ion-label>Femenino</ion-label>
+							<ion-radio [value]="2" slot="start"></ion-radio>
+						</ion-item>
+					</ion-radio-group>
+				</fieldset>
+			</ion-item>
+
+			<ion-item>
+				<ion-label position="floating">Télefono</ion-label>
+				<ion-input type="number"></ion-input>
+			</ion-item>
+
+			<ion-item>
+				<ion-label position="floating">Nacionalidad</ion-label>
+				<ion-select>
+					<ion-select-option [value]="1"
+						>Dominicano</ion-select-option
+					>
+				</ion-select>
+			</ion-item>
+
+			<ion-item>
+				<ion-label position="floating">Tipo asistencia</ion-label>
+				<ion-select>
+					<ion-select-option [value]="1"
+						>EXTRICACIÓN</ion-select-option
+					>
+					<ion-select-option [value]="2"
+						>RECUPERACIÓN</ion-select-option
+					>
+					<ion-select-option [value]="2">APOYO</ion-select-option>
+					<ion-select-option [value]="2"
+						>MOVIMIENTO</ion-select-option
+					>
+					<ion-select-option [value]="2">OTRO</ion-select-option>
+				</ion-select>
+			</ion-item>
+
+			<ion-item>
+				<ion-label position="floating">Condición Victima</ion-label>
+				<ion-select>
+					<ion-select-option [value]="1"
+						>VIVO/ILESO</ion-select-option
+					>
+					<ion-select-option [value]="2"
+						>VIVO/LESIONADO</ion-select-option
+					>
+					<ion-select-option [value]="2">APOYO</ion-select-option>
+					<ion-select-option [value]="2">FALLECIDO</ion-select-option>
+				</ion-select>
+			</ion-item>
+
+			<ion-item>
+				<ion-label position="floating">Personas lesionadas</ion-label>
+				<ion-input type="number"></ion-input>
+			</ion-item>
+
+			<ion-item>
+				<ion-label position="floating">Personas fallecidad</ion-label>
+				<ion-input type="number"></ion-input>
+			</ion-item>
+
+			<ion-item>
+				<ion-label position="floating"
+					>Institución recibio victima</ion-label
+				>
+				<ion-select>
+					<ion-select-option [value]="1"
+						>PERSONAL 911</ion-select-option
+					>
+					<ion-select-option [value]="2"
+						>POLICIA NACIONAL</ion-select-option
+					>
+					<ion-select-option [value]="3">DIGESETT</ion-select-option>
+					<ion-select-option [value]="4">INACIF</ion-select-option>
+					<ion-select-option [value]="5"
+						>DEFENSA CIVIL</ion-select-option
+					>
+					<ion-select-option [value]="6"
+						>FAMILIAR VICTIMA</ion-select-option
+					>
+					<ion-select-option [value]="7">OTRO</ion-select-option>
+				</ion-select>
+			</ion-item>
+
+			<ion-item>
+				<ion-label position="floating"
+					>Institución recibio pertenencias</ion-label
+				>
+				<ion-select>
+					<ion-select-option [value]="1"
+						>PERSONAL 911</ion-select-option
+					>
+					<ion-select-option [value]="2"
+						>POLICIA NACIONAL</ion-select-option
+					>
+					<ion-select-option [value]="3">DIGESETT</ion-select-option>
+					<ion-select-option [value]="4">INACIF</ion-select-option>
+					<ion-select-option [value]="5"
+						>DEFENSA CIVIL</ion-select-option
+					>
+					<ion-select-option [value]="6"
+						>FAMILIAR VICTIMA</ion-select-option
+					>
+					<ion-select-option [value]="7">OTRO</ion-select-option>
+				</ion-select>
+			</ion-item>
+
+			<ion-item>
+				<ion-label position="floating">Cantidad vehiculos</ion-label>
+				<ion-input type="number"></ion-input>
+			</ion-item>
+
+			<ion-item>
+				<ion-label position="floating">Provincia</ion-label>
+				<ion-select>
+					<ion-select-option [value]="1">Provincia</ion-select-option>
+				</ion-select>
+			</ion-item>
+
+			<ion-item>
+				<ion-label position="floating">Municipio</ion-label>
+				<ion-select>
+					<ion-select-option [value]="1">Municipio</ion-select-option>
+				</ion-select>
+			</ion-item>
+
+			<ion-item>
+				<ion-label position="floating">Detalles</ion-label>
+				<ion-textarea></ion-textarea>
+			</ion-item>
+		</ion-card-content>
+	</ion-card>
+</ion-content>
