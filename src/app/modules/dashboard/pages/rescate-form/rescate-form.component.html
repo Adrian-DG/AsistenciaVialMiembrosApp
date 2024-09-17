@@ -28,7 +28,10 @@
 			</ion-item>
 			<ion-item>
 				<ion-label position="floating">Identificación</ion-label>
-				<ion-input [(ngModel)]="rescateObj.identificacion"></ion-input>
+				<ion-input
+					[(ngModel)]="rescateObj.identificacion"
+					inputmode="numeric"
+				></ion-input>
 			</ion-item>
 			<ion-item>
 				<ion-label position="floating">Nombre</ion-label>
@@ -43,39 +46,32 @@
 				<ion-input
 					type="number"
 					[(ngModel)]="rescateObj.edad"
+					inputmode="numeric"
 				></ion-input>
 			</ion-item>
-			<ion-item>
-				<fieldset style="width: 100%">
-					<legend>Sexo</legend>
-					<ion-radio-group
-						[(ngModel)]="rescateObj.sexo"
-						style="
-							display: flex;
-							flex-direction: row;
-							justify-content: flex-start;
-							align-items: center;
-							gap: 1em;
-						"
-					>
-						<ion-item>
-							<ion-label>Masculino</ion-label>
-							<ion-radio [value]="1" slot="start"></ion-radio>
-						</ion-item>
 
-						<ion-item>
-							<ion-label>Femenino</ion-label>
-							<ion-radio [value]="2" slot="start"></ion-radio>
-						</ion-item>
-					</ion-radio-group>
-				</fieldset>
-			</ion-item>
+			<fieldset>
+				<legend>Sexo</legend>
+				<ion-radio-group [(ngModel)]="rescateObj.sexo">
+					<ion-row>
+						<ion-col class="radio-col">
+							<ion-radio [value]="1"></ion-radio>
+							<ion-label>Hombre</ion-label>
+						</ion-col>
+						<ion-col class="radio-col">
+							<ion-radio [value]="2"></ion-radio>
+							<ion-label>Mujer</ion-label>
+						</ion-col>
+					</ion-row>
+				</ion-radio-group>
+			</fieldset>
 
 			<ion-item>
 				<ion-label position="floating">Télefono</ion-label>
 				<ion-input
 					type="number"
 					[(ngModel)]="rescateObj.telefono"
+					inputmode="numeric"
 				></ion-input>
 			</ion-item>
 
@@ -124,6 +120,7 @@
 				<ion-input
 					type="number"
 					[(ngModel)]="rescateObj.cantidadPersonasLesionadas"
+					inputmode="numeric"
 				></ion-input>
 			</ion-item>
 
@@ -132,6 +129,7 @@
 				<ion-input
 					type="number"
 					[(ngModel)]="rescateObj.cantidadPersonasFallecidas"
+					inputmode="numeric"
 				></ion-input>
 			</ion-item>
 
@@ -181,11 +179,147 @@
 				</ion-select>
 			</ion-item>
 
+			<ion-card>
+				<ion-card-header>
+					<ion-card-title>Vehiculos Involucrados</ion-card-title>
+					<ion-card-subtitle
+						>Detallar los vehiculos involucrados en el
+						accidente</ion-card-subtitle
+					>
+				</ion-card-header>
+				<ion-card-content>
+					<form [formGroup]="vehiculosInvolucradosForm">
+						<div formArrayName="vehiculosArray">
+							<div
+								*ngFor="
+									let vehicle of vehiculosInvolucradosForm
+										.controls.vehiculosArray.controls;
+									let i = index
+								"
+								[formGroupName]="i"
+								style="margin-bottom: 1em"
+							>
+								<h5 style="text-align: center">
+									Vehiculo #{{ i + 1 }}
+								</h5>
+								<ion-item>
+									<ion-label>Tipo</ion-label>
+									<ion-select
+										formControlName="vehiculoTipoId"
+										placeholder="seleccione"
+										#tipo
+									>
+										<ion-select-option
+											*ngFor="let item of tiposList"
+											[value]="item.id"
+											>{{
+												item.nombre
+											}}</ion-select-option
+										>
+									</ion-select>
+								</ion-item>
+								<ion-item>
+									<ion-label>Color</ion-label>
+									<ion-select
+										formControlName="vehiculoColorId"
+										placeholder="seleccione"
+									>
+										<ion-select-option
+											*ngFor="let item of coloresList"
+											[value]="item.id"
+											>{{
+												item.nombre
+											}}</ion-select-option
+										>
+									</ion-select>
+								</ion-item>
+								<ion-item>
+									<ion-label>Marca</ion-label>
+									<ion-select
+										formControlName="vehiculoMarcaId"
+										placeholder="seleccione"
+										#marca
+									>
+										<ion-select-option
+											*ngFor="
+												let item of _cache.vehiculoMarca$
+													| async
+											"
+											[value]="item.id"
+											>{{
+												item.nombre
+											}}</ion-select-option
+										>
+									</ion-select>
+								</ion-item>
+
+								<ion-item>
+									<ion-label>Marca</ion-label>
+									<ion-input
+										placeholder="(opcional)"
+										formControlName="marcaTxt"
+									></ion-input>
+								</ion-item>
+
+								<ion-item
+									(click)="
+										_cache.getDataOnIdFilters(
+											'VehiculoModelo',
+											tipo.value,
+											marca.value
+										)
+									"
+								>
+									<ion-label>Modelo</ion-label>
+									<ion-select
+										formControlName="vehiculoModeloId"
+										placeholder="seleccione"
+									>
+										<ion-select-option
+											*ngFor="
+												let item of _cache.vehiculoModelo$
+													| async
+											"
+											[value]="item.id"
+											>{{
+												item.nombre
+											}}</ion-select-option
+										>
+									</ion-select>
+								</ion-item>
+
+								<ion-item>
+									<ion-label>Modelo</ion-label>
+									<ion-input
+										placeholder="(opcional)"
+										formControlName="modeloTxt"
+									></ion-input>
+								</ion-item>
+
+								<ion-item>
+									<ion-label>Placa</ion-label>
+									<ion-input
+										formControlName="placa"
+									></ion-input>
+								</ion-item>
+							</div>
+							<ion-button
+								expand="block"
+								(click)="addVehicle()"
+								color="light"
+								>Agregar</ion-button
+							>
+						</div>
+					</form>
+				</ion-card-content>
+			</ion-card>
+
 			<ion-item>
 				<ion-label position="floating">Cantidad vehiculos</ion-label>
 				<ion-input
 					type="number"
 					[(ngModel)]="rescateObj.cantidadVehiculos"
+					inputmode="numeric"
 				></ion-input>
 			</ion-item>
 
@@ -211,6 +345,14 @@
 				<ion-label position="floating">Detalles</ion-label>
 				<ion-textarea [(ngModel)]="rescateObj.detalles"></ion-textarea>
 			</ion-item>
+
+			<ion-button
+				expand="block"
+				color="success"
+				(click)="createAsistance()"
+				[disabled]="isFormValid"
+				>Enviar Asistencia</ion-button
+			>
 		</ion-card-content>
 	</ion-card>
 </ion-content>
