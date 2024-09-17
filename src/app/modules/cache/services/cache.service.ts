@@ -150,4 +150,16 @@ export class CacheService extends GenericService {
 				this.unidadesSource.next(response)
 			);
 	}
+
+	getMarcas() {
+		return this.$http.get<IGenericEnum[]>(`${this.endPoint}/VehiculoMarca`);
+	}
+
+	getModelosByMarca(marcaId: number, tipo: number) {
+		const params = new HttpParams().set('tipo', tipo).set('marca', marcaId);
+		return this.$http.get<IGenericEnum[]>(
+			`${this.endPoint}/VehiculoModelo`,
+			{ params: params }
+		);
+	}
 }

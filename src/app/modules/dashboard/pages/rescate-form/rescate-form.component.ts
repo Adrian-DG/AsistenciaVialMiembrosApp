@@ -13,6 +13,7 @@ import {
 	VehicleTypesArray,
 } from '../../constants/app.const';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { IGenericEnum } from 'src/app/modules/cache/interfaces/igeneric-enum';
 
 @Component({
 	selector: 'ReportarAsistencia-rescate-form',
@@ -29,6 +30,8 @@ export class RescateFormComponent implements OnInit {
 	proviciasList = ProvinciasArray;
 	coloresList = VehicleColors;
 	tiposList = VehicleTypesArray;
+	marcasList!: IGenericEnum[];
+	modelosList!: IGenericEnum[];
 
 	rescateObj: IAsistenciaRescateCreate = {
 		tipoDocumento: 0,
@@ -70,8 +73,20 @@ export class RescateFormComponent implements OnInit {
 	});
 
 	ngOnInit() {
-		this._cache.getResource('VehiculoMarca');
-		this._cache.getResource('VehiculoMarca');
+		this.getMarcas();
+		this._cache.getResource('nacionalidades');
+	}
+
+	getMarcas() {
+		this._cache
+			.getMarcas()
+			.subscribe((data: IGenericEnum[]) => (this.marcasList = data));
+	}
+
+	getModelos(tipo: number, marca: number) {
+		this._cache
+			.getModelosByMarca(tipo, marca)
+			.subscribe((data: IGenericEnum[]) => (this.modelosList = data));
 	}
 
 	get isFormValid() {
@@ -80,6 +95,16 @@ export class RescateFormComponent implements OnInit {
 	}
 
 	addVehicle() {
+		let vehiculos = (
+			this.vehiculosInvolucradosForm.controls.vehiculosArray
+				.value as IVehiculosInvolucrados[]
+		)
+			.filter((v) => v.vehiculoTipoId > 0 && v.vehiculoColorId > 0)
+			.map((v) => {
+				v.vehiculoMarcaId = (v.vehiculoMarcaId as any).id;
+				v.vehiculoModeloId = (v.vehiculoModeloId as any).id;
+			});
+
 		this.vehiculosInvolucradosForm.controls.vehiculosArray.push(
 			new FormGroup({
 				vehiculoTipoId: new FormControl(0),
@@ -97,8 +122,6 @@ export class RescateFormComponent implements OnInit {
 
 	async createAsistance(): Promise<void> {
 		this.rescateObj.unidadMiembroId = await this._rescate.getUnitMemberId();
-		this.rescateObj.vehiculosInvolucrados = this.vehiculosInvolucradosForm
-			.controls.vehiculosArray.value as IVehiculosInvolucrados[];
 		this._rescate.createAsistenciaRescate(this.rescateObj);
 	}
 }
