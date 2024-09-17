@@ -17,7 +17,10 @@
 		</ion-card-header>
 		<ion-card-content>
 			<ion-item>
-				<ion-select placeholder="seleccionar tipo documento">
+				<ion-select
+					placeholder="seleccionar tipo documento"
+					[(ngModel)]="rescateObj.tipoDocumento"
+				>
 					<ion-select-option [value]="1">Cédula</ion-select-option>
 					<ion-select-option [value]="2">Licencia</ion-select-option>
 					<ion-select-option [value]="3">Pasaporte</ion-select-option>
@@ -25,24 +28,28 @@
 			</ion-item>
 			<ion-item>
 				<ion-label position="floating">Identificación</ion-label>
-				<ion-input></ion-input>
+				<ion-input [(ngModel)]="rescateObj.identificacion"></ion-input>
 			</ion-item>
 			<ion-item>
 				<ion-label position="floating">Nombre</ion-label>
-				<ion-input></ion-input>
+				<ion-input [(ngModel)]="rescateObj.nombre"></ion-input>
 			</ion-item>
 			<ion-item>
 				<ion-label position="floating">Apellido</ion-label>
-				<ion-input></ion-input>
+				<ion-input [(ngModel)]="rescateObj.apellido"></ion-input>
 			</ion-item>
 			<ion-item>
 				<ion-label position="floating">Edad</ion-label>
-				<ion-input type="number"></ion-input>
+				<ion-input
+					type="number"
+					[(ngModel)]="rescateObj.edad"
+				></ion-input>
 			</ion-item>
 			<ion-item>
 				<fieldset style="width: 100%">
 					<legend>Sexo</legend>
 					<ion-radio-group
+						[(ngModel)]="rescateObj.sexo"
 						style="
 							display: flex;
 							flex-direction: row;
@@ -66,12 +73,15 @@
 
 			<ion-item>
 				<ion-label position="floating">Télefono</ion-label>
-				<ion-input type="number"></ion-input>
+				<ion-input
+					type="number"
+					[(ngModel)]="rescateObj.telefono"
+				></ion-input>
 			</ion-item>
 
 			<ion-item>
 				<ion-label position="floating">Nacionalidad</ion-label>
-				<ion-select>
+				<ion-select [(ngModel)]="rescateObj.nacionalidadId">
 					<ion-select-option [value]="1"
 						>Dominicano</ion-select-option
 					>
@@ -80,7 +90,7 @@
 
 			<ion-item>
 				<ion-label position="floating">Tipo asistencia</ion-label>
-				<ion-select>
+				<ion-select [(ngModel)]="rescateObj.tipoAsistencia">
 					<ion-select-option [value]="1"
 						>EXTRICACIÓN</ion-select-option
 					>
@@ -97,7 +107,7 @@
 
 			<ion-item>
 				<ion-label position="floating">Condición Victima</ion-label>
-				<ion-select>
+				<ion-select [(ngModel)]="rescateObj.condicionVictima">
 					<ion-select-option [value]="1"
 						>VIVO/ILESO</ion-select-option
 					>
@@ -111,19 +121,25 @@
 
 			<ion-item>
 				<ion-label position="floating">Personas lesionadas</ion-label>
-				<ion-input type="number"></ion-input>
+				<ion-input
+					type="number"
+					[(ngModel)]="rescateObj.cantidadPersonasLesionadas"
+				></ion-input>
 			</ion-item>
 
 			<ion-item>
-				<ion-label position="floating">Personas fallecidad</ion-label>
-				<ion-input type="number"></ion-input>
+				<ion-label position="floating">Personas fallecidas</ion-label>
+				<ion-input
+					type="number"
+					[(ngModel)]="rescateObj.cantidadPersonasFallecidas"
+				></ion-input>
 			</ion-item>
 
 			<ion-item>
 				<ion-label position="floating"
 					>Institución recibio victima</ion-label
 				>
-				<ion-select>
+				<ion-select [(ngModel)]="rescateObj.entidadRecibioVictima">
 					<ion-select-option [value]="1"
 						>PERSONAL 911</ion-select-option
 					>
@@ -146,7 +162,7 @@
 				<ion-label position="floating"
 					>Institución recibio pertenencias</ion-label
 				>
-				<ion-select>
+				<ion-select [(ngModel)]="rescateObj.entidadRecibioPertenencias">
 					<ion-select-option [value]="1"
 						>PERSONAL 911</ion-select-option
 					>
@@ -167,26 +183,33 @@
 
 			<ion-item>
 				<ion-label position="floating">Cantidad vehiculos</ion-label>
-				<ion-input type="number"></ion-input>
+				<ion-input
+					type="number"
+					[(ngModel)]="rescateObj.cantidadVehiculos"
+				></ion-input>
 			</ion-item>
 
 			<ion-item>
 				<ion-label position="floating">Provincia</ion-label>
-				<ion-select>
-					<ion-select-option [value]="1">Provincia</ion-select-option>
+				<ion-select [(ngModel)]="rescateObj.provinciaId">
+					<ion-select-option
+						[value]="item.id"
+						*ngFor="let item of proviciasList"
+						>{{ item.nombre }}</ion-select-option
+					>
 				</ion-select>
 			</ion-item>
 
 			<ion-item>
 				<ion-label position="floating">Municipio</ion-label>
-				<ion-select>
+				<ion-select [(ngModel)]="rescateObj.municipioId">
 					<ion-select-option [value]="1">Municipio</ion-select-option>
 				</ion-select>
 			</ion-item>
 
 			<ion-item>
 				<ion-label position="floating">Detalles</ion-label>
-				<ion-textarea></ion-textarea>
+				<ion-textarea [(ngModel)]="rescateObj.detalles"></ion-textarea>
 			</ion-item>
 		</ion-card-content>
 	</ion-card>
