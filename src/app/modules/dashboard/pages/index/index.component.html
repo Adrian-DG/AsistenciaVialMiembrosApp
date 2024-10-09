@@ -110,7 +110,11 @@
 			<ion-fab-button
 				*ngIf="
 					infoUser?.accesoTotal ||
-					infoUser?.perteneceA == departamento.Asistencia_Vial
+					infoUser?.perteneceA == departamento.Asistencia_Vial ||
+					infoUser?.perteneceA == departamento.Taller ||
+					infoUser?.perteneceA == departamento.Gestion_Operativa ||
+					infoUser?.perteneceA == departamento.Gruas ||
+					infoUser?.perteneceA == departamento.Seguridad_Ciudadana
 				"
 				color="warning"
 				[routerLink]="['create']"
