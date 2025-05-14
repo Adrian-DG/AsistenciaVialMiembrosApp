@@ -166,6 +166,8 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		direccion: [''],
 	});
 
+	tiempoRespuesta: string = new Date().toISOString();
+
 	imagesWeb: string[] = [];
 	imagenes64: string[] = [];
 	hasPictures = false;
@@ -194,6 +196,12 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		// 	(value: string) =>
 		// 		this.AddVehiculoPlacaValidator(value.length === 1)
 		// );
+	}
+
+	onTiempoRespuestaChange(event: any): void {
+		console.log('Tiempo de respuesta: ', event.detail.value);
+		console.log('Tiempo de respuesta: ', this.tiempoRespuesta);
+		this.tiempoRespuesta = event.detail.value;
 	}
 
 	async getCurrentPosition(): Promise<void> {
@@ -383,6 +391,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 
 			solicitoApoyo: this.solicitoApoyo,
 			unidadAlfaId: this.unidadAlfaId ?? 0,
+			tiempoRespuesta: this.tiempoRespuesta,
 		};
 
 		if (typeof this.tipoAsistencias === 'number') {
