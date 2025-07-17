@@ -67,53 +67,6 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		);
 	}
 
-	// Cedula: Validators.pattern(/^[0-9]{11,15}$/)
-	// Telefono: [Validators.pattern(/^[0-9]{10,15}$/)]
-
-	// private AddCiudadanoIdentificacionValidator(value: boolean): void {
-	// 	if (value) {
-	// 		this.ciudadanoForm.controls['identificacion'].addValidators([
-	// 			Validators.required,
-	// 			Validators.minLength(11),
-	// 			Validators.maxLength(20),
-	// 			Validators.pattern(/^[a-zA-Z0-9]{11,}$/),
-	// 		]);
-	// 		console.log('validar identificacion: Si');
-	// 	} else {
-	// 		this.ciudadanoForm.controls['identificacion'].clearValidators();
-	// 		this.ciudadanoForm.controls['identificacion'].reset();
-	// 		console.log('validar identificacion: No');
-	// 	}
-	// }
-
-	// private AddCiudadanoTelefonoValidator(value: boolean): void {
-	// 	console.log('validar telefono: ', value);
-	// 	if (value) {
-	// 		this.ciudadanoForm.controls['telefono'].addValidators([
-	// 			Validators.required,
-	// 			Validators.minLength(10),
-	// 			Validators.pattern(/^[0-9]{10,}$/),
-	// 		]);
-	// 	} else {
-	// 		this.ciudadanoForm.controls['telefono'].clearValidators();
-	// 		this.ciudadanoForm.controls['telefono'].reset();
-	// 	}
-	// }
-
-	// private AddVehiculoPlacaValidator(value: boolean): void {
-	// 	console.log('validar placa: ', value);
-	// 	if (value) {
-	// 		this.vehiculoForm.controls['placa'].addValidators([
-	// 			Validators.required,
-	// 			Validators.minLength(7),
-	// 			Validators.pattern(/^[A-Za-z0-9]{1,10}$/),
-	// 		]);
-	// 	} else {
-	// 		this.vehiculoForm.controls['placa'].clearValidators();
-	// 		this.vehiculoForm.controls['placa'].reset();
-	// 	}
-	// }
-
 	ciudadanoForm: FormGroup = this.$fb.group({
 		identificacion: [
 			'',

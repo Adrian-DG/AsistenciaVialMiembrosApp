@@ -391,36 +391,13 @@
 			<fieldset>
 				<legend>Tiempo de respuesta</legend>
 
-				<ion-datetime-button
-					expand="block"
-					datetime="tiempoInicio"
-					style="width: 100%; display: block"
-				></ion-datetime-button>
-
-				<ion-modal
-					[keepContentsMounted]="true"
-					[animated]="true"
-					[title]="'Tiempo Inicio'"
-				>
-					<ng-template>
-						<ion-datetime
-							id="tiempoInicio"
-							[isDateEnabled]="false"
-							[presentation]="'time'"
-							[showDefaultTimeLabel]="true"
-							[showDefaultTitle]="false"
-							[title]="'Tiempo Inicio'"
-							[showDefaultButtons]="true"
-							[doneText]="'Aceptar'"
-							[cancelText]="'Cancelar'"
-							[(ngModel)]="tiempoRespuesta"
-							(ionChange)="onTiempoRespuestaChange($event)"
-							[hourCycle]="'h12'"
-						>
-							<span slot="title">Tiempo de Llegada</span>
-						</ion-datetime>
-					</ng-template>
-				</ion-modal>
+				<input
+					style="width: 100%"
+					id="tiempoInicio"
+					type="time"
+					[(ngModel)]="tiempoRespuesta"
+					(ngModelChange)="onTiempoRespuestaChange($event)"
+				/>
 			</fieldset>
 
 			<fieldset>
