@@ -26,5 +26,7 @@ export interface IAsistanceCreate {
 	modeloTxt: string;
 	solicitoApoyo: boolean;
 	unidadAlfaId: number | null;
-	tiempoRespuesta: string;
+	tiempoLlegada: Date;
+	tiempoCompletada?: Date;
+	tiempoCreacion: Date;
 }

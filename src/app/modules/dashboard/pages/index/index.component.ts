@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { IMemberUnitInfo } from '../../interfaces/imember-unit-info';
 import { AsistanceService } from '../../services/asistance/asistance.service';
@@ -14,8 +14,11 @@ import { take } from 'rxjs/operators';
 	templateUrl: './index.component.html',
 	styleUrls: ['./index.component.scss'],
 })
-export class IndexComponent implements OnInit, AfterViewInit {
+export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 	private static readonly REFRESH_DELAY_MS = 2000;
+	private static readonly SYNC_INTERVAL_MS = 600_000; // 10 minutes
+
+	private syncInterval: ReturnType<typeof setInterval> | null = null;
 
 	infoUser: IMemberUnitInfo | null = null;
 
@@ -33,8 +36,17 @@ export class IndexComponent implements OnInit, AfterViewInit {
 
 	ngOnInit() {
 		this.initUserData();
-		this.updatePendingAsistancesCount();
 		this.syncPendingAsistances();
+		this.syncInterval = setInterval(
+			() => this.syncPendingAsistances(),
+			IndexComponent.SYNC_INTERVAL_MS,
+		);
+	}
+
+	ngOnDestroy(): void {
+		if (this.syncInterval !== null) {
+			clearInterval(this.syncInterval);
+		}
 	}
 
 	initUserData(): void {
@@ -123,10 +135,6 @@ export class IndexComponent implements OnInit, AfterViewInit {
 		}
 	}
 
-	private updatePendingAsistancesCount(): void {
-		this.unSentAsistancesSource.next(localStorage.length);
-	}
-
 	private syncPendingAsistances(): void {
 		const pendingKeys = this.getPendingAsistanceKeys();
 		this.unSentAsistancesSource.next(pendingKeys.length);
@@ -148,7 +156,9 @@ export class IndexComponent implements OnInit, AfterViewInit {
 				.subscribe((response) => {
 					if (response) {
 						localStorage.removeItem(key);
-						this.unSentAsistancesSource.next(localStorage.length);
+						this.unSentAsistancesSource.next(
+							this.getPendingAsistanceKeys().length,
+						);
 					}
 				});
 		}
@@ -156,6 +166,31 @@ export class IndexComponent implements OnInit, AfterViewInit {
 
 	private getPendingAsistanceKeys(): string[] {
 		return Object.keys(localStorage).filter((key) => /^\d+$/.test(key));
+	}
+
+	sendPendingAsistencias(): void {
+		const pendingKeys = this.getPendingAsistanceKeys();
+		if (pendingKeys.length === 0) {
+			return;
+		}
+		for (const key of pendingKeys) {
+			const jsonAsistance = localStorage.getItem(key);
+			if (!jsonAsistance) {
+				continue;
+			}
+			const asistanceObj = JSON.parse(jsonAsistance) as IAsistanceCreate;
+			this._asistencias
+				.createAsistance(asistanceObj)
+				.pipe(take(1))
+				.subscribe((response) => {
+					if (response) {
+						localStorage.removeItem(key);
+						this.unSentAsistancesSource.next(
+							this.getPendingAsistanceKeys().length,
+						);
+					}
+				});
+		}
 	}
 
 	// sendSavedAsistances() {
