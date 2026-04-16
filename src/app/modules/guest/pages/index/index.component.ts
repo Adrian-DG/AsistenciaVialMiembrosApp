@@ -8,7 +8,16 @@ import { FormControl, Validators } from '@angular/forms';
 	styleUrls: ['./index.component.scss'],
 })
 export class IndexComponent implements OnInit {
-	cedula: FormControl = new FormControl('', [Validators.required]);
+	cedula: FormControl<string> = new FormControl<string>('', {
+		nonNullable: true,
+		validators: [
+			Validators.required,
+			Validators.minLength(11),
+			Validators.maxLength(11),
+			Validators.pattern('^[0-9]+$'),
+		],
+	});
+
 	constructor(private _guest: GuestService) {}
 
 	ngOnInit() {
@@ -16,6 +25,12 @@ export class IndexComponent implements OnInit {
 	}
 
 	validate(): void {
-		this._guest.confirmGuestAccess(this.cedula.value);
+		const normalizedCedula = this.cedula.value.trim();
+		if (this.cedula.invalid || !normalizedCedula) {
+			this.cedula.markAsTouched();
+			return;
+		}
+
+		this._guest.confirmGuestAccess(normalizedCedula);
 	}
 }

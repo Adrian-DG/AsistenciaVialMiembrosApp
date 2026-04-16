@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-	<ion-toolbar>
+	<ion-toolbar color="primary">
 		<ion-buttons slot="start">
 			<ion-back-button icon="caret-back"></ion-back-button>
 		</ion-buttons>
@@ -7,36 +7,40 @@
 	</ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-	<div class="container">
-		<ion-card>
+<ion-content [fullscreen]="true" class="guest-page">
+	<section class="container ion-padding">
+		<ion-card class="guest-card">
 			<ion-card-header>
-				<ion-card-title>Acceso Invitado</ion-card-title>
-				<ion-card-subtitle
-					>Esta modalidad permite a la persona ver las estadisticas a
-					nivel nacional, reservada solo para personal
-					autorizado.</ion-card-subtitle
-				>
+				<ion-chip color="primary" outline="true" class="guest-chip">
+					<ion-icon name="shield-checkmark-outline"></ion-icon>
+					<ion-label>Acceso Invitado</ion-label>
+				</ion-chip>
+				<ion-card-title>Consulta de estadisticas</ion-card-title>
+				<ion-card-subtitle>
+					Esta modalidad permite visualizar estadisticas a nivel nacional.
+					Disponible solo para personal autorizado.
+				</ion-card-subtitle>
 			</ion-card-header>
+
 			<ion-card-content>
-				<ion-item [counter]="true">
-					<ion-label>Cedula</ion-label>
-					<ion-input
-						inputmode="number"
-						[maxlength]="11"
-						[clearInput]="true"
-						[formControl]="cedula"
-					></ion-input>
+				<ion-item class="cedula-item" [counter]="true" lines="none">
+					<ion-label position="stacked">Cedula</ion-label>
+					<ion-input inputmode="numeric" enterkeyhint="go" [maxlength]="11" [clearInput]="true"
+						[formControl]="cedula" (keyup.enter)="validate()"></ion-input>
 				</ion-item>
+
+				<ion-note class="helper-text" color="medium">
+					Ingresa una cedula valida de 11 digitos.
+				</ion-note>
 			</ion-card-content>
-			<ion-button
-				color="primary"
-				fill="outline"
-				style="width: 100%"
-				(click)="validate()"
-				[disabled]="!cedula.valid"
-				>Validar</ion-button
-			>
+
+			<div class="actions">
+				<ion-button color="primary" expand="block" class="validate-btn" (click)="validate()"
+					[disabled]="!cedula.valid">
+					<ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+					Validar
+				</ion-button>
+			</div>
 		</ion-card>
-	</div>
+	</section>
 </ion-content>

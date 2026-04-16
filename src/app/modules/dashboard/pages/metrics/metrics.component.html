@@ -6,65 +6,81 @@
 		<ion-title>Estadísticas</ion-title>
 	</ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding">
+<ion-content class="metrics-page">
 	<ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
 		<ion-refresher-content></ion-refresher-content>
 	</ion-refresher>
-	<ion-card>
-		<ion-card-header>
-			<ion-card-title>Listado de Tramos</ion-card-title>
-			<ion-card-subtitle
-				>A continuación se muestran los tramos asignados a supervisar y
-				las asistencias completadas por unidad.</ion-card-subtitle
-			>
-		</ion-card-header>
-		<ion-card-content>
-			<ion-accordion-group>
-				<ion-accordion
-					[value]="'tramo' + tramo.id"
-					*ngFor="let tramo of _asistencias.tramosSupervisor$ | async"
-					(click)="displayUnidadesByTramo(tramo.id)"
-				>
-					<ion-item slot="header">
-						<ion-label>{{ tramo.nombre }}</ion-label>
-						<ion-badge slot="end" color="primary">{{
-							tramo.total
-						}}</ion-badge>
-					</ion-item>
-					<div class="ion-padding" slot="content">
-						<ion-accordion-group>
-							<ion-accordion
-								[value]="'unidad' + unidad.id"
-								*ngFor="
-									let unidad of _asistencias.metricasByTramoUnidad$
-										| async
-								"
-								(click)="displayAsistenciasByUnidad(unidad.id)"
-							>
-								<ion-item slot="header">
-									<ion-label>{{ unidad.nombre }}</ion-label>
-									<ion-badge slot="end" color="primary">{{
-										unidad.total
-									}}</ion-badge>
-								</ion-item>
-								<div class="ion-padding" slot="content">
-									<ion-item
-										*ngFor="
-											let tipo of _asistencias.metricasByUnidadTipoAsistencia$
-												| async
-										"
-									>
-										<ion-label>{{ tipo.nombre }}</ion-label>
-										<ion-badge slot="end" color="primary">{{
-											tipo.total
-										}}</ion-badge>
-									</ion-item>
-								</div>
-							</ion-accordion>
-						</ion-accordion-group>
-					</div>
-				</ion-accordion>
-			</ion-accordion-group>
-		</ion-card-content>
-	</ion-card>
+
+	<section class="metrics-shell ion-padding">
+		<ion-card class="metrics-overview">
+			<ion-card-header>
+				<ion-card-title>Listado de Tramos</ion-card-title>
+				<ion-card-subtitle>
+					Tramos asignados a supervisicion y asistencias completadas por
+					unidad.
+				</ion-card-subtitle>
+			</ion-card-header>
+		</ion-card>
+
+		<ion-card class="metrics-content">
+			<ion-card-content>
+				<ng-container *ngIf="_asistencias.tramosSupervisor$ | async as tramos">
+					<ion-accordion-group class="tramo-accordion" *ngIf="tramos.length; else emptyState">
+						<ion-accordion [value]="'tramo' + tramo.id" *ngFor="let tramo of tramos"
+							(click)="displayUnidadesByTramo(tramo.id)">
+							<ion-item class="tramo-item" slot="header" lines="none">
+								<ion-label>
+									<h3>{{ tramo.nombre }}</h3>
+									<p>Total de asistencias</p>
+								</ion-label>
+								<ion-badge slot="end" color="primary">
+									{{ tramo.total }}
+								</ion-badge>
+							</ion-item>
+
+							<div class="tramo-content" slot="content">
+								<ion-accordion-group class="unidad-accordion">
+									<ion-accordion [value]="'unidad' + unidad.id" *ngFor="
+											let unidad of _asistencias.metricasByTramoUnidad$ | async
+										" (click)="displayAsistenciasByUnidad(unidad.id)">
+										<ion-item class="unidad-item" slot="header" lines="none">
+											<ion-label>
+												<h4>{{ unidad.nombre }}</h4>
+												<p>Asistencias por tipo</p>
+											</ion-label>
+											<ion-badge slot="end" color="tertiary">
+												{{ unidad.total }}
+											</ion-badge>
+										</ion-item>
+
+										<div class="unidad-content" slot="content">
+											<ion-item class="tipo-item" lines="none" *ngFor="
+													let tipo of _asistencias.metricasByUnidadTipoAsistencia$
+														| async
+												">
+												<ion-label>{{ tipo.nombre }}</ion-label>
+												<ion-badge slot="end" color="success">
+													{{ tipo.total }}
+												</ion-badge>
+											</ion-item>
+										</div>
+									</ion-accordion>
+								</ion-accordion-group>
+							</div>
+						</ion-accordion>
+					</ion-accordion-group>
+				</ng-container>
+			</ion-card-content>
+		</ion-card>
+
+		<ng-template #emptyState>
+			<ion-card class="empty-state">
+				<ion-card-content>
+					<ion-icon name="stats-chart-outline"></ion-icon>
+					<h3>Sin datos para mostrar</h3>
+					<p>Actualiza la pantalla o intenta nuevamente en unos minutos.</p>
+				</ion-card-content>
+			</ion-card>
+		</ng-template>
+	</section>
 </ion-content>

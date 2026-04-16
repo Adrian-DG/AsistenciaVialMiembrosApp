@@ -1,8 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ILoginUnitMember } from '../../interfaces/ilogin-unit-member';
 import { AuthService } from '../../services/auth.service';
 import { NewVersionService } from 'src/app/modules/generic/services/NewVersion/new-version.service';
 import { Router } from '@angular/router';
+
+interface BeforeInstallPromptEvent extends Event {
+	prompt: () => Promise<void>;
+	userChoice: Promise<{
+		outcome: 'accepted' | 'dismissed';
+		platform: string;
+	}>;
+}
 
 @Component({
 	selector: 'app-signin',
@@ -10,60 +18,84 @@ import { Router } from '@angular/router';
 	styleUrls: ['./signin.component.scss'],
 })
 export class SigninComponent implements OnInit {
-	cedulaInput!: string;
-	fichaInput!: string;
-	isWriting!: boolean;
+	cedulaInput: string = '';
+	fichaInput: string = '';
+	isWriting: boolean = false;
+	isInstallAvailable: boolean = false;
+
+	private deferredPrompt: BeforeInstallPromptEvent | null = null;
+	private readonly onBeforeInstallPrompt = (event: Event): void => {
+		event.preventDefault();
+		this.deferredPrompt = event as BeforeInstallPromptEvent;
+		this.isInstallAvailable = true;
+	};
+
 	constructor(
 		public _auth: AuthService,
 		private _newVersionService: NewVersionService,
-		private $router: Router
+		private _router: Router,
 	) {}
 
 	ngOnInit() {
-		this.cedulaInput = '';
-		this.fichaInput = '';
-		this.isWriting = false;
+		window.addEventListener(
+			'beforeinstallprompt',
+			this.onBeforeInstallPrompt,
+		);
+	}
 
-		let defferedPrompt: any;
-		const addbtn = document.getElementById(
-			'signin-btn'
-		) as HTMLButtonElement;
-
-		window.addEventListener('beforeinstallprompt', (event) => {
-			event.preventDefault();
-			defferedPrompt = event;
-			addbtn.style.display = 'block';
-		});
-
-		addbtn.addEventListener('click', (event) => {
-			defferedPrompt.prompt();
-
-			defferedPrompt.userChoice.then((choice: any) => {
-				if (choice.outcome === 'accepted') {
-					console.log('user accepted the prompt');
-				}
-				defferedPrompt = null;
-			});
-		});
+	ngOnDestroy(): void {
+		window.removeEventListener(
+			'beforeinstallprompt',
+			this.onBeforeInstallPrompt,
+		);
 	}
 
 	hideImage = () => (this.isWriting = true);
 
 	validateMember(): void {
-		this._auth.validateMember(this.cedulaInput);
+		const cedula = this.cedulaInput.trim();
+		if (!cedula) {
+			return;
+		}
+
+		this._auth.validateMember(cedula);
 	}
 
 	validateUnit(): void {
-		this._auth.validateUnit(this.fichaInput);
+		const ficha = this.fichaInput.trim();
+		if (!ficha) {
+			return;
+		}
+
+		this._auth.validateUnit(ficha);
 	}
 
 	loginUnitMember(): void {
 		this.isWriting = false;
+
+		const cedula = this.cedulaInput.trim();
+		const ficha = this.fichaInput.trim();
+		if (!cedula || !ficha) {
+			return;
+		}
+
 		const model: ILoginUnitMember = {
-			cedula: this.cedulaInput,
-			ficha: this.fichaInput,
+			cedula,
+			ficha,
 		};
 		this._auth.loginUnitMember(model);
+	}
+
+	async installApp(): Promise<void> {
+		if (!this.deferredPrompt) {
+			return;
+		}
+
+		await this.deferredPrompt.prompt();
+		await this.deferredPrompt.userChoice;
+
+		this.deferredPrompt = null;
+		this.isInstallAvailable = false;
 	}
 
 	checkUpdate(): void {
@@ -71,6 +103,6 @@ export class SigninComponent implements OnInit {
 	}
 
 	loginAsGuest(): void {
-		this.$router.navigate(['guest']);
+		this._router.navigate(['guest']);
 	}
 }

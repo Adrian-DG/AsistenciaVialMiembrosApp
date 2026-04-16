@@ -3,145 +3,113 @@
 		<ion-title>Inicio</ion-title>
 
 		<ion-buttons slot="end">
-			<ion-button (click)="refreshUserData()">
+			<ion-button aria-label="Actualizar usuario" (click)="refreshUserData()">
 				<ion-icon name="refresh-sharp"></ion-icon>
 			</ion-button>
 
-			<div
-				style="margin: auto 0.3em"
-				class="status"
-				[ngClass]="
+			<div class="status-indicator" aria-label="Estado de conexion" [ngClass]="
 					(_asistencias.isConnected$ | async)
 						? 'disponible'
 						: 'noDisponible'
-				"
-			></div>
+				"></div>
 
-			<ion-button (click)="logout()">
+			<ion-button aria-label="Cerrar sesion" (click)="logout()">
 				<ion-icon name="log-out"></ion-icon>
 			</ion-button>
 		</ion-buttons>
 	</ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content class="home-page" [fullscreen]="true">
 	<!-- Refresher, pull down -->
 	<ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
 		<ion-refresher-content></ion-refresher-content>
 	</ion-refresher>
-	<!-- Unit information card -->
-	<app-member-unit-card [memberInfo]="infoUser"></app-member-unit-card>
-	<div class="list" *ngIf="_asistencias.asistencias$ | async as asistencias">
-		<ion-item>
-			<ion-label>Filtrar por estatus</ion-label>
-			<ion-select
-				placeholder="estatus asistencia"
-				[(ngModel)]="estatusAsistenciaSelected"
-				(ionChange)="refresh()"
-			>
-				<ion-select-option [value]="1">Pendiente</ion-select-option>
-				<ion-select-option [value]="2">En Proceso </ion-select-option>
-				<ion-select-option [value]="3">Completadas</ion-select-option>
-			</ion-select>
-		</ion-item>
 
-		<!-- <ion-row *ngIf="(unSentAsistances$ | async) ?? 0 > 0">
-			<ion-col>
-				<ion-button
-					color="warning"
-					expand="block"
-					(click)="sendSavedAsistances()"
-				>
-					<ion-badge
-						slot="start"
-						style="
-							color: white;
-							background-color: rgb(41, 40, 40);
-							margin-right: 0.2em;
-						"
-						>{{ unSentAsistances$ | async }}</ion-badge
-					>
-					Sin Enviar
-				</ion-button>
-			</ion-col>
-		</ion-row> -->
+	<section class="home-shell ion-padding">
+		<!-- Unit information card -->
+		<app-member-unit-card [memberInfo]="infoUser"></app-member-unit-card>
 
-		<ion-row>
-			<ion-col>
-				<ion-button color="primary" expand="block" (click)="refresh()"
-					>Refrescar</ion-button
-				>
-			</ion-col>
-		</ion-row>
+		<div class="list" *ngIf="_asistencias.asistencias$ | async as asistencias">
+			<ion-card class="control-card">
+				<ion-card-content>
+					<div class="control-row">
+						<ion-item lines="none" class="filter-item">
+							<ion-label>Filtrar por estatus</ion-label>
+							<ion-select interface="popover" placeholder="Selecciona un estatus"
+								[(ngModel)]="estatusAsistenciaSelected" (ionChange)="refresh()">
+								<ion-select-option [value]="1">Pendiente</ion-select-option>
+								<ion-select-option [value]="2">En Proceso</ion-select-option>
+								<ion-select-option [value]="3">Completadas</ion-select-option>
+							</ion-select>
+						</ion-item>
 
-		<ion-list *ngIf="asistencias.length > 0; else emptyList">
-			<ion-list-header>
-				<ion-label class="list-title">{{
-					estatusAsistenciaSelected == 3
-						? 'Asistencia completadas hoy'
-						: 'Listado de asistencia'
-				}}</ion-label>
-			</ion-list-header>
-			<!-- asistencias -->
-			<ion-item *ngFor="let item of asistencias">
-				<app-asistencia-card
-					[ficha]="infoUser?.ficha"
-					[item]="item"
-					[unidadMiembroId]="infoUser?.unidadMiembroId"
-					[departamento]="infoUser?.perteneceA"
-					style="width: 100%"
-				></app-asistencia-card>
-			</ion-item>
-		</ion-list>
-		<!-- empty list -->
-		<ng-template #emptyList>
-			<ion-list>
+						<div class="actions-row">
+							<ion-badge class="pending-badge" color="warning"
+								*ngIf="(unSentAsistances$ | async) as pending">
+								Pendientes sin enviar: {{ pending }}
+							</ion-badge>
+
+							<!--  -->
+						</div>
+					</div>
+				</ion-card-content>
+			</ion-card>
+
+			<ion-list class="asistance-list" *ngIf="asistencias.length > 0; else emptyList">
 				<ion-list-header>
-					<ion-label class="list-title">No hay registros</ion-label>
+					<ion-label class="list-title">{{
+						estatusAsistenciaSelected == 3
+						? 'Asistencias completadas hoy'
+						: 'Listado de asistencias'
+						}}</ion-label>
 				</ion-list-header>
+				<!-- asistencias -->
+				<ion-item class="asistance-item" lines="none" *ngFor="let item of asistencias">
+					<app-asistencia-card [ficha]="infoUser?.ficha" [item]="item"
+						[unidadMiembroId]="infoUser?.unidadMiembroId"
+						[departamento]="infoUser?.perteneceA"></app-asistencia-card>
+				</ion-item>
 			</ion-list>
-		</ng-template>
-	</div>
 
-	<ion-fab slot="fixed" vertical="bottom" horizontal="end">
+			<!-- empty list -->
+			<ng-template #emptyList>
+				<ion-card class="empty-state">
+					<ion-card-content>
+						<ion-icon name="albums-outline"></ion-icon>
+						<h3>No hay registros</h3>
+						<p>No se encontraron asistencias para el filtro seleccionado.</p>
+					</ion-card-content>
+				</ion-card>
+			</ng-template>
+		</div>
+
+	</section>
+
+	<ion-fab class="dashboard-fab" slot="fixed" vertical="bottom" horizontal="end">
 		<ion-fab-button>
 			<ion-icon name="add"></ion-icon>
 		</ion-fab-button>
 		<ion-fab-list side="top">
-			<ion-fab-button
-				*ngIf="
+			<ion-fab-button *ngIf="
 					infoUser?.accesoTotal ||
 					infoUser?.perteneceA == departamento.Asistencia_Vial ||
 					infoUser?.perteneceA == departamento.Taller ||
 					infoUser?.perteneceA == departamento.Gestion_Operativa ||
 					infoUser?.perteneceA == departamento.Gruas ||
 					infoUser?.perteneceA == departamento.Seguridad_Ciudadana
-				"
-				color="warning"
-				[routerLink]="['create']"
-				style="font-weight: bold; font-size: 2rem"
-			>
+				" color="warning" [routerLink]="['create']" style="font-weight: bold; font-size: 2rem">
 				<ion-icon name="car-sport-outline"></ion-icon>
 			</ion-fab-button>
-			<ion-fab-button
-				*ngIf="
+			<ion-fab-button *ngIf="
 					infoUser?.accesoTotal ||
 					infoUser?.perteneceA == departamento.Ambulancia
-				"
-				style="font-weight: bold; font-size: 2rem"
-				color="danger"
-				[routerLink]="['pre-hospitalaria-form']"
-			>
+				" style="font-weight: bold; font-size: 2rem" color="danger" [routerLink]="['pre-hospitalaria-form']">
 				<ion-icon name="medkit-outline"></ion-icon>
 			</ion-fab-button>
-			<ion-fab-button
-				*ngIf="
+			<ion-fab-button *ngIf="
 					infoUser?.accesoTotal ||
 					infoUser?.perteneceA == departamento.Rescate
-				"
-				style="font-weight: bold; font-size: 2rem"
-				color="tertiary"
-				[routerLink]="['rescate-form']"
-			>
+				" style="font-weight: bold; font-size: 2rem" color="tertiary" [routerLink]="['rescate-form']">
 				<ion-icon name="car-outline"></ion-icon>
 			</ion-fab-button>
 		</ion-fab-list>

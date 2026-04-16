@@ -1,165 +1,125 @@
-<ion-card style="width: 100%">
-	<ion-card-header>
-		<ion-row>
+<ion-card class="asistencia-card">
+	<ion-card-header class="card-header">
+		<ion-row class="header-row">
 			<!-- category icon-->
-			<ion-col size="2">
-				<ion-icon
-					class="category-icon"
-					[ngClass]="departamento == 6 ? 'emergencia' : 'asistencia'"
-					name="car-sport"
-				></ion-icon>
+			<ion-col size="2" class="icon-col">
+				<ion-icon class="category-icon" [ngClass]="departamento == 6 ? 'emergencia' : 'asistencia'"
+					name="car-sport"></ion-icon>
 			</ion-col>
 			<!-- card information -->
-			<ion-col size="8">
-				<ion-card-title style="text-align: center">{{
+			<ion-col size="8" class="title-col">
+				<ion-card-title>{{
 					item.estatusAsistencia
-				}}</ion-card-title>
+					}}</ion-card-title>
 			</ion-col>
 			<!-- card estatus -->
-			<ion-col size="2">
-				<ion-icon
-					class="completada status-icon"
-					*ngIf="item.estatus"
-					name="checkmark-done-circle"
-				></ion-icon>
-				<ion-icon
-					[ngClass]="
+			<ion-col size="2" class="icon-col">
+				<ion-icon class="completada status-icon" *ngIf="item.estatus" name="checkmark-done-circle"></ion-icon>
+				<ion-icon [ngClass]="
 						item.estatusAsistencia == 'PENDIENTE'
 							? 'pendiente'
 							: 'enCurso'
-					"
-					class="status-icon"
-					*ngIf="!item.estatus"
-					name="alert-circle"
-				></ion-icon>
+					" class="status-icon" *ngIf="!item.estatus" name="alert-circle"></ion-icon>
 			</ion-col>
 		</ion-row>
 	</ion-card-header>
-	<ion-card-content>
+	<ion-card-content class="card-content">
 		<ion-accordion-group>
 			<ion-accordion value="first">
-				<ion-item slot="header">
+				<ion-item slot="header" class="section-header" lines="none">
 					<ion-label>Datos ciudadano</ion-label>
 				</ion-item>
-				<div class="ion-padding" slot="content">
-					<ion-text
-						><strong>Identificación: </strong
-						>{{ item.identificacion }}</ion-text
-					>
-					<br />
-					<ion-text
-						><strong>Nombre: </strong
-						>{{ item.nombreCiudadano }}</ion-text
-					>
-					<br />
-					<ion-text
-						><strong>Sexo: </strong>{{ item.genero }}</ion-text
-					>
-					<br />
-					<ion-text
-						><strong>Extranjero: </strong
-						>{{ item.esExtranjero ? 'Si' : 'No' }}</ion-text
-					>
-					<br />
-					<ion-text
-						><strong>Teléfono: </strong
-						>{{ item.telefono }}</ion-text
-					>
+				<div class="details" slot="content">
+					<div class="detail-row">
+						<strong>Identificación:</strong>
+						<span>{{ item.identificacion }}</span>
+					</div>
+					<div class="detail-row">
+						<strong>Nombre:</strong>
+						<span>{{ item.nombreCiudadano }}</span>
+					</div>
+					<div class="detail-row">
+						<strong>Sexo:</strong>
+						<span>{{ item.genero }}</span>
+					</div>
+					<div class="detail-row">
+						<strong>Extranjero:</strong>
+						<span>{{ item.esExtranjero ? 'Si' : 'No' }}</span>
+					</div>
+					<div class="detail-row">
+						<strong>Teléfono:</strong>
+						<span>{{ item.telefono }}</span>
+					</div>
 				</div>
 			</ion-accordion>
 			<ion-accordion value="second" *ngIf="departamento != 6">
-				<ion-item slot="header">
-					<ion-label>Datos Vehiculo</ion-label></ion-item
-				>
-				<div class="ion-padding" slot="content">
-					<ion-text
-						><strong>Tipo: </strong
-						>{{ item.vehiculoTipo }}</ion-text
-					>
-					<br />
-					<ion-text
-						><strong>Color: </strong
-						>{{ item.vehiculoColor }}</ion-text
-					>
-					<br />
-					<ion-text
-						><strong>Marca: </strong
-						>{{ item.vehiculoMarca }}</ion-text
-					>
-					<br />
-					<ion-text
-						><strong>Modelo: </strong
-						>{{ item.vehiculoModelo }}</ion-text
-					>
-					<br />
-					<ion-text
-						><strong>Placa: </strong>{{ item.placa }}</ion-text
-					>
+				<ion-item slot="header" class="section-header" lines="none">
+					<ion-label>Datos Vehiculo</ion-label></ion-item>
+				<div class="details" slot="content">
+					<div class="detail-row">
+						<strong>Tipo:</strong>
+						<span>{{ item.vehiculoTipo }}</span>
+					</div>
+					<div class="detail-row">
+						<strong>Color:</strong>
+						<span>{{ item.vehiculoColor }}</span>
+					</div>
+					<div class="detail-row">
+						<strong>Marca:</strong>
+						<span>{{ item.vehiculoMarca }}</span>
+					</div>
+					<div class="detail-row">
+						<strong>Modelo:</strong>
+						<span>{{ item.vehiculoModelo }}</span>
+					</div>
+					<div class="detail-row">
+						<strong>Placa:</strong>
+						<span>{{ item.placa }}</span>
+					</div>
 				</div>
 			</ion-accordion>
 			<!-- datos asistencia -->
 			<ion-accordion value="third">
-				<ion-item slot="header">
+				<ion-item slot="header" class="section-header" lines="none">
 					<ion-label>Datos asistencia</ion-label>
 				</ion-item>
-				<div class="ion-padding" slot="content">
-					<ion-list>
-						<ion-list-header
-							><strong>Tipos asistencia</strong></ion-list-header
-						>
-						<ion-item *ngFor="let item of item.tipoAsistencias">
-							<ion-text
-								><ion-icon name="checkbox-outline"></ion-icon>
+				<div class="details" slot="content">
+					<ion-list class="types-list">
+						<ion-list-header><strong>Tipos asistencia</strong></ion-list-header>
+						<ion-item lines="none" *ngFor="let item of item.tipoAsistencias">
+							<ion-text><ion-icon name="checkbox-outline"></ion-icon>
 								{{ item.nombre }}
 							</ion-text>
 						</ion-item>
 					</ion-list>
-					<br />
-					<ion-text
-						><strong>Creación: </strong
-						>{{ item.fechaCreacion | date : 'short' }}</ion-text
-					>
-					<br />
-					<ion-text
-						><strong>Reportada por: </strong
-						>{{ item.reportadaPor }}</ion-text
-					>
-					<br />
-					<ion-text
-						><strong>Comentario: </strong
-						>{{ item.comentario }}</ion-text
-					>
+					<div class="detail-row">
+						<strong>Creación:</strong>
+						<span>{{ item.fechaCreacion | date : 'short' }}</span>
+					</div>
+					<div class="detail-row">
+						<strong>Reportada por:</strong>
+						<span>{{ item.reportadaPor }}</span>
+					</div>
+					<div class="detail-row">
+						<strong>Comentario:</strong>
+						<span>{{ item.comentario }}</span>
+					</div>
 				</div>
 			</ion-accordion>
 		</ion-accordion-group>
-		<ion-item
-			*ngIf="
+		<ion-item class="action-item" lines="none" *ngIf="
 				item.estatusAsistencia != 'COMPLETADA' &&
 				item.estatusAsistencia == 'EN PROCESO' &&
 				departamento !== 6
-			"
-		>
-			<ion-button
-				style="width: 100%"
-				color="primary"
-				expand="block"
-				[routerLink]="['edit', item.id]"
-				><ion-icon name="create-outline"></ion-icon> Editar</ion-button
-			>
+			">
+			<ion-button class="action-btn" color="primary" expand="block" [routerLink]="['edit', item.id]"><ion-icon
+					name="create-outline"></ion-icon> Editar</ion-button>
 		</ion-item>
 
-		<ion-item
-			*ngIf="item.estatusAsistencia == 'PENDIENTE' && departamento !== 6"
-		>
-			<ion-button
-				style="width: 100%"
-				color="success"
-				expand="block"
-				(click)="iniciar(item.id)"
-			>
+		<ion-item class="action-item" lines="none" *ngIf="item.estatusAsistencia == 'PENDIENTE' && departamento !== 6">
+			<ion-button class="action-btn" color="success" expand="block" (click)="iniciar(item.id)">
 				<ion-icon name="timer-outline" slot="start"></ion-icon>
-				Iniciar</ion-button
-			>
+				Iniciar</ion-button>
 		</ion-item>
 	</ion-card-content>
 </ion-card>
