@@ -2,12 +2,12 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { IMemberUnitInfo } from '../../interfaces/imember-unit-info';
 import { AsistanceService } from '../../services/asistance/asistance.service';
-import { AlertController } from '@ionic/angular';
 import { IUpdateStatusUnit } from '../../interfaces/iupdate-status-unit';
 import { PerteneceA } from '../../constants/app.const';
 import { ILoginUnitResponse } from 'src/app/modules/auth/interfaces/ilogin-unit-response';
 import { BehaviorSubject } from 'rxjs';
 import { IAsistanceCreate } from '../../interfaces/iasistance-create';
+import { take } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-index',
@@ -15,6 +15,8 @@ import { IAsistanceCreate } from '../../interfaces/iasistance-create';
 	styleUrls: ['./index.component.scss'],
 })
 export class IndexComponent implements OnInit, AfterViewInit {
+	private static readonly REFRESH_DELAY_MS = 2000;
+
 	infoUser: IMemberUnitInfo | null = null;
 
 	estatusAsistenciaSelected: number = 1;
@@ -27,47 +29,67 @@ export class IndexComponent implements OnInit, AfterViewInit {
 	constructor(
 		private _auth: AuthService,
 		public _asistencias: AsistanceService,
-		private _alert: AlertController
 	) {}
 
 	ngOnInit() {
 		this.initUserData();
-		this.checkLocalStorage();
+		this.updatePendingAsistancesCount();
+		this.syncPendingAsistances();
 	}
 
 	initUserData(): void {
 		this._auth.getStorageData().then((response) => {
+			const [
+				denominacion,
+				unidadMiembroId,
+				ficha,
+				miembro,
+				placa,
+				tramo,
+				esEncargado,
+				accesoTotal,
+				perteneceA,
+				unidadId,
+			] = response;
+
 			this.infoUser = {
-				denominacion: response[0],
-				unidadMiembroId: response[1],
-				ficha: response[2],
-				miembro: response[3],
-				placa: response[4],
-				tramo: response[5],
-				esEncargado: response[6],
-				accesoTotal: response[7],
-				perteneceA: response[8],
-				unidadId: response[9],
+				denominacion,
+				unidadMiembroId,
+				ficha,
+				miembro,
+				placa,
+				tramo,
+				esEncargado,
+				accesoTotal,
+				perteneceA,
+				unidadId,
 			};
 		});
 	}
 
 	ngAfterViewInit(): void {
-		setTimeout(() => this.refresh(), 2000);
+		setTimeout(() => this.refresh(), IndexComponent.REFRESH_DELAY_MS);
 	}
 
-	handleRefresh(event: any) {
+	handleRefresh(event: Event): void {
 		setTimeout(() => {
 			this.refresh();
-			event.target.complete();
-		}, 2000);
+			(event.target as HTMLIonRefresherElement | null)?.complete();
+		}, IndexComponent.REFRESH_DELAY_MS);
 	}
 
 	refreshUserData(): void {
+		if (!this.infoUser?.unidadMiembroId) {
+			return;
+		}
+
 		this._auth
-			.refreshUnidadMiembroInfo(this.infoUser?.unidadMiembroId as number)
+			.refreshUnidadMiembroInfo(this.infoUser.unidadMiembroId)
 			.subscribe((data: ILoginUnitResponse) => {
-				this._auth.saveToStorage(data).then(() => this.initUserData());
+				this._auth
+					.saveToStorage(data)
+					.then(() => this.initUserData())
+					.finally(() => this.refresh());
 			});
 	}
 
@@ -75,15 +97,15 @@ export class IndexComponent implements OnInit, AfterViewInit {
 		if (this.infoUser?.ficha && this.infoUser.unidadMiembroId) {
 			// this._asistencias.confirmUnidadEstatus(this.infoUser?.ficha)
 			this._asistencias.getTotalAsistenciasUnidad(
-				this.infoUser?.unidadMiembroId
+				this.infoUser?.unidadMiembroId,
 			);
 
 			this._asistencias.getAsistenciasUnidad(
 				this.infoUser?.ficha.toString(),
-				this.estatusAsistenciaSelected
+				this.estatusAsistenciaSelected,
 			);
 
-			this.checkLocalStorage();
+			this.syncPendingAsistances();
 		}
 	}
 
@@ -101,27 +123,39 @@ export class IndexComponent implements OnInit, AfterViewInit {
 		}
 	}
 
-	private checkLocalStorage() {
+	private updatePendingAsistancesCount(): void {
 		this.unSentAsistancesSource.next(localStorage.length);
-		this.unSentAsistances$.subscribe((value: number) => {
-			if (value > 0) {
-				for (let index = 0; index < value; index++) {
-					const jsonAsistance = localStorage.getItem(`${index}`);
-					if (jsonAsistance) {
-						const asistanceObj = JSON.parse(
-							jsonAsistance
-						) as IAsistanceCreate;
-						this._asistencias
-							.createAsistance(asistanceObj)
-							.subscribe((response) => {
-								if (response) {
-									localStorage.removeItem(`${index}`);
-								}
-							});
-					}
-				}
+	}
+
+	private syncPendingAsistances(): void {
+		const pendingKeys = this.getPendingAsistanceKeys();
+		this.unSentAsistancesSource.next(pendingKeys.length);
+
+		if (pendingKeys.length === 0) {
+			return;
+		}
+
+		for (const key of pendingKeys) {
+			const jsonAsistance = localStorage.getItem(key);
+			if (!jsonAsistance) {
+				continue;
 			}
-		});
+
+			const asistanceObj = JSON.parse(jsonAsistance) as IAsistanceCreate;
+			this._asistencias
+				.createAsistance(asistanceObj)
+				.pipe(take(1))
+				.subscribe((response) => {
+					if (response) {
+						localStorage.removeItem(key);
+						this.unSentAsistancesSource.next(localStorage.length);
+					}
+				});
+		}
+	}
+
+	private getPendingAsistanceKeys(): string[] {
+		return Object.keys(localStorage).filter((key) => /^\d+$/.test(key));
 	}
 
 	// sendSavedAsistances() {
@@ -154,18 +188,4 @@ export class IndexComponent implements OnInit, AfterViewInit {
 	// 		this.checkLocalStorage();
 	// 	}
 	// }
-
-	private async showAlert(condition: boolean) {
-		const title = condition ? 'Exito' : 'Error';
-		const body = condition
-			? 'La asistencia se ha enviado correctamente'
-			: 'Hubo fallo en el servicio';
-		const alert = await this._alert.create({
-			header: title,
-			message: body,
-			backdropDismiss: true,
-			animated: true,
-		});
-		await alert.present();
-	}
 }

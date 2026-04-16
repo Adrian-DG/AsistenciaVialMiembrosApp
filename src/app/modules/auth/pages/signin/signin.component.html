@@ -1,107 +1,77 @@
 <ion-header>
 	<ion-toolbar color="primary">
 		<ion-title>Inicio</ion-title>
-		<ion-buttons
-			slot="end"
-			(click)="checkUpdate()"
-			style="margin-right: 1em"
-		>
-			<ion-icon name="reload-circle" style="font-size: 1.5rem"></ion-icon>
-		</ion-buttons>
-		<ion-buttons
-			slot="end"
-			id="signin-btn"
-			style="margin-right: 1em; margin-top: 0.2em"
-		>
-			<ion-icon
-				name="cloud-download"
-				style="font-size: 1.5rem"
-			></ion-icon>
+
+		<ion-buttons slot="end" class="toolbar-actions">
+			<ion-button aria-label="Buscar actualizaciones" (click)="checkUpdate()">
+				<ion-icon name="reload-circle"></ion-icon>
+			</ion-button>
+
+			<ion-button *ngIf="isInstallAvailable" aria-label="Instalar aplicacion" (click)="installApp()">
+				<ion-icon name="cloud-download"></ion-icon>
+			</ion-button>
 		</ion-buttons>
 	</ion-toolbar>
 </ion-header>
 
-<ion-content>
-	<div id="content">
-		<ion-img
-			src="../../../../../assets/logo_comipol.png"
-			[ngClass]="isWriting ? 'small-logo' : 'big-logo'"
-		></ion-img>
-		<ion-card class="formulary">
-			<ion-card-header class="card-header">
-				<ion-card-title class="text"
-					>Registrar Asistencia</ion-card-title
-				>
-				<ion-card-subtitle class="text"
-					>Formulario de autenticación
-				</ion-card-subtitle>
-			</ion-card-header>
-			<ion-card-content>
-				<ion-row>
-					<ion-col size="10">
-						<ion-item counter="true">
-							<ion-label>Cédula </ion-label>
-							<ion-input
-								type="text"
-								placeholder="Cédula  agente"
-								[clearInput]="true"
-								[required]="true"
-								[minlength]="11"
-								[maxlength]="11"
-								inputmode="number"
-								[(ngModel)]="cedulaInput"
-								(click)="hideImage()"
-							></ion-input>
-						</ion-item>
-					</ion-col>
-					<ion-col size="2">
-						<ion-button color="primary" (click)="validateMember()">
-							<ion-icon name="checkmark-done-outline"></ion-icon>
-						</ion-button>
-					</ion-col>
-				</ion-row>
+<ion-content class="signin-page">
+	<section class="signin-shell">
+		<div class="brand-panel">
+			<div class="brand-copy">
+				<h1>Registrar Asistencia</h1>
+				<p>Accede con tu cedula y ficha para iniciar tu jornada operativa.</p>
+			</div>
 
-				<ion-row *ngIf="_auth.isMemberValid$ | async">
-					<ion-col size="10">
-						<ion-item>
-							<ion-label>Ficha</ion-label>
-							<ion-input
-								type="text"
-								placeholder="Ficha unidad"
-								[clearInput]="true"
-								[(ngModel)]="fichaInput"
-							></ion-input>
-						</ion-item>
-					</ion-col>
-					<ion-col size="2">
-						<ion-button color="primary" (click)="validateUnit()">
-							<ion-icon name="checkmark-done-outline"></ion-icon>
-						</ion-button>
-					</ion-col>
-				</ion-row>
-			</ion-card-content>
-			<ion-button
-				(click)="loginUnitMember()"
-				color="primary"
-				expand="block"
-				class="btn"
-				*ngIf="
+			<ion-img class="brand-logo" src="../../../../../assets/logo_comipol.png"
+				[ngClass]="isWriting ? 'small-logo' : 'big-logo'"></ion-img>
+		</div>
+
+		<div class="formulary" role="form" aria-label="Formulario de autenticacion">
+			<div class="card-header">
+				<h2 class="text form-title">Registrar Asistencia</h2>
+				<p class="text form-subtitle">Formulario de autenticación</p>
+			</div>
+
+			<div class="form-content">
+				<div class="input-group">
+					<ion-item counter="true" class="input-item" lines="none">
+						<ion-label>Cédula </ion-label>
+						<ion-input type="text" placeholder="Cedula del agente" [clearInput]="true" [required]="true"
+							[minlength]="11" [maxlength]="11" inputmode="numeric" enterkeyhint="done"
+							[(ngModel)]="cedulaInput" (keyup.enter)="validateMember()"
+							(click)="hideImage()"></ion-input>
+					</ion-item>
+
+					<ion-button class="validate-btn" color="primary" (click)="validateMember()">
+						<ion-icon name="checkmark-done-outline"></ion-icon>
+					</ion-button>
+				</div>
+
+				<div class="input-group" *ngIf="_auth.isMemberValid$ | async">
+					<ion-item class="input-item" lines="none">
+						<ion-label>Ficha</ion-label>
+						<ion-input type="text" placeholder="Ficha unidad" [clearInput]="true" inputmode="numeric"
+							enterkeyhint="go" (keyup.enter)="validateUnit()" [(ngModel)]="fichaInput"></ion-input>
+					</ion-item>
+
+					<ion-button class="validate-btn" color="primary" (click)="validateUnit()">
+						<ion-icon name="checkmark-done-outline"></ion-icon>
+					</ion-button>
+				</div>
+			</div>
+
+			<div class="button-stack">
+				<ion-button (click)="loginUnitMember()" color="primary" expand="block" class="btn btn-main" *ngIf="
 					(_auth.isUnitValid$ | async) &&
 					(_auth.isMemberValid$ | async)
-				"
-			>
-				<ion-icon name="log-in-outline"></ion-icon>
-				Ingresar
-			</ion-button>
+				">
+					<ion-icon slot="start" name="log-in-outline"></ion-icon>
+					Ingresar
+				</ion-button>
 
-			<ion-button
-				color="medium"
-				expand="block"
-				fill="clear"
-				class="btn"
-				(click)="loginAsGuest()"
-				>Invitado</ion-button
-			>
-		</ion-card>
-	</div>
+				<ion-button color="medium" expand="block" fill="clear" class="btn"
+					(click)="loginAsGuest()">Invitado</ion-button>
+			</div>
+		</div>
+	</section>
 </ion-content>

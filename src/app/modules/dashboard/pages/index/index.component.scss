@@ -1,31 +1,238 @@
+:host {
+	--surface: #f6f8fc;
+	--card-bg: #ffffff;
+	--card-border: #d9e2f3;
+	--text-primary: #12284b;
+	--text-muted: #5a6c8f;
+	--shadow-soft: 0 12px 26px rgba(18, 40, 75, 0.08);
+	display: block;
+}
+
+.home-page {
+	--background:
+		radial-gradient(circle at 10% -10%, #dce8fb 0%, transparent 38%),
+		linear-gradient(180deg, #eef4ff 0%, #f8fbff 55%, #f4f8ff 100%);
+	--padding-bottom: calc(env(safe-area-inset-bottom) + 88px);
+}
+
+.home-shell {
+	max-width: 980px;
+	margin: 0 auto;
+	display: grid;
+	gap: 14px;
+}
+
 .list {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5em;
+	display: grid;
+	gap: 12px;
 	min-height: 55%;
-	height: auto;
-	padding: 1em;
-	overflow-y: auto;
+}
+
+.control-card,
+.asistance-list,
+.empty-state {
+	margin: 0;
+	border: 1px solid var(--card-border);
+	border-radius: 16px;
+	background: var(--card-bg);
+	box-shadow: var(--shadow-soft);
+}
+
+.control-row {
+	display: grid;
+	gap: 12px;
+}
+
+.filter-item {
+	--background: #f9fbff;
+	--border-radius: 12px;
+	--padding-start: 12px;
+	--inner-padding-end: 12px;
+	border: 1px solid #e3e9f6;
+
+	ion-label {
+		font-weight: 600;
+		color: var(--text-primary);
+	}
+}
+
+.actions-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.pending-badge {
+	font-size: 0.78rem;
+	font-weight: 700;
+	padding: 8px 10px;
+	border-radius: 999px;
+}
+
+.asistance-list {
+	padding: 6px;
 }
 
 .list-title {
-	color: rgb(99, 99, 99);
-	font-weight: 500;
-	font-size: 1.1rem;
+	color: #5b6f96;
+	font-weight: 600;
+	font-size: 1.02rem;
 	text-align: center;
 }
 
+.asistance-item {
+	--background: transparent;
+	--padding-start: 0;
+	--inner-padding-end: 0;
+	margin-bottom: 8px;
+}
+
+.asistance-item:last-child {
+	margin-bottom: 0;
+}
+
+.empty-state ion-card-content {
+	display: grid;
+	place-items: center;
+	text-align: center;
+	gap: 8px;
+	padding: 5px 16px;
+}
+
+.empty-state ion-icon {
+	font-size: 2rem;
+	color: #2456b4;
+}
+
+.empty-state h3 {
+	margin: 0;
+	font-size: 1rem;
+	color: var(--text-primary);
+}
+
+.empty-state p {
+	margin: 0;
+	font-size: 0.88rem;
+	line-height: 1.4;
+	color: var(--text-muted);
+}
+
 .disponible {
-	background-color: rgb(71, 236, 71);
+	background-color: #47ec47;
 }
 
 .noDisponible {
-	background-color: rgb(252, 56, 56);
+	background-color: #fc3838;
 }
 
-.status {
+.status-indicator {
+	margin: auto 0.3em;
 	width: 1.2em;
 	height: 1.2em;
-	border: 3px solid white;
+	border: 3px solid #ffffff;
 	border-radius: 100%;
+	box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35);
+}
+
+.dashboard-fab {
+	right: max(16px, env(safe-area-inset-right));
+	bottom: max(16px, env(safe-area-inset-bottom));
+	position: absolute;
+	z-index: 20;
+}
+
+.dashboard-fab ion-fab-button {
+	--box-shadow: 0 14px 28px rgba(18, 40, 75, 0.24);
+}
+
+@media (min-width: 768px) {
+	.home-shell {
+		gap: 18px;
+	}
+
+	.control-row {
+		grid-template-columns: 1fr auto;
+		align-items: center;
+	}
+
+	.actions-row {
+		justify-content: flex-end;
+	}
+}
+
+@media (max-width: 480px) {
+	.home-page {
+		--padding-bottom: calc(env(safe-area-inset-bottom) + 96px);
+	}
+
+	.home-shell {
+		padding-left: 10px;
+		padding-right: 10px;
+		gap: 10px;
+	}
+
+	.list {
+		gap: 8px;
+	}
+
+	.control-card,
+	.asistance-list,
+	.empty-state {
+		border-radius: 14px;
+	}
+
+	.control-card ion-card-content {
+		padding: 8px;
+	}
+
+	.control-row {
+		gap: 8px;
+	}
+
+	.filter-item {
+		--min-height: 44px;
+		--padding-start: 10px;
+		--inner-padding-end: 10px;
+	}
+
+	.pending-badge {
+		font-size: 0.72rem;
+		padding: 6px 8px;
+	}
+
+	.asistance-list {
+		padding: 4px;
+	}
+
+	.asistance-item {
+		margin-bottom: 6px;
+	}
+
+	.list-title {
+		font-size: 0.95rem;
+	}
+
+	.empty-state ion-card-content {
+		padding: 10px 12px;
+		gap: 6px;
+	}
+
+	.empty-state ion-icon {
+		font-size: 1.65rem;
+	}
+
+	.empty-state h3 {
+		font-size: 0.95rem;
+	}
+
+	.empty-state p {
+		font-size: 0.8rem;
+	}
+
+	.dashboard-fab {
+		right: max(12px, env(safe-area-inset-right));
+		bottom: max(12px, env(safe-area-inset-bottom));
+	}
 }
