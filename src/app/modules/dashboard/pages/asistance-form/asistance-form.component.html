@@ -210,22 +210,6 @@
 					<div class="ion-padding" slot="content">
 						<form [formGroup]="ubicacionForm">
 							<ion-item fill="outline">
-								<!-- <ion-select
-								(click)="_cache.getResource('provincias')"
-									formControlName="provinciaId"
-									placeholder="Seleccionar Provincia"
-									#provinciaId
-								>
-									<ion-select-option
-										[value]="item.id"
-										*ngFor="
-											let item of _cache.provincias$
-												| async
-										"
-										>{{ item.nombre }}</ion-select-option
-									>
-								</ion-select> -->
-
 								<ion-select formControlName="provinciaId" placeholder="Seleccionar Provincia"
 									#provinciaId>
 									<ion-select-option [value]="item.id" *ngFor="
@@ -252,16 +236,6 @@
 								<ion-input formControlName="direccion"></ion-input>
 							</ion-item>
 						</form>
-						<ion-row>
-							<ion-col size="12">
-								<ion-button expand="block" (click)="getCurrentPosition()" color="primary"
-									[disabled]="hasPosition">
-									<ion-icon class="form-icons" name="location"></ion-icon>
-
-									Ubicación
-								</ion-button>
-							</ion-col>
-						</ion-row>
 					</div>
 				</ion-accordion>
 			</ion-accordion-group>

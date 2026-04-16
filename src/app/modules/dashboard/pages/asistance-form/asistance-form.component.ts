@@ -140,6 +140,8 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	isSoldierSignatureCapture = false;
 
 	async ngOnInit(): Promise<void> {
+		void this.getCurrentPosition();
+
 		// this.ciudadanoForm.controls['identificacion'].valueChanges.subscribe(
 		// 	(value: string) =>
 		// 		this.AddCiudadanoIdentificacionValidator(value.length === 1)
@@ -159,12 +161,15 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	}
 
 	async getCurrentPosition(): Promise<void> {
-		const position = await Geolocation.getCurrentPosition({
-			enableHighAccuracy: true,
-		});
-		console.log(position);
-		this.coordenadas = `${position.coords.latitude}, ${position.coords.longitude}`;
-		this.hasPosition = !this.hasPosition;
+		try {
+			const position = await Geolocation.getCurrentPosition({
+				enableHighAccuracy: true,
+			});
+			this.coordenadas = `${position.coords.latitude}, ${position.coords.longitude}`;
+			this.hasPosition = true;
+		} catch {
+			// Geolocation is attempted in the background; form submission can continue without blocking the user.
+		}
 	}
 
 	private async readAsBase64(photo: Photo) {
@@ -301,6 +306,10 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	}
 
 	async createAsistance(): Promise<void> {
+		if (!this.coordenadas) {
+			await this.getCurrentPosition();
+		}
+
 		const { identificacion, nombre, apellido, genero, telefono } =
 			this.ciudadanoForm.value;
 
