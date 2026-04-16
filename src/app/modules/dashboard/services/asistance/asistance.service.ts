@@ -84,6 +84,7 @@ export class AsistanceService extends GenericService {
 	}
 
 	createAsistance(model: IAsistanceCreate): Observable<boolean> {
+		console.log('Creating asistance with model:', model);
 		return this.$http.post<boolean>(`${this.endPoint}/create`, model);
 	}
 

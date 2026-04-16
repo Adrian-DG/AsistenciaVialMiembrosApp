@@ -1,15 +1,117 @@
+:host {
+	display: block;
+	width: 100%;
+}
+
+.asistencia-card {
+	width: 100%;
+	margin: 0;
+	border: 1px solid #dbe3f2;
+	border-radius: 16px;
+	box-shadow: 0 10px 22px rgba(19, 35, 66, 0.08);
+}
+
+.card-header {
+	padding-top: 12px;
+	padding-bottom: 8px;
+}
+
+.header-row {
+	align-items: center;
+}
+
+.icon-col,
+.title-col {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.title-col ion-card-title {
+	margin: 0;
+	text-align: center;
+	font-size: 1rem;
+	font-weight: 800;
+	color: #12284b;
+	line-height: 1.25;
+}
+
+.card-content {
+	padding-top: 8px;
+}
+
 .category-icon {
 	font-size: 2rem;
 	border: 1px solid gainsboro;
-	border-radius: 0.1em;
-	padding: 0.1em;
+	border-radius: 8px;
+	padding: 0.16em;
 }
 
 .status-icon {
 	font-size: 2rem;
+	flex-shrink: 0;
 	ion-icon {
 		border: 2px solid rgb(131, 130, 130);
 	}
+}
+
+.section-header {
+	--min-height: 46px;
+	--padding-start: 12px;
+	--inner-padding-end: 12px;
+	--background: #f8faff;
+	font-weight: 700;
+	border-radius: 10px;
+	margin-bottom: 8px;
+}
+
+.details {
+	padding: 8px 10px 12px;
+	background: #ffffff;
+	border: 1px solid #e5ebf7;
+	border-radius: 12px;
+	margin-bottom: 8px;
+}
+
+.detail-row {
+	display: grid;
+	grid-template-columns: minmax(100px, 145px) 1fr;
+	align-items: start;
+	gap: 8px;
+	font-size: 0.9rem;
+	line-height: 1.38;
+	padding: 4px 0;
+	color: #1d3256;
+
+	strong {
+		color: #11284a;
+	}
+
+	span {
+		word-break: break-word;
+		overflow-wrap: anywhere;
+	}
+}
+
+.types-list {
+	margin-bottom: 10px;
+	border: 1px solid #e6ecf8;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.action-item {
+	--padding-start: 0;
+	--inner-padding-end: 0;
+	--background: transparent;
+	margin-top: 6px;
+}
+
+.action-btn {
+	width: 100%;
+	margin: 0;
+	--border-radius: 12px;
+	font-weight: 700;
 }
 
 .emergencia {
@@ -34,4 +136,29 @@
 
 .completada {
 	color: rgb(37, 179, 37);
+}
+
+@media (max-width: 480px) {
+	.asistencia-card {
+		border-radius: 14px;
+	}
+
+	.title-col ion-card-title {
+		font-size: 0.92rem;
+	}
+
+	.category-icon,
+	.status-icon {
+		font-size: 1.7rem;
+	}
+
+	.detail-row {
+		grid-template-columns: 1fr;
+		gap: 2px;
+		font-size: 0.85rem;
+	}
+
+	.details {
+		padding: 8px;
+	}
 }
