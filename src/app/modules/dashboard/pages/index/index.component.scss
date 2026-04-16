@@ -139,7 +139,7 @@
 .dashboard-fab {
 	right: max(16px, env(safe-area-inset-right));
 	bottom: max(16px, env(safe-area-inset-bottom));
-	position: absolute;
+	position: fixed;
 	z-index: 20;
 }
 
