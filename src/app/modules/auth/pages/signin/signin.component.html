@@ -50,7 +50,7 @@
 				<div class="input-group" *ngIf="_auth.isMemberValid$ | async">
 					<ion-item class="input-item" lines="none">
 						<ion-label>Ficha</ion-label>
-						<ion-input type="text" placeholder="Ficha unidad" [clearInput]="true" inputmode="numeric"
+						<ion-input type="text" placeholder="Ficha unidad" [clearInput]="true" inputmode="text"
 							enterkeyhint="go" (keyup.enter)="validateUnit()" [(ngModel)]="fichaInput"></ion-input>
 					</ion-item>
 
