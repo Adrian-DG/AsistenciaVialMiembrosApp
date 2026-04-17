@@ -108,22 +108,6 @@
 
 						<form [formGroup]="vehiculoForm">
 							<ion-item fill="outline">
-								<!-- <ion-select
-									(click)="_cache.getResource('VehiculoTipo')"
-									formControlName="vehiculoTipoId"
-									placeholder="Tipo de Vehiculo"
-									#tipo
-								>
-									<ion-select-option
-										[value]="item.id"
-										*ngFor="
-											let item of _cache.vehiculoTipos$
-												| async
-										"
-										>{{ item.nombre }}</ion-select-option
-									>
-								</ion-select> -->
-
 								<ion-select formControlName="vehiculoTipoId" placeholder="Tipo de Vehiculo" #tipo>
 									<ion-select-option [value]="item.id" *ngFor="
 											let item of tipoVehiculosArray.sort()
@@ -131,21 +115,6 @@
 								</ion-select>
 							</ion-item>
 							<ion-item fill="outline">
-								<!-- <ion-select
-								(click)="_cache.getResource('VehiculoColores')"
-									formControlName="vehiculoColorId"
-									placeholder="Seleccionar Color"
-								>
-									<ion-select-option
-										[value]="item.id"
-										*ngFor="
-											let item of _cache.vehiculoColor$
-												| async
-										"
-										>{{ item.nombre }}</ion-select-option
-									>
-								</ion-select> -->
-
 								<ion-select formControlName="vehiculoColorId" placeholder="Seleccionar Color" #color>
 									<ion-select-option [value]="item.id" *ngFor="
 											let item of coloresVehiculosArray.sort()
