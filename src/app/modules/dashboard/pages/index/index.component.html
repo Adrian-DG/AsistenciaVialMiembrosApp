@@ -43,13 +43,11 @@
 							</ion-select>
 						</ion-item>
 
-						<div class="actions-row">
-							<ion-badge class="pending-badge" color="warning"
-								*ngIf="(unSentAsistances$ | async) as pending">
-								Pendientes sin enviar: {{ pending }}
-							</ion-badge>
-
-							<!--  -->
+						<div class="actions-row" *ngIf="unSentAsistances$ | async as unSentAsistances">
+							<ion-button (click)="sendPendingAsistencias()" color="warning" fill="solid">
+								<ion-icon name="cloud-upload" slot="start"></ion-icon>
+								Enviar pendientes: {{ unSentAsistances || 0 }}
+							</ion-button>
 						</div>
 					</div>
 				</ion-card-content>

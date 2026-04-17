@@ -14,7 +14,6 @@ import {
 	Photo,
 } from '@capacitor/camera';
 import { ComponentCanDeactivate } from 'src/app/guard/leave.guard';
-import { firstValueFrom } from 'rxjs';
 
 import {
 	ProvinciasArray,
@@ -122,7 +121,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		direccion: [''],
 	});
 
-	tiempoRespuesta: string = new Date().toISOString();
+	tiempoLlegada: Date = new Date();
 
 	imagesWeb: string[] = [];
 	imagenes64: string[] = [];
@@ -156,8 +155,8 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		// );
 	}
 
-	onTiempoRespuestaChange(value: string): void {
-		this.tiempoRespuesta = value;
+	setTiempoLlegada(): void {
+		this.tiempoLlegada = new Date();
 	}
 
 	async getCurrentPosition(): Promise<void> {
@@ -364,7 +363,9 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 
 			solicitoApoyo: this.solicitoApoyo,
 			unidadAlfaId: this.unidadAlfaId ?? 0,
-			tiempoRespuesta: this.tiempoRespuesta,
+			tiempoLlegada: this.tiempoLlegada,
+			tiempoCompletada: this.fueCompletada ? new Date() : undefined,
+			tiempoCreacion: new Date(),
 		};
 
 		if (typeof this.tipoAsistencias === 'number') {
@@ -400,29 +401,19 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 			return;
 		}
 
-		const response = await firstValueFrom(
-			this._asistencia.createAsistance(newAsistencia),
+		this._asistencia.saveAsistanceToStorage(newAsistencia);
+
+		[this.ciudadanoForm, this.vehiculoForm, this.ubicacionForm].forEach(
+			(item) => item.reset(),
 		);
 
-		if (response) {
-			[this.ciudadanoForm, this.vehiculoForm, this.ubicacionForm].forEach(
-				(item) => item.reset(),
-			);
+		this._asistencia.generateRequestResultAlert(
+			'Guardado',
+			'',
+			'La asistencia fue guardada y se enviará al servidor en breve.',
+		);
 
-			this._asistencia.generateRequestResultAlert(
-				'Exito',
-				'',
-				'La asistencia se registro correctamente',
-			);
-
-			this.$router.navigate(['dashboard']);
-		} else {
-			this._asistencia.generateRequestResultAlert(
-				'Error',
-				'Algo salió mal',
-				'No se pudo crear la asistencia, es posible que algunos campos no esten correctos o un fallo en el servicio!!',
-			);
-		}
+		this.$router.navigate(['dashboard']);
 	}
 
 	async setStatusReportarAsistencia(): Promise<void> {
