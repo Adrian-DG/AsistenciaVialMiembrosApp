@@ -43,7 +43,7 @@
 							</ion-select>
 						</ion-item>
 
-						<div class="actions-row" *ngIf="unSentAsistances$ | async as unSentAsistances">
+						<div id="unsend-btn" class="actions-row" *ngIf="unSentAsistances$ | async as unSentAsistances">
 							<ng-container *ngIf="_asistencias.isConnected$ | async as isConnected">
 								<ion-button (click)="sendPendingAsistencias()" color="warning" fill="solid" [disabled]="
 									(unSentAsistances || 0) === 0 ||

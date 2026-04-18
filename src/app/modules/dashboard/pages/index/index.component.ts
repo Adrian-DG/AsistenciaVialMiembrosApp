@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { IMemberUnitInfo } from '../../interfaces/imember-unit-info';
 import { AsistanceService } from '../../services/asistance/asistance.service';
@@ -38,6 +39,7 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 	constructor(
 		private _auth: AuthService,
 		public _asistencias: AsistanceService,
+		private _alert: AlertController,
 	) {}
 
 	ngOnInit() {
@@ -66,6 +68,10 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 			() => this.syncPendingAsistances(),
 			IndexComponent.SYNC_INTERVAL_MS,
 		);
+	}
+
+	ionViewWillEnter(): void {
+		this.syncPendingAsistances();
 	}
 
 	ngOnDestroy(): void {
@@ -187,7 +193,7 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 		return Object.keys(localStorage).filter((key) => /^\d+$/.test(key));
 	}
 
-	sendPendingAsistencias(): void {
+	async sendPendingAsistencias(): Promise<void> {
 		if (this.isManualPendingSendLocked || this.isPendingSendInProgress) {
 			return;
 		}
@@ -196,6 +202,16 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (pendingKeys.length === 0) {
 			return;
 		}
+
+		const alert = await this._alert.create({
+			header: 'Aviso',
+			message:
+				'Las asistencias pendientes se iran enviando de forma automaticatica, favor ser paciente',
+			buttons: ['Aceptar'],
+			animated: true,
+		});
+
+		await alert.present();
 
 		this.isManualPendingSendLocked = true;
 		this.unSentAsistancesSource.next(pendingKeys.length);
