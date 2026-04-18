@@ -21,6 +21,7 @@ import {
 	VehicleColors,
 } from '../../constants/app.const';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
 	selector: 'app-asistance-form',
@@ -138,6 +139,17 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	isCitizenSignatureCapture = false;
 	isSoldierSignatureCapture = false;
 
+	private isTiempoLLegadaRegistradoSubject = new BehaviorSubject<boolean>(
+		false,
+	);
+	isTiempoLLegadaRegistrado$ =
+		this.isTiempoLLegadaRegistradoSubject.asObservable();
+
+	setTiempoLlegada(): void {
+		this.tiempoLlegada = new Date();
+		this.isTiempoLLegadaRegistradoSubject.next(true);
+	}
+
 	async ngOnInit(): Promise<void> {
 		void this.getCurrentPosition();
 
@@ -153,10 +165,6 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		// 	(value: string) =>
 		// 		this.AddVehiculoPlacaValidator(value.length === 1)
 		// );
-	}
-
-	setTiempoLlegada(): void {
-		this.tiempoLlegada = new Date();
 	}
 
 	async getCurrentPosition(): Promise<void> {
