@@ -5,7 +5,7 @@ import { AsistanceService } from '../../services/asistance/asistance.service';
 import { IUpdateStatusUnit } from '../../interfaces/iupdate-status-unit';
 import { PerteneceA } from '../../constants/app.const';
 import { ILoginUnitResponse } from 'src/app/modules/auth/interfaces/ilogin-unit-response';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { IAsistanceCreate } from '../../interfaces/iasistance-create';
 import { take } from 'rxjs/operators';
 
@@ -21,7 +21,10 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	private syncInterval: ReturnType<typeof setInterval> | null = null;
 	private pendingSendTimeout: ReturnType<typeof setTimeout> | null = null;
-	private isPendingSendInProgress = false;
+	private connectionSubscription: Subscription | null = null;
+	public isPendingSendInProgress = false;
+	public isWaitingForConnection = false;
+	public isManualPendingSendLocked = false;
 
 	infoUser: IMemberUnitInfo | null = null;
 
@@ -40,6 +43,25 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 	ngOnInit() {
 		this.initUserData();
 		this.syncPendingAsistances();
+		this.connectionSubscription = this._asistencias.isConnected$.subscribe(
+			(isConnected) => {
+				if (!isConnected) {
+					if (this.isManualPendingSendLocked) {
+						this.isWaitingForConnection =
+							this.getPendingAsistanceKeys().length > 0;
+					}
+					return;
+				}
+
+				this.isWaitingForConnection = false;
+				if (
+					this.isManualPendingSendLocked ||
+					this.getPendingAsistanceKeys().length > 0
+				) {
+					this.processNextPendingAsistance();
+				}
+			},
+		);
 		this.syncInterval = setInterval(
 			() => this.syncPendingAsistances(),
 			IndexComponent.SYNC_INTERVAL_MS,
@@ -53,6 +75,10 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		if (this.pendingSendTimeout !== null) {
 			clearTimeout(this.pendingSendTimeout);
+		}
+
+		if (this.connectionSubscription !== null) {
+			this.connectionSubscription.unsubscribe();
 		}
 	}
 
@@ -162,13 +188,33 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	sendPendingAsistencias(): void {
+		if (this.isManualPendingSendLocked || this.isPendingSendInProgress) {
+			return;
+		}
+
 		const pendingKeys = this.getPendingAsistanceKeys();
 		if (pendingKeys.length === 0) {
 			return;
 		}
 
+		this.isManualPendingSendLocked = true;
 		this.unSentAsistancesSource.next(pendingKeys.length);
 		this.processNextPendingAsistance();
+	}
+
+	getPendingSendButtonLabel(
+		unSentAsistances: number,
+		isConnected: boolean | null,
+	): string {
+		if (this.isPendingSendInProgress) {
+			return 'Enviando pendientes...';
+		}
+
+		if (this.isWaitingForConnection || !isConnected) {
+			return 'Esperando conexion...';
+		}
+
+		return `Enviar pendientes: ${unSentAsistances || 0}`;
 	}
 
 	private processNextPendingAsistance(): void {
@@ -180,6 +226,8 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.unSentAsistancesSource.next(pendingKeys.length);
 
 		if (pendingKeys.length === 0) {
+			this.isWaitingForConnection = false;
+			this.isManualPendingSendLocked = false;
 			return;
 		}
 
@@ -187,8 +235,11 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 			.pipe(take(1))
 			.subscribe((isConnected) => {
 				if (!isConnected) {
+					this.isWaitingForConnection = true;
 					return;
 				}
+
+				this.isWaitingForConnection = false;
 
 				const key = this.getPendingAsistanceKeys()[0];
 				if (!key) {
@@ -231,9 +282,16 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 						},
 						complete: () => {
 							this.isPendingSendInProgress = false;
-							this.unSentAsistancesSource.next(
-								this.getPendingAsistanceKeys().length,
-							);
+							const pendingCount =
+								this.getPendingAsistanceKeys().length;
+							this.unSentAsistancesSource.next(pendingCount);
+
+							if (pendingCount === 0) {
+								this.isWaitingForConnection = false;
+								this.isManualPendingSendLocked = false;
+								return;
+							}
+
 							this.scheduleNextPendingAsistance();
 						},
 						error: () => {

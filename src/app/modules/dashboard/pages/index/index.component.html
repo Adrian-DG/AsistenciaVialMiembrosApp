@@ -44,10 +44,18 @@
 						</ion-item>
 
 						<div class="actions-row" *ngIf="unSentAsistances$ | async as unSentAsistances">
-							<ion-button (click)="sendPendingAsistencias()" color="warning" fill="solid">
-								<ion-icon name="cloud-upload" slot="start"></ion-icon>
-								Enviar pendientes: {{ unSentAsistances || 0 }}
-							</ion-button>
+							<ng-container *ngIf="_asistencias.isConnected$ | async as isConnected">
+								<ion-button (click)="sendPendingAsistencias()" color="warning" fill="solid" [disabled]="
+									(unSentAsistances || 0) === 0 ||
+									isPendingSendInProgress ||
+									isWaitingForConnection ||
+									isManualPendingSendLocked ||
+									!isConnected
+								">
+									<ion-icon name="cloud-upload" slot="start"></ion-icon>
+									{{ getPendingSendButtonLabel(unSentAsistances, isConnected) }}
+								</ion-button>
+							</ng-container>
 						</div>
 					</div>
 				</ion-card-content>
