@@ -17,8 +17,11 @@ import { take } from 'rxjs/operators';
 export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 	private static readonly REFRESH_DELAY_MS = 2000;
 	private static readonly SYNC_INTERVAL_MS = 600_000; // 10 minutes
+	private static readonly PENDING_SEND_INTERVAL_MS = 60_000; // 1 minute
 
 	private syncInterval: ReturnType<typeof setInterval> | null = null;
+	private pendingSendTimeout: ReturnType<typeof setTimeout> | null = null;
+	private isPendingSendInProgress = false;
 
 	infoUser: IMemberUnitInfo | null = null;
 
@@ -47,10 +50,14 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (this.syncInterval !== null) {
 			clearInterval(this.syncInterval);
 		}
+
+		if (this.pendingSendTimeout !== null) {
+			clearTimeout(this.pendingSendTimeout);
+		}
 	}
 
-	initUserData(): void {
-		this._auth.getStorageData().then((response) => {
+	initUserData(): Promise<void> {
+		return this._auth.getStorageData().then((response) => {
 			const [
 				denominacion,
 				unidadMiembroId,
@@ -90,7 +97,11 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 		}, IndexComponent.REFRESH_DELAY_MS);
 	}
 
-	refreshUserData(): void {
+	async refreshUserData(): Promise<void> {
+		if (!this.infoUser?.unidadMiembroId) {
+			await this.initUserData();
+		}
+
 		if (!this.infoUser?.unidadMiembroId) {
 			return;
 		}
@@ -143,25 +154,7 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 			return;
 		}
 
-		for (const key of pendingKeys) {
-			const jsonAsistance = localStorage.getItem(key);
-			if (!jsonAsistance) {
-				continue;
-			}
-
-			const asistanceObj = JSON.parse(jsonAsistance) as IAsistanceCreate;
-			this._asistencias
-				.createAsistance(asistanceObj)
-				.pipe(take(1))
-				.subscribe((response) => {
-					if (response) {
-						localStorage.removeItem(key);
-						this.unSentAsistancesSource.next(
-							this.getPendingAsistanceKeys().length,
-						);
-					}
-				});
-		}
+		this.processNextPendingAsistance();
 	}
 
 	private getPendingAsistanceKeys(): string[] {
@@ -173,24 +166,97 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 		if (pendingKeys.length === 0) {
 			return;
 		}
-		for (const key of pendingKeys) {
-			const jsonAsistance = localStorage.getItem(key);
-			if (!jsonAsistance) {
-				continue;
-			}
-			const asistanceObj = JSON.parse(jsonAsistance) as IAsistanceCreate;
-			this._asistencias
-				.createAsistance(asistanceObj)
-				.pipe(take(1))
-				.subscribe((response) => {
-					if (response) {
-						localStorage.removeItem(key);
-						this.unSentAsistancesSource.next(
-							this.getPendingAsistanceKeys().length,
-						);
-					}
-				});
+
+		this.unSentAsistancesSource.next(pendingKeys.length);
+		this.processNextPendingAsistance();
+	}
+
+	private processNextPendingAsistance(): void {
+		if (this.isPendingSendInProgress || this.pendingSendTimeout !== null) {
+			return;
 		}
+
+		const pendingKeys = this.getPendingAsistanceKeys();
+		this.unSentAsistancesSource.next(pendingKeys.length);
+
+		if (pendingKeys.length === 0) {
+			return;
+		}
+
+		this._asistencias.isConnected$
+			.pipe(take(1))
+			.subscribe((isConnected) => {
+				if (!isConnected) {
+					return;
+				}
+
+				const key = this.getPendingAsistanceKeys()[0];
+				if (!key) {
+					return;
+				}
+
+				const jsonAsistance = localStorage.getItem(key);
+				if (!jsonAsistance) {
+					localStorage.removeItem(key);
+					this.unSentAsistancesSource.next(
+						this.getPendingAsistanceKeys().length,
+					);
+					this.processNextPendingAsistance();
+					return;
+				}
+
+				let asistanceObj: IAsistanceCreate;
+				try {
+					asistanceObj = JSON.parse(
+						jsonAsistance,
+					) as IAsistanceCreate;
+				} catch {
+					localStorage.removeItem(key);
+					this.unSentAsistancesSource.next(
+						this.getPendingAsistanceKeys().length,
+					);
+					this.processNextPendingAsistance();
+					return;
+				}
+
+				this.isPendingSendInProgress = true;
+				this._asistencias
+					.createAsistance(asistanceObj)
+					.pipe(take(1))
+					.subscribe({
+						next: (response) => {
+							if (response) {
+								localStorage.removeItem(key);
+							}
+						},
+						complete: () => {
+							this.isPendingSendInProgress = false;
+							this.unSentAsistancesSource.next(
+								this.getPendingAsistanceKeys().length,
+							);
+							this.scheduleNextPendingAsistance();
+						},
+						error: () => {
+							this.isPendingSendInProgress = false;
+							this.scheduleNextPendingAsistance();
+						},
+					});
+			});
+	}
+
+	private scheduleNextPendingAsistance(): void {
+		if (this.pendingSendTimeout !== null) {
+			return;
+		}
+
+		if (this.getPendingAsistanceKeys().length === 0) {
+			return;
+		}
+
+		this.pendingSendTimeout = setTimeout(() => {
+			this.pendingSendTimeout = null;
+			this.processNextPendingAsistance();
+		}, IndexComponent.PENDING_SEND_INTERVAL_MS);
 	}
 
 	// sendSavedAsistances() {
