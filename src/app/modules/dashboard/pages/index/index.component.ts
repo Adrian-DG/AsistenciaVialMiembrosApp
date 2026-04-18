@@ -278,6 +278,7 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 						next: (response) => {
 							if (response) {
 								localStorage.removeItem(key);
+								this.refresh();
 							}
 						},
 						complete: () => {
@@ -316,35 +317,4 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.processNextPendingAsistance();
 		}, IndexComponent.PENDING_SEND_INTERVAL_MS);
 	}
-
-	// sendSavedAsistances() {
-	// 	let localStorageCount = localStorage.length;
-	// 	if (localStorageCount > 0) {
-	// 		const lastIndex = (localStorageCount - 1).toString();
-	// 		const asistanceJson = localStorage.getItem(lastIndex);
-
-	// 		const isType1 =
-	// 			asistanceJson &&
-	// 			this.infoUser?.perteneceA == this.departamento.Asistencia_Vial;
-
-	// 		if (isType1) {
-	// 			const newAsistance = JSON.parse(
-	// 				asistanceJson
-	// 			) as IAsistanceCreate;
-	// 			this._asistencias.createAsistance(newAsistance).subscribe(
-	// 				async (response: boolean) => {
-	// 					if (response) {
-	// 						localStorage.removeItem(lastIndex);
-	// 						await this.showAlert(response);
-	// 					}
-	// 				},
-	// 				async () => await this.showAlert(false)
-	// 			);
-	// 		} else {
-	// 			// TODO: add pre-hospitalaria
-	// 		}
-
-	// 		this.checkLocalStorage();
-	// 	}
-	// }
 }
