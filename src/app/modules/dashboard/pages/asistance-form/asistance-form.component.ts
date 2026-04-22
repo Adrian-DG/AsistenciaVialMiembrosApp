@@ -22,11 +22,13 @@ import {
 } from '../../constants/app.const';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 @Component({
 	selector: 'app-asistance-form',
 	templateUrl: './asistance-form.component.html',
 	styleUrls: ['./asistance-form.component.scss'],
+	providers: [DatePipe],
 })
 export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	tipoVehiculosArray = VehicleTypesArray;
@@ -52,6 +54,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		private _asistencia: AsistanceService,
 		private _alert: AlertController,
 		private $router: Router,
+		private _datePipe: DatePipe,
 	) {}
 
 	get isMainFormValid(): boolean {
@@ -111,9 +114,9 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 				Validators.pattern(/^[A-Za-z0-9]{1,10}$/),
 			],
 		],
-		colorTxt: [''],
-		marcaTxt: [''],
-		modeloTxt: [''],
+		// colorTxt: [''],
+		// marcaTxt: [''],
+		// modeloTxt: [''],
 	});
 
 	ubicacionForm: FormGroup = this.$fb.group({
@@ -122,7 +125,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		direccion: [''],
 	});
 
-	tiempoLlegada: Date = new Date();
+	tiempoLlegada: string | null = this.getMyCountryDateTime();
 
 	imagesWeb: string[] = [];
 	imagenes64: string[] = [];
@@ -146,7 +149,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		this.isTiempoLLegadaRegistradoSubject.asObservable();
 
 	setTiempoLlegada(): void {
-		this.tiempoLlegada = new Date();
+		this.tiempoLlegada = this.getMyCountryDateTime();
 		this.isTiempoLLegadaRegistradoSubject.next(true);
 	}
 
@@ -312,6 +315,18 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		await alert.present();
 	}
 
+	private getMyCountryDateTime(): string | null {
+		const formattedDate = this._datePipe.transform(
+			new Date(),
+			'yyyy-MM-dd HH:mm:ss',
+			'en-US', // This is the LOCALE (data format)
+			'es-DO', // This is the TIMEZONE (offset)
+		);
+
+		console.log('Formatted Date: ' + formattedDate);
+		return formattedDate;
+	}
+
 	async createAsistance(): Promise<void> {
 		if (!this.coordenadas) {
 			await this.getCurrentPosition();
@@ -326,9 +341,9 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 			vehiculoMarcaId,
 			vehiculoModeloId,
 			placa,
-			colorTxt,
-			marcaTxt,
-			modeloTxt,
+			// colorTxt,
+			// marcaTxt,
+			// modeloTxt,
 		} = this.vehiculoForm.value;
 
 		const { provinciaId, municipioId, direccion } =
@@ -365,15 +380,17 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 			imagenes: this.imagenes64,
 			fueCompletada: this.fueCompletada,
 
-			colorTxt: colorTxt,
-			marcaTxt: marcaTxt,
-			modeloTxt: modeloTxt,
+			colorTxt: '',
+			marcaTxt: '',
+			modeloTxt: '',
 
 			solicitoApoyo: this.solicitoApoyo,
 			unidadAlfaId: this.unidadAlfaId ?? 0,
 			tiempoLlegada: this.tiempoLlegada,
-			tiempoCompletada: this.fueCompletada ? new Date() : undefined,
-			tiempoCreacion: new Date(),
+			tiempoCompletada: this.fueCompletada
+				? this.getMyCountryDateTime()
+				: null,
+			tiempoCreacion: this.getMyCountryDateTime(),
 		};
 
 		if (typeof this.tipoAsistencias === 'number') {
@@ -434,7 +451,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 			inputs: [
 				{ label: 'En Curso', type: 'radio', value: false },
 				{
-					label: 'Completadad',
+					label: 'Completada',
 					type: 'radio',
 					value: true,
 					checked: true,

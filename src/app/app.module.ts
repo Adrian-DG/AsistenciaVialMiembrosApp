@@ -1,4 +1,4 @@
-import { NgModule, isDevMode } from '@angular/core';
+import { LOCALE_ID, NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -17,10 +17,14 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { LeaveGuard } from './guard/leave.guard';
 
 import { NgChartsModule } from 'ng2-charts';
+import { registerLocaleData } from '@angular/common';
+import localeEsDo from '@angular/common/locales/es-DO'; // Import Dominican Spanish
 
 export function tokenGetter() {
 	return localStorage.getItem('access_token');
 }
+
+registerLocaleData(localeEsDo, 'es-DO'); // Register the locale data for Dominican Spanish
 
 @NgModule({
 	declarations: [AppComponent],
@@ -53,6 +57,7 @@ export function tokenGetter() {
 			useClass: LoadingInterceptor,
 			multi: true,
 		},
+		{ provide: LOCALE_ID, useValue: 'es-DO' },
 	],
 	bootstrap: [AppComponent],
 })
