@@ -1,10 +1,7 @@
 :host {
 	--surface: #f4f8ff;
-	--card-bg: #ffffff;
-	--card-border: #d7e1f2;
 	--text-primary: #112849;
 	--text-muted: #62749a;
-	--shadow-soft: 0 16px 34px rgba(17, 40, 73, 0.12);
 	display: block;
 }
 
@@ -26,8 +23,11 @@
 
 .signin-shell {
 	min-height: 100%;
+	min-height: 100dvh;
 	padding: calc(env(safe-area-inset-top) + 16px) 12px
-		calc(env(safe-area-inset-bottom) + 14px);
+		calc(
+			env(safe-area-inset-bottom) + env(keyboard-inset-height, 0px) + 14px
+		);
 	display: grid;
 	align-content: center;
 	justify-items: center;
@@ -35,6 +35,9 @@
 	max-width: 900px;
 	width: 100%;
 	margin: 0 auto;
+	transition:
+		padding 0.24s ease,
+		gap 0.24s ease;
 }
 
 .brand-panel {
@@ -81,20 +84,27 @@
 	max-width: 560px;
 	justify-self: center;
 	margin: 0;
-	border-radius: 20px;
-	border: 1px solid var(--card-border);
-	box-shadow: var(--shadow-soft);
-	background: var(--card-bg);
-	overflow: hidden;
+	background: transparent;
+	transition: transform 0.24s ease;
+}
+
+.signin-shell.is-writing {
+	align-content: start;
+	padding-top: calc(env(safe-area-inset-top) + 10px);
+	gap: 10px;
+}
+
+.signin-shell.is-writing .formulary {
+	transform: translateY(-10px);
+}
+
+.signin-shell.is-writing .brand-panel {
+	gap: 8px;
 }
 
 .card-header {
 	text-align: center;
-	padding: 16px 12px 8px;
-
-	.text {
-		text-transform: none;
-	}
+	padding: 4px 0 8px;
 }
 
 .form-title {
@@ -112,7 +122,7 @@
 }
 
 .form-content {
-	padding: 12px;
+	padding: 6px 0;
 }
 
 .input-group {
@@ -128,11 +138,11 @@
 }
 
 .input-item {
-	--background: #f9fbff;
+	--background: transparent;
 	--padding-start: 12px;
 	--inner-padding-end: 12px;
-	--border-radius: 12px;
-	border: 1px solid #e1e9f8;
+	--border-radius: 0;
+	border-bottom: 1px solid #d3def1;
 }
 
 .validate-btn {
@@ -143,7 +153,7 @@
 }
 
 .button-stack {
-	padding: 0 12px 14px;
+	padding: 8px 0 0;
 	display: grid;
 	gap: 10px;
 }
@@ -180,6 +190,16 @@
 	.small-logo {
 		max-width: 170px;
 	}
+
+	.signin-shell.is-writing {
+		align-content: center;
+		padding: 28px 18px;
+		gap: 22px;
+	}
+
+	.signin-shell.is-writing .formulary {
+		transform: none;
+	}
 }
 
 @media (max-width: 420px) {
@@ -198,12 +218,12 @@
 	}
 
 	.form-content {
-		padding-left: 12px;
-		padding-right: 12px;
+		padding-left: 0;
+		padding-right: 0;
 	}
 
 	.button-stack {
-		padding: 0 10px 12px;
+		padding: 8px 0 12px;
 	}
 
 	.btn-main,

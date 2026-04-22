@@ -15,7 +15,7 @@
 </ion-header>
 
 <ion-content class="signin-page">
-	<section class="signin-shell">
+	<section class="signin-shell" [class.is-writing]="isWriting">
 		<div class="brand-panel">
 			<div class="brand-copy">
 				<h1>Registrar Asistencia</h1>
@@ -28,8 +28,8 @@
 
 		<div class="formulary" role="form" aria-label="Formulario de autenticacion">
 			<div class="card-header">
-				<h2 class="text form-title">Registrar Asistencia</h2>
-				<p class="text form-subtitle">Formulario de autenticación</p>
+				<h2 class="form-title">Registrar Asistencia</h2>
+				<p class="form-subtitle">Formulario de autenticación</p>
 			</div>
 
 			<div class="form-content">
@@ -38,8 +38,8 @@
 						<ion-label>Cédula </ion-label>
 						<ion-input type="text" placeholder="Cedula del agente" [clearInput]="true" [required]="true"
 							[minlength]="11" [maxlength]="11" inputmode="text" enterkeyhint="done"
-							[(ngModel)]="cedulaInput" (keyup.enter)="validateMember()"
-							(click)="hideImage()"></ion-input>
+							[(ngModel)]="cedulaInput" (keyup.enter)="validateMember()" (ionFocus)="onInputFocus($event)"
+							(ionBlur)="onInputBlur()"></ion-input>
 					</ion-item>
 
 					<ion-button class="validate-btn" color="primary" (click)="validateMember()">
@@ -51,7 +51,8 @@
 					<ion-item class="input-item" lines="none">
 						<ion-label>Ficha</ion-label>
 						<ion-input type="text" placeholder="Ficha unidad" [clearInput]="true" inputmode="text"
-							enterkeyhint="go" (keyup.enter)="validateUnit()" [(ngModel)]="fichaInput"></ion-input>
+							enterkeyhint="go" (keyup.enter)="validateUnit()" [(ngModel)]="fichaInput"
+							(ionFocus)="onInputFocus($event)" (ionBlur)="onInputBlur()"></ion-input>
 					</ion-item>
 
 					<ion-button class="validate-btn" color="primary" (click)="validateUnit()">

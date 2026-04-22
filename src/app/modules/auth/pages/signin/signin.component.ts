@@ -22,6 +22,7 @@ export class SigninComponent implements OnInit {
 	fichaInput: string = '';
 	isWriting: boolean = false;
 	isInstallAvailable: boolean = false;
+	private focusScrollTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
 	private deferredPrompt: BeforeInstallPromptEvent | null = null;
 	private readonly onBeforeInstallPrompt = (event: Event): void => {
@@ -48,9 +49,50 @@ export class SigninComponent implements OnInit {
 			'beforeinstallprompt',
 			this.onBeforeInstallPrompt,
 		);
+
+		if (this.focusScrollTimeoutId) {
+			clearTimeout(this.focusScrollTimeoutId);
+			this.focusScrollTimeoutId = null;
+		}
 	}
 
-	hideImage = () => (this.isWriting = true);
+	onInputFocus(event: Event): void {
+		if (this.focusScrollTimeoutId) {
+			clearTimeout(this.focusScrollTimeoutId);
+			this.focusScrollTimeoutId = null;
+		}
+
+		this.isWriting = true;
+		this.scheduleInputScrollIntoView(event);
+	}
+
+	onInputBlur(): void {
+		// Writing mode is intentionally sticky once the user starts typing.
+	}
+
+	private scheduleInputScrollIntoView(event: Event): void {
+		const ionInput = event.target as {
+			getInputElement?: () => Promise<HTMLInputElement>;
+		};
+
+		if (!ionInput || typeof ionInput.getInputElement !== 'function') {
+			return;
+		}
+
+		// Delay allows mobile keyboard animation to settle before scrolling.
+		this.focusScrollTimeoutId = setTimeout(async () => {
+			try {
+				const nativeInput = await ionInput.getInputElement?.();
+				nativeInput?.scrollIntoView({
+					behavior: 'smooth',
+					block: 'center',
+					inline: 'nearest',
+				});
+			} finally {
+				this.focusScrollTimeoutId = null;
+			}
+		}, 180);
+	}
 
 	validateMember(): void {
 		const cedula = this.cedulaInput.trim();
@@ -71,8 +113,6 @@ export class SigninComponent implements OnInit {
 	}
 
 	loginUnitMember(): void {
-		this.isWriting = false;
-
 		const cedula = this.cedulaInput.trim();
 		const ficha = this.fichaInput.trim();
 		if (!cedula || !ficha) {
