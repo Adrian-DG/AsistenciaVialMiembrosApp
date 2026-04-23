@@ -105,6 +105,9 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		vehiculoColorId: [0],
 		vehiculoModeloId: [0],
 		vehiculoMarcaId: [0],
+		colorTxt: [''],
+		marcaTxt: [''],
+		modeloTxt: [''],
 		placa: [
 			'',
 			[
@@ -114,9 +117,6 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 				Validators.pattern(/^[A-Za-z0-9]{1,10}$/),
 			],
 		],
-		// colorTxt: [''],
-		// marcaTxt: [''],
-		// modeloTxt: [''],
 	});
 
 	ubicacionForm: FormGroup = this.$fb.group({
@@ -155,19 +155,6 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 
 	async ngOnInit(): Promise<void> {
 		void this.getCurrentPosition();
-
-		// this.ciudadanoForm.controls['identificacion'].valueChanges.subscribe(
-		// 	(value: string) =>
-		// 		this.AddCiudadanoIdentificacionValidator(value.length === 1)
-		// );
-		// this.ciudadanoForm.controls['telefono'].valueChanges.subscribe(
-		// 	(value: string) =>
-		// 		this.AddCiudadanoTelefonoValidator(value.length === 1)
-		// );
-		// this.vehiculoForm.controls['placa'].valueChanges.subscribe(
-		// 	(value: string) =>
-		// 		this.AddVehiculoPlacaValidator(value.length === 1)
-		// );
 	}
 
 	async getCurrentPosition(): Promise<void> {
@@ -231,22 +218,23 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	}
 
 	async getUnitMemberId(): Promise<number> {
-		const info = await this._auth.getStorageData();
-		return info[1];
+		return this.getStorageDataByIndex(1);
 	}
 
 	async getTramoId(): Promise<number> {
+		return this.getStorageDataByIndex(10);
+	}
+
+	private async getStorageDataByIndex(index: number): Promise<number> {
 		const info = await this._auth.getStorageData();
-		return info[10];
+		return info[index];
 	}
 
 	private generateAlertMessage(fields: string[]): string {
-		let finalString = '<ul>';
-		fields.forEach((item) => {
-			finalString += `<li><b>${item}</b></li>`;
-		});
-
-		return `${finalString}</ul>`;
+		const listItems = fields
+			.map((item) => `<li><b>${item}</b></li>`)
+			.join('');
+		return `<ul>${listItems}</ul>`;
 	}
 
 	private mapFieldName(field: string): string {
@@ -264,13 +252,14 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 
 	private getInvalidFieldNames(): string[] {
 		const invalidFields = new Set<string>();
-		const forms = [
+		const formControls = [
 			this.ciudadanoForm.controls,
 			this.vehiculoForm.controls,
 			this.ubicacionForm.controls,
 		];
 
-		forms.forEach((controls) => {
+		// This keeps the confirmation message aligned with both empty required fields and invalid formats.
+		formControls.forEach((controls) => {
 			Object.keys(controls).forEach((key) => {
 				const control = controls[key];
 				if (
@@ -289,7 +278,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 	async confirmCreate(): Promise<void> {
 		const emptyOrInvalidFields = this.getInvalidFieldNames();
 
-		let formatedMessage: string =
+		const formattedMessage: string =
 			emptyOrInvalidFields.length > 0
 				? `Los siguientes campos estan vacios o no seleccionaste una opcion: ${this.generateAlertMessage(
 						emptyOrInvalidFields,
@@ -299,7 +288,7 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		const alert = await this._alert.create({
 			header: 'Confirmar reporte de asistencia',
 			subHeader: 'Se enviara la siguiente asistencia.',
-			message: formatedMessage,
+			message: formattedMessage,
 			buttons: [
 				{ text: 'cancelar', role: 'cancel' },
 				{
@@ -323,15 +312,74 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 			'es-DO', // This is the TIMEZONE (offset)
 		);
 
-		console.log('Formatted Date: ' + formattedDate);
 		return formattedDate;
 	}
 
-	async createAsistance(): Promise<void> {
+	private async ensureCoordinates(): Promise<void> {
 		if (!this.coordenadas) {
 			await this.getCurrentPosition();
 		}
+	}
 
+	private normalizeTipoAsistencias(): number[] {
+		// The select can return a single value or a list depending on configuration.
+		if (typeof this.tipoAsistencias === 'number') {
+			return [this.tipoAsistencias];
+		}
+
+		return this.tipoAsistencias;
+	}
+
+	private buildComentarioBase(identificacion: string): string {
+		let comentarioFinal = this.comentario;
+
+		if (identificacion === '') {
+			comentarioFinal += '\nNo portaba un documento de identidad.';
+		}
+
+		return comentarioFinal;
+	}
+
+	private appendMissingInformationNotes(
+		currentComment: string,
+		marcaTxt: string,
+		modeloTxt: string,
+	): string {
+		let comment = currentComment;
+
+		if (!this.hasPersonalInformation) {
+			comment += ' \n-No se tienen los datos personales del ciudadano.\n';
+		}
+
+		if (!this.hasVehicleInformation) {
+			comment += ` \n-No se tienen los datos del vehículo.\n
+				   Marca: ${marcaTxt}\n
+				   Modelo: ${modeloTxt}\n
+				`;
+		}
+
+		return comment;
+	}
+
+	private async showRequiredPictureAlert(): Promise<void> {
+		const alert = await this._alert.create({
+			header: 'Importante',
+			subHeader: 'Se requiere tomar la foto',
+			message:
+				'La imagen es necesaria para la creación de la asistencia, esta es OBLIGATORIA.',
+			buttons: ['Aceptar'],
+		});
+
+		await alert.present();
+	}
+
+	private resetFormState(): void {
+		[this.ciudadanoForm, this.vehiculoForm, this.ubicacionForm].forEach(
+			(item) => item.reset(),
+		);
+	}
+
+	private async buildAsistanceRequest(): Promise<IAsistanceCreate> {
 		const { identificacion, nombre, apellido, genero, telefono } =
 			this.ciudadanoForm.value;
 
@@ -341,104 +389,88 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 			vehiculoMarcaId,
 			vehiculoModeloId,
 			placa,
-			// colorTxt,
-			// marcaTxt,
-			// modeloTxt,
+			colorTxt,
+			marcaTxt,
+			modeloTxt,
 		} = this.vehiculoForm.value;
 
 		const { provinciaId, municipioId, direccion } =
 			this.ubicacionForm.value;
 
-		let comentarioFinal = this.comentario;
-		if (identificacion === '') {
-			comentarioFinal += '\nNo portaba un documento de identidad.';
-		}
+		const comentarioBase = this.buildComentarioBase(identificacion);
+		const comentarioFinal = this.appendMissingInformationNotes(
+			comentarioBase,
+			marcaTxt,
+			modeloTxt,
+		);
+		const tiempoActual = this.getMyCountryDateTime();
 
-		const newAsistencia: IAsistanceCreate = {
+		return {
 			// ciudadano
-			identificacion: identificacion,
-			nombre: nombre,
-			apellido: apellido,
-			genero: genero,
+			identificacion,
+			nombre,
+			apellido,
+			genero,
 			esExtranjero: this.esExtranjero,
-			telefono: telefono,
+			telefono,
 			// vehiculo
-			vehiculoColorId: vehiculoColorId,
-			vehiculoTipoId: vehiculoTipoId,
-			vehiculoMarcaId: vehiculoMarcaId,
-			vehiculoModeloId: vehiculoModeloId,
-			placa: placa,
+			vehiculoColorId,
+			vehiculoTipoId,
+			vehiculoMarcaId,
+			vehiculoModeloId,
+			placa,
 			// ubicacion
-			provinciaId: provinciaId,
-			municipioId: municipioId,
-			direccion: direccion,
+			provinciaId,
+			municipioId,
+			direccion,
 			comentario: comentarioFinal,
 			coordenadas: this.coordenadas,
 			reportadoPor: this.reportadoPor,
-			tipoAsistencias: [],
-			unidadMiembroId: 0,
+			tipoAsistencias: this.normalizeTipoAsistencias(),
+			unidadMiembroId: await this.getUnitMemberId(),
 			imagenes: this.imagenes64,
 			fueCompletada: this.fueCompletada,
-
-			colorTxt: '',
-			marcaTxt: '',
-			modeloTxt: '',
-
+			colorTxt,
+			marcaTxt,
+			modeloTxt,
 			solicitoApoyo: this.solicitoApoyo,
 			unidadAlfaId: this.unidadAlfaId ?? 0,
 			tiempoLlegada: this.tiempoLlegada,
-			tiempoCompletada: this.fueCompletada
-				? this.getMyCountryDateTime()
-				: null,
-			tiempoCreacion: this.getMyCountryDateTime(),
+			tiempoCompletada: this.fueCompletada ? tiempoActual : null,
+			tiempoCreacion: tiempoActual,
 		};
+	}
 
-		if (typeof this.tipoAsistencias === 'number') {
-			newAsistencia.tipoAsistencias = [this.tipoAsistencias as number];
-		} else {
-			newAsistencia.tipoAsistencias = this.tipoAsistencias as number[];
-		}
-
-		newAsistencia.unidadMiembroId = await this.getUnitMemberId();
-
-		if (!this.hasPersonalInformation) {
-			newAsistencia.comentario +=
-				' \n-No se tienen los datos personales del ciudadano.\n';
-		}
-
-		if (!this.hasVehicleInformation) {
-			newAsistencia.comentario += ` \n-No se tienen los datos del vehículo.\n
-				   Marca: ${this.vehiculoForm.controls['marcaTxt'].value}\n
-				   Modelo: ${this.vehiculoForm.controls['modeloTxt'].value}\n
-				`;
-		}
+	async createAsistance(): Promise<void> {
+		await this.ensureCoordinates();
+		const newAsistencia = await this.buildAsistanceRequest();
 
 		if (newAsistencia.imagenes.length === 0) {
-			const alert = await this._alert.create({
-				header: 'Importante',
-				subHeader: 'Se requiere tomar la foto',
-				message:
-					'La imagen es necesaria para la creación de la asistencia, esta es OBLIGATORIA.',
-				buttons: ['Aceptar'],
-			});
-
-			await alert.present();
+			await this.showRequiredPictureAlert();
 			return;
 		}
 
-		this._asistencia.saveAsistanceToStorage(newAsistencia);
+		this._asistencia
+			.createAsistance(newAsistencia)
+			.subscribe((response) => {
+				if (response) {
+					this.resetFormState();
 
-		[this.ciudadanoForm, this.vehiculoForm, this.ubicacionForm].forEach(
-			(item) => item.reset(),
-		);
+					this._asistencia.generateRequestResultAlert(
+						'Guardado',
+						'',
+						'La asistencia fue enviada exitosamente.',
+					);
 
-		this._asistencia.generateRequestResultAlert(
-			'Guardado',
-			'',
-			'La asistencia fue guardada y se enviará al servidor en breve.',
-		);
-
-		this.$router.navigate(['dashboard']);
+					this.$router.navigate(['dashboard']);
+				} else {
+					this._asistencia.generateRequestResultAlert(
+						'Error',
+						'',
+						'Ocurrió un error al enviar la asistencia, por favor intenta nuevamente.',
+					);
+				}
+			});
 	}
 
 	async setStatusReportarAsistencia(): Promise<void> {
@@ -462,11 +494,13 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		});
 
 		await estatusAlert.present();
+		const { data } = await estatusAlert.onDidDismiss();
 
-		estatusAlert.onDidDismiss().then((obj) => {
-			this.fueCompletada = obj.data.values;
-			this.confirmCreate();
-		});
+		if (typeof data?.values === 'boolean') {
+			this.fueCompletada = data.values;
+		}
+
+		await this.confirmCreate();
 	}
 
 	async showUnidadAlfaAlert(): Promise<void> {
@@ -491,21 +525,33 @@ export class AsistanceFormComponent implements OnInit, ComponentCanDeactivate {
 		}
 	}
 
-	disableCitizenSignModal(): void {
-		this.isCitizenSignatureCapture = !this.isCitizenSignatureCapture;
-	}
+	private toggleSignatureModalState(type: 'citizen' | 'soldier'): void {
+		if (type === 'citizen') {
+			this.isCitizenSignatureCapture = !this.isCitizenSignatureCapture;
+			return;
+		}
 
-	disableSoldierSignModal(): void {
 		this.isSoldierSignatureCapture = !this.isSoldierSignatureCapture;
 	}
 
+	disableCitizenSignModal(): void {
+		this.toggleSignatureModalState('citizen');
+	}
+
+	disableSoldierSignModal(): void {
+		this.toggleSignatureModalState('soldier');
+	}
+
+	private captureSignature(data: string, modal: IonModal): void {
+		this.imagenes64.push(data);
+		modal.dismiss('', 'confirm');
+	}
+
 	captureCitizenSignature(data: string): void {
-		this.imagenes64.push(data as string);
-		this.citizenModal.dismiss('', 'confirm');
+		this.captureSignature(data, this.citizenModal);
 	}
 
 	captureSoldierSignature(data: string): void {
-		this.imagenes64.push(data as string);
-		this.soldierModal.dismiss('', 'confirm');
+		this.captureSignature(data, this.soldierModal);
 	}
 }
