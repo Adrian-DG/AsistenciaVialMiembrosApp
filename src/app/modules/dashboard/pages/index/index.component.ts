@@ -17,8 +17,8 @@ import { take } from 'rxjs/operators';
 })
 export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 	private static readonly REFRESH_DELAY_MS = 2000;
-	private static readonly SYNC_INTERVAL_MS = 600_000; // 10 minutes
-	private static readonly PENDING_SEND_INTERVAL_MS = 60_000; // 1 minute
+	private static readonly SYNC_INTERVAL_MS = 120_000; // 2 minutes
+	private static readonly PENDING_SEND_INTERVAL_MS = 15_000; // 15 seconds
 
 	private syncInterval: ReturnType<typeof setInterval> | null = null;
 	private pendingSendTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -45,6 +45,7 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 	ngOnInit() {
 		this.initUserData();
 		this.syncPendingAsistances();
+		this.ensureSyncIntervalRunning();
 		this.connectionSubscription = this._asistencias.isConnected$.subscribe(
 			(isConnected) => {
 				if (!isConnected) {
@@ -64,13 +65,10 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 				}
 			},
 		);
-		this.syncInterval = setInterval(
-			() => this.syncPendingAsistances(),
-			IndexComponent.SYNC_INTERVAL_MS,
-		);
 	}
 
 	ionViewWillEnter(): void {
+		this.ensureSyncIntervalRunning();
 		this.syncPendingAsistances();
 	}
 
@@ -124,6 +122,7 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	handleRefresh(event: Event): void {
 		setTimeout(() => {
+			this.ensureSyncIntervalRunning();
 			this.refresh();
 			(event.target as HTMLIonRefresherElement | null)?.complete();
 		}, IndexComponent.REFRESH_DELAY_MS);
@@ -332,5 +331,16 @@ export class IndexComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.pendingSendTimeout = null;
 			this.processNextPendingAsistance();
 		}, IndexComponent.PENDING_SEND_INTERVAL_MS);
+	}
+
+	private ensureSyncIntervalRunning(): void {
+		if (this.syncInterval !== null) {
+			return;
+		}
+
+		this.syncInterval = setInterval(
+			() => this.syncPendingAsistances(),
+			IndexComponent.SYNC_INTERVAL_MS,
+		);
 	}
 }
